@@ -1,0 +1,45 @@
+{
+  "name": "main-gate",
+  "version": "0.0.1",
+  "description": "Main gate of Dip class project",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/updowndude/DIP-Class.git"
+  },
+  "keywords": [
+    "javascript",
+    "gulp",
+    "sass",
+    "bootstrap"
+  ],
+  "author": "Correy Winke Matthew Warren",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/updowndude/DIP-Class/issues"
+  },
+  "homepage": "https://github.com/updowndude/DIP-Class#readme",
+  "devDependencies": {
+    "babel-core": "^6.14.0",
+    "babel-loader": "^6.2.8",
+    "babel-plugin-async-to-promises": "^1.0.5",
+    "babel-plugin-transform-object-rest-spread": "^6.22.0",
+    "babel-preset-es2015": "^6.14.0",
+    "csswring": "^5.1.0",
+    "gulp": "^3.9.1",
+    "gulp-livereload": "^3.8.1",
+    "gulp-postcss": "^6.1.1",
+    "gulp-sass": "^3.1.0",
+    "postcss-cssnext": "^2.8.0",
+    "webpack": "^1.13.3",
+    "webpack-stream": "^3.2.0"
+  },
+  "dependencies": {
+    "bootstrap": "^4.0.0-alpha.6",
+    "postcss": "^5.2.6",
+    "vue": "^2.1.8"
+  }
+}
