@@ -1,0 +1,2 @@
+RewriteEngine on
+ErrorDocument 404 /DIP-Class/php/view/404.php

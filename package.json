@@ -38,7 +38,7 @@
     "webpack-stream": "^3.2.0"
   },
   "dependencies": {
-    "bootstrap": "^4.0.0-alpha.6",
+    "bootstrap-sass": "^3.3.7",
     "postcss": "^5.2.6",
     "vue": "^2.1.8"
   }

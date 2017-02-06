@@ -1,0 +1,12 @@
+DROP Database IF EXISTS Festival_DB;
+CREATE DATABASE Festival_DB;
+USE Festival_DB;
+
+CREATE TABLE Visitors (
+VisitorsID INT PRIMARY KEY,
+FName VARCHAR(20) NOT NULL,
+LName VARCHAR(20) NOT NULL,
+PhoneNumber VARCHAR(15)  NOT NULL,
+Address VARCHAR(30) ,
+Comment VARCHAR(30)
+);
