@@ -39,7 +39,6 @@
   },
   "dependencies": {
     "bootstrap-sass": "^3.3.7",
-    "postcss": "^5.2.6",
-    "vue": "^2.1.8"
+    "postcss": "^5.2.6"
   }
 }

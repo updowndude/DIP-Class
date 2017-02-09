@@ -47,7 +47,7 @@ function actions() {
       } else {
         $_SESSION['found'] = $newFeedback;
       }
-      require '../view/found.php';
+      header('Location: ../view/HandleVisiter.php');
   } else {
     header('Location: ../view/404.php');
   }
