@@ -2,7 +2,7 @@
 session_start();
 
 function actions() {
-    require '../model/db.php';
+    require_once '../model/db.php';
 
     $action = $_POST['action'];
 
