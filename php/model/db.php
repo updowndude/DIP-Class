@@ -1,5 +1,8 @@
 <?php
 
+    /*Summary:
+     *Returns a PDO object that has access to the festival database.
+     */
     function getAccess() {
         // by Correy Winke
         // 10/27/16
@@ -17,6 +20,21 @@
         }
     }
 
+    /*Summary:
+     *Takes the required parts to query a database through a PDO object
+     *and inserts those things into working code.
+     */
+    /*Remarks:
+     *Function provides some error feedback.
+     */
+    /*Parameters:
+     * ($strQuer) - The MySQL query as a string (i.e. SELECT * FROM someTable WHERE someTable = :someValue)
+     * ($aryStatments) - Each thing in the MySQL query that looks like this (element example: ":someSQLVariablePlaceholder")
+     * ($aryValues) - Each value assigned to each element in '$aryStatments' (element example: 1, "a string", true)
+     * ($intGetValues) - Value determining if a single or all rows of fetched data is returned.
+     *                      If value = 0, then only a single row is returned
+     *                      If value = 1, then all rows are returned
+     */
     function handSQL($strQuer="",$aryStatments=[], $aryValues=[], $intGetValues = 0) {
         $db = getAccess();
 
