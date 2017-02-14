@@ -60,7 +60,7 @@ gulp.task('index', () => {
 });
 
 gulp.task('php', () => {
-	gulp.src('php/*.php')
+	gulp.src('php/**/*.php')
     .pipe(livereload());
 });
 
@@ -69,5 +69,5 @@ gulp.task('default', () => {
 	gulp.watch('sass/*.sass', ['sass']);
 	gulp.watch('js/*.js', ['jsx']);
 	gulp.watch('index.php', ['index']);
-	gulp.watch('php/*.php', ['php']);
+	gulp.watch('php/**/*.php', ['php']);
 });

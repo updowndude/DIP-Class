@@ -11,7 +11,8 @@
 		<title>Main Gate</title>
 		
 		<link rel="icon" href="">
-		
+
+        <link rel="icon", type="image/x-icon", href="images/favicon.ico">
 		<!--customer styles-->
         <link rel="stylesheet" type="text/css" href="dist/myStyle.css" />
 

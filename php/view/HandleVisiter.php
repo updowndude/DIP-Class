@@ -21,7 +21,13 @@ intended datatype: string
 ====== PLACEHOLDER PHP ======
 -->
 <?php
-$found = false;
+
+if($_SESSION['found'] == false) {
+    $found = false;
+} else {
+    $found = true;
+}
+
 ?>
 <!DOCTYPE HTML>
 <html>
@@ -60,7 +66,8 @@ $found = false;
 	<!--
 	  Placeholder
 	-->
-    <link rel="stylesheet" href="../../dist/myStyle.css">
+      <link rel="icon", type="image/x-icon", href="../../images/favicon.ico">
+      <link rel="stylesheet" href="../../dist/myStyle.css">
     <!-- TODO: get css myStyle.css to work correctly (panels don't show -->
     <!--<link rel="stylesheet" href="myStyle.css">-->
   </head>
