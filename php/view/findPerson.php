@@ -16,21 +16,48 @@
                <form action="../controller/search.php" method="post" id="searchPerson">
                   <div class="form-group">
                      <label>Phone Number</label>
-                     <input class="form-control" type="tel" placeholder="Phone Number" name="phone-number">
+                     <input class="form-control" type="tel" value="<?php
+                        if(isset($phone)) {
+                            echo $phone;
+                        }
+                     ?>" placeholder="Phone Number" name="phone-number">
                   </div>
                   <div class="form-group">
                      <label>First Name</label>
-                     <input class="form-control" type="text" placeholder="First Name" name="first-name">
+                     <input class="form-control" value="<?php
+                     if(isset($fName)) {
+                         echo $fName;
+                     }
+                     ?>" type="text" placeholder="First Name" name="first-name">
                   </div>
                   <div class="form-group">
                      <label>Last Name</label>
-                     <input class="form-control" type="text" placeholder="Last Name" name="last-name">
+                     <input class="form-control" value="<?php
+                     if(isset($lName)) {
+                         echo $lName;
+                     }
+                     ?>" type="text" placeholder="Last Name" name="last-name">
                   </div>
                   <div class="form-group">
                      <label>Address</label>
-                     <input class="form-control" type="text" placeholder="Anddress" name="address">
+                     <input class="form-control" value="<?php
+                     if(isset($address)) {
+                         echo $address;
+                     }
+                     ?>" type="text" placeholder="Anddress" name="address">
                   </div>
-                     <button type="submit" class="btn btn-default">Find person</button>
+                   <div class="form-group">
+                       <label>Email</label>
+                       <input class="form-control" value="<?php
+                       if(isset($email)) {
+                           echo $email;
+                       }
+                       ?>" type="text" placeholder="Email" name="email">
+                   </div>
+                   <div class="btn-group" role="group">
+                       <button type="submit" class="btn btn-default" id="findPerson">Find person</button>
+                       <button type="submit" class="btn btn-default">Search by phone number</button>
+                   </div>
                   </div>
                   <input type="hidden" type="text" name="action" value="search">
                </form>
