@@ -11,7 +11,7 @@ import bsn from 'bootstrap.native';
 if(document.body.id == 'findPerson') {
     let blnRemoveSumbit = true;
     const elmInputs = document.querySelectorAll('#searchPerson input');
-    const btnSumbit = document.querySelector("#searchPerson > button");
+    const btnSumbit = document.querySelector("#findPerson");
 
     elmInputs.forEach((cur) => {
         if((cur.value.trim().length == 0) && ((cur.name == 'last-name') || (cur.name == 'first-name'))) {
@@ -20,7 +20,6 @@ if(document.body.id == 'findPerson') {
     });
 
     blnRemoveSumbit == false ? btnSumbit.setAttribute('disabled','disabled') : null;
-
 
     elmInputs.forEach((cur) => {
         cur.addEventListener('input', () => {

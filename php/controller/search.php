@@ -11,6 +11,7 @@ function actions() {
       $fName = $_POST['first-name'];
       $lName = $_POST['last-name'];
       $address = $_POST['address'];
+      $email = $_POST['email'];
 
       if((strlen($address) != 0) && (strlen($phone) == 0)) {
           $sqlVaues = handSQL('SELECT *
@@ -27,6 +28,20 @@ function actions() {
        from Visitors
        where ((FName = :fname) && (LName = :lname) && (PhoneNumber = :phoneNumber) && (Address = :adress))
        LIMIT 1', [':fname', ':lname', ':phoneNumber',':adress'], [$fName, $lName, $phone, $address], 0);
+      } elseif ((strlen($phone) != 0) && (strlen($fName) == 0) && (strlen($lName) == 0) && (strlen($address) == 0) && (strlen($email) == 0)) {
+          $sqlVaues = handSQL('SELECT *
+       from Visitors
+       where PhoneNumber = :phoneNumber
+       LIMIT 1', [':phoneNumber'], [$phone], 0);
+
+          $phone = $sqlVaues['PhoneNumber'];
+          $fName = $sqlVaues['FName'];
+          $lName = $sqlVaues['LName'];
+          $address = $sqlVaues['Address'];
+          $email = $sqlVaues['Email'];
+
+          require('../view/findPerson.php');
+          exit();
       } else {
           $sqlVaues = handSQL('SELECT *
        from Visitors
