@@ -15,9 +15,32 @@ name: action
 value: registerPerson
 intended datatype: string
 -->
-<!--
-====== PLACEHOLDER PHP ======
--->
+<?php
+//*** SQL Related PHP ***
+//**********************
+  $TicketTypeCountQuery
+    = handSQL
+    ('SELECT TicketTypes.Name, TicketTypes.Price, Available.Total
+      FROM TicketTypes INNER JOIN Available ON TicketTypes.AvailableID = Available.AvailableID'
+    , ///* Function Default Value */
+    , ///* Function Default Value */
+    , 1 /* Fetch All Rows */
+    );
+  $TicketOfVisitorQuery
+    = handSQL
+    ('SELECT
+        TicketTypes.Price
+      FROM
+        TicketAssignment INNER JOIN TicketTypes ON TicketAssignment.TicketTypeID = TicketTypes.TicketTypeID
+      WHERE
+        :visitorID = TicketAssignment.VisitorID
+        AND TicketAssignment.TicketTypeID = TicketTypes.TicketTypeID'
+    , [":visitorID"]
+    , [$_SESSION["sqlValues"]["VisitorID"]]
+    , 0
+    );
+  $TicketOfVisitorPrice = $TicketOfVisitorQuery[0];
+?>
 <?php
 if($_SESSION['found'] == false) {
     $found = false;
@@ -25,6 +48,7 @@ if($_SESSION['found'] == false) {
     $found = true;
 }
 ?>
+
 <!DOCTYPE HTML>
 <html>
   <head> 
