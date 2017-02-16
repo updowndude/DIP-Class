@@ -3,7 +3,7 @@
   //require( some database php );
 
   //--- RETRIEVE VARIABLES ---
-  $action = filter_input("INPUT_POST", FILTER_SANITIZE_STRING);
+  $action = filter_input("INPUT_POST", "action", FILTER_SANITIZE_STRING);
 
   //--- CONTROLLER ---
   switch($action)
