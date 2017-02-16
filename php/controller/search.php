@@ -13,31 +13,32 @@ function actions() {
       $address = $_POST['address'];
 
       if((strlen($address) != 0) && (strlen($phone) == 0)) {
-          $sqlVaues = handSQL('SELECT *
+          $sqlValues = handSQL('SELECT *
        from Visitors
-       where ((FName = :fname) && (LName = :lname) && (Address = :adress))
-       LIMIT 1', [':fname', ':lname', ':adress'], [$fName, $lName, $address], 0);
+       where ((FName = :fname) && (LName = :lname) && (Address = :address))
+       LIMIT 1', [':fname', ':lname', ':address'], [$fName, $lName, $address], 0);
       } elseif ((strlen($address) != 0) && (strlen($phone) == 0)) {
-          $sqlVaues = handSQL('SELECT *
+          $sqlValues = handSQL('SELECT *
        from Visitors
        where ((FName = :fname) && (LName = :lname) && (PhoneNumber = :phoneNumber))
        LIMIT 1', [':fname', ':lname', ':phoneNumber'], [$fName, $lName, $phone], 0);
       } elseif ((strlen($address) != 0) && (strlen($phone) != 0)) {
-          $sqlVaues = handSQL('SELECT *
+          $sqlValues = handSQL('SELECT *
        from Visitors
-       where ((FName = :fname) && (LName = :lname) && (PhoneNumber = :phoneNumber) && (Address = :adress))
-       LIMIT 1', [':fname', ':lname', ':phoneNumber',':adress'], [$fName, $lName, $phone, $address], 0);
+       where ((FName = :fname) && (LName = :lname) && (PhoneNumber = :phoneNumber) && (Address = :address))
+       LIMIT 1', [':fname', ':lname', ':phoneNumber',':address'], [$fName, $lName, $phone, $address], 0);
       } else {
-          $sqlVaues = handSQL('SELECT *
+          $sqlValues = handSQL('SELECT *
        from Visitors
        where ((FName = :fname) && (LName = :lname))
        LIMIT 1', [':fname', ':lname'], [$fName, $lName], 0);
       }
 
-      if ($sqlVaues == 0) {
+      if ($sqlValues == 0) {
         $_SESSION['found'] = false;
       } else {
-        $_SESSION['found'] = $sqlVaues;
+        $_SESSION['found'] = true;
+        $_SESSION['sqlValues'] = $sqlValues;
       }
       require('../view/HandleVisiter.php');
   } else {
