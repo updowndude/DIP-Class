@@ -206,10 +206,10 @@ if($_SESSION['found'] == false) {
       -->
 	  <div class="row">
 	    <div class="col-xs-12">
-		  <div class="btn btn-default"
-		       onclick="window.history.back()">
-            <span class="glyphicon glyphicon-arrow-left"></span>&nbsp;Go Back
-          </div>
+            <button class="btn btn-default">
+                <a href="../view/findPerson.php">
+                    <span class="glyphicon glyphicon-arrow-left"></span>&nbsp;Go Back</a>
+            </button>
 	    </div>
 	  </div>
 	

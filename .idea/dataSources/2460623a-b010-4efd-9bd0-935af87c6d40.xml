@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dataSource name="MySQL - Festival_DB@localhost">
+  <database-model serializer="dbm" rdbms="MYSQL" format-version="4.0">
+    <root id="1"/>
+    <schema id="2" parent="1" name="Festival_DB">
+      <Current>1</Current>
+      <Visible>1</Visible>
+    </schema>
+    <schema id="3" parent="1" name="ap"/>
+    <schema id="4" parent="1" name="cwinkebt_Messenger"/>
+    <schema id="5" parent="1" name="ex"/>
+    <schema id="6" parent="1" name="GamesDB"/>
+    <schema id="7" parent="1" name="information_schema"/>
+    <schema id="8" parent="1" name="learningBootsrap"/>
+    <schema id="9" parent="1" name="llama_lodge"/>
+    <schema id="10" parent="1" name="Mega_Man_Final_Fantasy"/>
+    <schema id="11" parent="1" name="midTerm_DB"/>
+    <schema id="12" parent="1" name="mysql"/>
+    <schema id="13" parent="1" name="my_guitar_shop1"/>
+    <schema id="14" parent="1" name="my_guitar_shop2"/>
+    <schema id="15" parent="1" name="om"/>
+    <schema id="16" parent="1" name="performance_schema"/>
+    <schema id="17" parent="1" name="wordpress_test"/>
+    <table id="18" parent="2" name="Users"/>
+    <table id="19" parent="2" name="Visitors"/>
+    <column id="20" parent="18" name="UserID">
+      <Position>1</Position>
+      <DataType>int(11)|0</DataType>
+      <NotNull>1</NotNull>
+      <SequenceIdentity>1</SequenceIdentity>
+    </column>
+    <column id="21" parent="18" name="Username">
+      <Position>2</Position>
+      <DataType>varchar(10)|0</DataType>
+      <NotNull>1</NotNull>
+    </column>
+    <column id="22" parent="18" name="Password">
+      <Position>3</Position>
+      <DataType>varchar(255)|0</DataType>
+      <NotNull>1</NotNull>
+    </column>
+    <column id="23" parent="18" name="AccessLevel">
+      <Position>4</Position>
+      <DataType>int(11)|0</DataType>
+      <NotNull>1</NotNull>
+    </column>
+    <key id="24" parent="18" name="PRIMARY">
+      <ColNames>UserID</ColNames>
+      <Primary>1</Primary>
+    </key>
+    <column id="25" parent="19" name="VisitorsID">
+      <Position>1</Position>
+      <DataType>int(11)|0</DataType>
+      <NotNull>1</NotNull>
+    </column>
+    <column id="26" parent="19" name="FName">
+      <Position>2</Position>
+      <DataType>varchar(20)|0</DataType>
+      <NotNull>1</NotNull>
+    </column>
+    <column id="27" parent="19" name="LName">
+      <Position>3</Position>
+      <DataType>varchar(20)|0</DataType>
+      <NotNull>1</NotNull>
+    </column>
+    <column id="28" parent="19" name="PhoneNumber">
+      <Position>4</Position>
+      <DataType>varchar(15)|0</DataType>
+      <NotNull>1</NotNull>
+    </column>
+    <column id="29" parent="19" name="Address">
+      <Position>5</Position>
+      <DataType>varchar(30)|0</DataType>
+    </column>
+    <column id="30" parent="19" name="Comment">
+      <Position>6</Position>
+      <DataType>varchar(30)|0</DataType>
+    </column>
+    <key id="31" parent="19" name="PRIMARY">
+      <ColNames>VisitorsID</ColNames>
+      <Primary>1</Primary>
+    </key>
+  </database-model>
+</dataSource>
