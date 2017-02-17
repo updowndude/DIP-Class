@@ -29,16 +29,16 @@ function actions() {
        where ((FName = :fname) && (LName = :lname) && (PhoneNumber = :phoneNumber) && (Address = :adress))
        LIMIT 1', [':fname', ':lname', ':phoneNumber',':adress'], [$fName, $lName, $phone, $address], 0);
       } elseif ((strlen($phone) != 0) && (strlen($fName) == 0) && (strlen($lName) == 0) && (strlen($address) == 0) && (strlen($email) == 0)) {
-          $sqlVaues = handSQL('SELECT *
+          $sqlValues = handSQL('SELECT *
        from Visitors
        where PhoneNumber = :phoneNumber
        LIMIT 1', [':phoneNumber'], [$phone], 0);
 
-          $phone = $sqlVaues['PhoneNumber'];
-          $fName = $sqlVaues['FName'];
-          $lName = $sqlVaues['LName'];
-          $address = $sqlVaues['Address'];
-          $email = $sqlVaues['Email'];
+          $phone = $sqlValues['PhoneNumber'];
+          $fName = $sqlValues['FName'];
+          $lName = $sqlValues['LName'];
+          $address = $sqlValues['Address'];
+          $email = $sqlValues['Email'];
 
           require('../view/findPerson.php');
           exit();
@@ -56,6 +56,8 @@ function actions() {
         $_SESSION['sqlValues'] = $sqlValues;
       }
       require('../view/HandleVisiter.php');
+  } elseif ($action == 'lookUp') {
+
   } else {
     header('Location: ../view/404.php');
   }

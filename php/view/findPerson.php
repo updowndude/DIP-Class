@@ -55,8 +55,8 @@
                        ?>" type="text" placeholder="Email" name="email">
                    </div>
                    <div class="btn-group" role="group">
-                       <button type="submit" class="btn btn-default" id="findPerson">Find person</button>
-                       <button type="submit" class="btn btn-default">Search by phone number</button>
+                       <button type="submit" class="btn btn-default" name="ff" id="findPerson">Find person</button>
+                       <button type="submit" class="btn btn-default" name="jkl">Search by phone number</button>
                    </div>
                   </div>
                   <input type="hidden" type="text" name="action" value="search">

@@ -253,15 +253,15 @@ if($_SESSION['found'] == false) {
       Without the "Go Back" button it is possible
       that the flow of registration could be disrupted.
       -->
-      <div class="row">
-        <div class="col-xs-12">
-          <div class="btn btn-default"
-               onclick="window.history.back()">
-            <span class="glyphicon glyphicon-arrow-left"></span>&nbsp;Go Back
-          </div>
-        </div>
-      </div>
-    
+	  <div class="row">
+	    <div class="col-xs-12">
+            <button class="btn btn-default">
+                <a href="../view/findPerson.php">
+                    <span class="glyphicon glyphicon-arrow-left"></span>&nbsp;Go Back
+              </a>
+            </button>
+	    </div>
+	  </div>
       <!--- Bottom Padding --->
       <div class="page-bottom-padding"> 
       </div>
