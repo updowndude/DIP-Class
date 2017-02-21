@@ -181,7 +181,7 @@ if($_SESSION['found'] == false) {
 			 name="action"
 			 value="registerPerson">
 		  <input type="hidden"
-			 name="ticketTypeID"
+			 name="ticketTypeName"
 			 value="<?php echo $TicketTypeName ?>">
 		</form>
 	      <?php elseif ($TicketOfVisitorPrice == $TicketTypePrice): ?>
