@@ -20,7 +20,7 @@ intended datatype: string
 //**********************
   $TicketTypeCountQuery
     = handSQL
-    ('SELECT TicketTypes.Name, TicketTypes.Price, Available.Total
+    ('SELECT TicketTypes.TicketTypeID, TicketTypes.Name, TicketTypes.Price, Available.Total
       FROM TicketTypes INNER JOIN Available ON TicketTypes.AvailableID = Available.AvailableID'
     , ///* Function Default Value */
     , ///* Function Default Value */
@@ -165,9 +165,10 @@ if($_SESSION['found'] == false) {
 	    <?php foreach /* thing in */ ($TicketTypeCountQuery AS $TicketType) : ?>
 	      <?php
 		//*** Remember Values Of Ticket Type ***
-		$TicketTypeName = $TicketType[0];
-		$TicketTypePrice = $TicketType[1];
-		$TicketTypeAmount = $TicketType[2];
+		$TicketTypeID = $TicketType[0];
+		$TicketTypeName = $TicketType[1];
+		$TicketTypePrice = $TicketType[2];
+		$TicketTypeAmount = $TicketType[3];
 	      ?>
 
 	      <?php //*** If Valid Option: Add Button Into HTML *** ?>
@@ -182,7 +183,7 @@ if($_SESSION['found'] == false) {
 			 value="registerPerson">
 		  <input type="hidden"
 			 name="ticketTypeID"
-			 value="<?php echo $TicketTypeName ?>">
+			 value="<?php echo $TicketTypeID ?>">
 		</form>
 	      <?php elseif ($TicketOfVisitorPrice == $TicketTypePrice): ?>
 	      <?php //*** Add Unclickable Button With Visitor's Current Ticket Type *** ?>
