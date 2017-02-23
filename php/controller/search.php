@@ -51,10 +51,12 @@ function actions() {
 
       if ($sqlValues == 0) {
         $_SESSION['found'] = false;
+          $_SESSION['sqlValues'] = null;
       } else {
         $_SESSION['found'] = true;
         $_SESSION['sqlValues'] = $sqlValues;
       }
+
       require('../view/HandleVisiter.php');
   } elseif ($action == 'lookUp') {
 

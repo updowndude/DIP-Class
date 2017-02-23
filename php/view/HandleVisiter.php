@@ -22,8 +22,8 @@ intended datatype: string
     = handSQL
     ('SELECT TicketTypes.TicketTypeID, TicketTypes.Name, TicketTypes.Price, Available.Total
       FROM TicketTypes INNER JOIN Available ON TicketTypes.AvailableID = Available.AvailableID'
-    , ///* Function Default Value */
-    , ///* Function Default Value */
+    , [] ///* Function Default Value */
+    , [] ///* Function Default Value */
     , 1 /* Fetch All Rows */
     );
   $ticketOfVisitorQuery
@@ -125,8 +125,7 @@ if($_SESSION['found'] == false) {
                 <?php endif; ?>
               </div><!- End Of Panel Heading ->
               <div class="panel-body">
-                <?php
-                //*** Generate Vertical Button Group From MySQL Data *** ->
+                // *** Generate Vertical Button Group From MySQL Data ***
                 <div class="btn-group-vertical">
                 <?php foreach /* thing in */ ($ticketTypeCountQuery AS $ticketType) :?>
                   <?php
@@ -148,17 +147,17 @@ if($_SESSION['found'] == false) {
                                     btn-default
                                     <?php 
                                       //if ticket type sold out, disable button
-                                      if($ticketTypeAmount == 0)
+                                      if($ticketTypeAvailable == 0)
                                       { echo 'disabled'; }
                                     ?>"
                              data-toggle="button">
                         <input type="radio"
                                name="selected-ticket-type-option"
-                               value=<?php echo '"'.ticketTypeID.'"'?>
+                               value=<?php echo '"'.$ticketTypeID.'"'?>
                                onclick="enableButton('register-and-update-button')">
                         <!- radio button text ->
                         <div>
-                          <?php echo $ticketTypeName.' ($'.$ticketTypePrice.')\nRemaining: '.$ticketTypeAmount ?>
+                          <?php echo $ticketTypeName.' ($'.$ticketTypePrice.')\nRemaining: '.$ticketTypeAvailable ?>
                         </div>
                       </label>
                     <?php endif; ?>
@@ -270,11 +269,9 @@ if($_SESSION['found'] == false) {
       -->
 	  <div class="row">
 	    <div class="col-xs-12">
-              <button class="btn btn-default">
-                <a href="../view/findPerson.php">
-                  <span class="glyphicon glyphicon-arrow-left"></span>&nbsp;Go Back
-                </a>
-              </button>
+            <a href="../view/findPerson.php" class="btn btn-default">
+                <span class="glyphicon glyphicon-arrow-left"></span>&nbsp;Go Back
+            </a>
 	    </div>
 	  </div>
 	    
