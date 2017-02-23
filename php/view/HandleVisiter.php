@@ -18,7 +18,7 @@ intended datatype: string
 <?php
 //*** SQL Related PHP ***
 //**********************
-  $TicketTypeCountQuery
+  $ticketTypeCountQuery
     = handSQL
     ('SELECT TicketTypes.TicketTypeID, TicketTypes.Name, TicketTypes.Price, Available.Total
       FROM TicketTypes INNER JOIN Available ON TicketTypes.AvailableID = Available.AvailableID'
@@ -26,7 +26,7 @@ intended datatype: string
     , ///* Function Default Value */
     , 1 /* Fetch All Rows */
     );
-  $TicketOfVisitorQuery
+  $ticketOfVisitorQuery
     = handSQL
     ('SELECT
         TicketTypes.Price
@@ -39,7 +39,7 @@ intended datatype: string
     , [$_SESSION["sqlValues"]["VisitorID"]]
     , 0
     );
-  $TicketOfVisitorPrice = $TicketOfVisitorQuery[0];
+  $ticketOfVisitorPrice = $ticketOfVisitorQuery[0];
 ?>
 <?php
 if($_SESSION['found'] == false) {
@@ -73,16 +73,8 @@ if($_SESSION['found'] == false) {
         height: /*-- VALUE --*/35px;
       }
     </style>
-    <!--- SCRIPTS --->
-    <!--
-      Placeholder
-    -->
-    <!--- CSS --->
-    <!--
-      Placeholder
-    -->
-      <link rel="icon", type="image/x-icon", href="../../images/favicon.ico">
-      <link rel="stylesheet" href="../../dist/myStyle.css">
+    <link rel="icon", type="image/x-icon", href="../../images/favicon.ico">
+    <link rel="stylesheet" href="../../dist/myStyle.css">
     <!-- TODO: get css myStyle.css to work correctly (panels don't show -->
     <!--<link rel="stylesheet" href="myStyle.css">-->
   </head>
@@ -96,148 +88,170 @@ if($_SESSION['found'] == false) {
         === PAGE MESSAGE ===
       -->
       <div class="row">
-          <div class="col-xs-12">
-              <div class="panel panel-default">
-                <div class="panel-heading">
-                  Visiter Status  
-                </div>
-                <div class="panel-body">
-                  <p id="msgPanel" class="text-center" style="font-size:20px;">
+        <div class="col-xs-12">
+          <!-
+          === MESSAGE PANEL =============================
+          ->
+          <div class="panel panel-default">
+            <div class="panel-body">
+              <?php if(/*visitor is*/ $found) :?>
+                <?php echo 'Visitor Is Registered' ?>
+              <?php else /*visitor not found*/ :?>
+                <?php echo 'Visitor Not Registered' ?>
+              <?php endif; ?>
+            </div>
+          </div>
+		
+	  <!- Vertical Spacing ->	
+          <div class="page-vert-space">
+	  </div>
+
+          <!-
+          === FORM: REGISTRATION/ UPGRADE ==================
+          ->
+          <form action=<?php echo '"'.($found?'php/view/findperson.php':'').'"'?> method="post">
+            <!-
+            *** Message Panel: Visitor Found? ***
+            ************************************
+            ->
+            <div class="panel panel-default">
+              <div class="panel-heading">
+                <?php
+                //*** Choose Panel Title *** ?>
+                <?php if(/* visitor is */ $found) :?>
+                  <?php echo 'Upgrade Visitor' ?>
+                <?php else /* visitor not found */:?>
+                  <?php echo 'Complete Visitor Registration' ?>
+                <?php endif; ?>
+              </div><!- End Of Panel Heading ->
+              <div class="panel-body">
+                <?php
+                //*** Generate Vertical Button Group From MySQL Data *** ->
+                <div class="btn-group-vertical">
+                <?php foreach /* thing in */ ($ticketTypeCountQuery AS $ticketType) :?>
+                  <?php
+                    $ticketTypeID = $ticketType[0];
+                    $ticketTypeName = $ticketType[1];
+                    $ticketTypePrice = $ticketType[2];
+                    $ticketTypeAvailable = $ticketType[3];
+                  ?>
                     <?php
-                      if($found)
-                      {
-                        echo 'Registered';
-                      }
-                      else
-                      {
-                        echo 'Not Registered';
-                      }
+                    /*Note:
+                     *If visitor is not found in MySQL database, then show
+                     *all ticket type options.
+                     *
+                     *If visitor is registered in MySQL database, then
+                     *show all valid ticket type upgrade options
+                     */?>
+                    <?php if(/* visitor not */!$found || $ticketOfVisitorPrice < $ticketTypePrice): ?>
+                      <label class="btn
+                                    btn-default
+                                    <?php 
+                                      //if ticket type sold out, disable button
+                                      if($ticketTypeAmount == 0)
+                                      { echo 'disabled'; }
+                                    ?>"
+                             data-toggle="button">
+                        <input type="radio"
+                               name="selected-ticket-type-option"
+                               value=<?php echo '"'.ticketTypeID.'"'?>
+                               onclick="enableButton('register-and-update-button')">
+                        <!- radio button text ->
+                        <div>
+                          <?php echo $ticketTypeName.' ($'.$ticketTypePrice.')\nRemaining: '.$ticketTypeAmount ?>
+                        </div>
+                      </label>
+                    <?php endif; ?>
+
+                    <?php
+                    /*Note:
+                     *If visitor is registered in MySQL database,
+                     *then show visitor’s current ticket type
+                     */
                     ?>
-                  </p>
+                    <?php if(/* visitor is */ $found) :?>
+                      <?php
+                      /*Note:
+                       *Else, if retrieved ticket type is the visitor’s ticket
+                       *type, then create unclickable option to show the
+                       *visitor’s current ticket type
+                       */?>
+                      <?php if($ticketOfVisitorPrice == $ticketTypePrice): ?>
+                        <label class="btn btn-default disabled">
+                          <div>
+                            <?php echo 'Current Ticket: '.$ticketTypeName.'\nPrice: $'.$ticketTypePrice; ?>
+                          </div>
+                        </label>
+                      <?php
+                      /*Note:
+                       *The last else statement is excluded due to being
+                       *uneeded. The comment that would’ve been above the
+                       *statement is kept to clarify how the program should work.
+                       */
+                      //else, don’t display invalid upgrade option (retrieved ticket type) ?>
+                    <?php endif; ?>
+                  <?php endif; ?>
+                <?php endforeach; ?>
+                </div><!- End Of Vertical Button Group ->
+              </div><!- End Of Panel Body ->
+              <div class="panel-footer">
+                <!- Upgrade/ Registration Button ->
+                <?php
+                //*** Choose Button Text (Upgrade/ Register) *** ?>
+                <?php
+                  $buttonText = "";
+                  if(/* visitor is */ $found){ $buttonText = 'Upgrade'; }
+                  else /* visitor not found */ { $buttonText = 'Register'; }
+                ?>
+                <!- *** On Click Show Confirmation Box Modal *** ->
+                <button id="register-and-upgrade-button"
+                        class="btn btn-primary disabled"
+                        data-target="#confirmation-box"
+                        data-toggle="modal"
+                        onclick="updateConfirmationBoxMsg()">
+                  <?php
+                  //*** Apply Choosen Button Text *** ?>
+                  <?php echo '"'.$buttonText.'"'?>
+                </button>
+              </div><!- End Of Panel Footer ->
+            </div><!- End Of Panel ->
+  
+            <!-
+            *** Confirmation Box ***
+            ***********************
+            ->
+            <div id="confirmation-box" class="modal fade" role="dialog">
+              <div class="modal-dialog">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h4 class="modal-title">Confirmation Box</h4>
+                  </div>
+                  <div class="modal-body">
+                    <p id="confirmation-box-text">
+                    <!-
+                      Auto-generated
+                    ->
+                    </p>
+                  </div>
+                  <div class="modal-footer">
+                    <button class="btn btn-default" 
+                            data-dismiss="modal">
+                      No
+                    </button>
+                    <input type="submit" 
+                           class="btn btn-default"
+                           data-dismiss="modal" 
+                           value="Yes">
+                    <input type="hidden"
+                           name="action"
+                           value=<?php echo '"'.(/* visitor is */$found?'upgradePerson':'registerPerson').'"' ?>
+                  </div>
                 </div>
               </div>
-          </div>
-      </div>
-      
-      <!--- Vertical Spacing --->
-      <div class="page-vert-space">
-      </div>
-      
-      <!--
-        === PAGE BUTTONS ===
-      -->
-      <div class="row">
-        <!--- Horizontal Spacer --->
-        <div class="col-xs-3">
-        </div>
-          
-        <!--- Button Group: Upgrade --->
-        <div class="col-xs-4">
-	  <?php //*** Label For Button Group *** ?>
-	  <div class="label label-default">
-	    Upgrade Options
-	  </div>
-	  <div class="btn-group-vertical">
-	    <?php
-	    //*** Generate Upgrade Buttons ***
-	    //*******************************?>
-	    <?php
-	    /* *** Outputed Button UI ***
-	     *  ~~~ KEY ~~~
-	     *  #RT ~ Remaining amount of ticket type
-	     *
-	     *  ===========
-	     *
-	     *  _________________________________
-	     * /  Highest Upgrade Option "(#RT)" \  <==== css class: btn btn-primary
-	     * |---------------------------------|
-	     * | ... Lower Options "(#RT)"       |  <=|
-	     * |---------------------------------|
-	     * | ... ... "(#RT)"                 |  <=/
-	     * |---------------------------------|
-	     * | "Current Ticket: [type]"        |  <==== css class: btn btn-default disabled
-	     * \_________________________________/
-	     *
-	     * Note:
-	     * Only posiable upgrades for a visitor is shown or disabled (excluding visitors current ticket type). 
-	     */
-	    ?>
-	    <?php foreach /* thing in */ ($TicketTypeCountQuery AS $TicketType) : ?>
-	      <?php
-		//*** Remember Values Of Ticket Type ***
-		$TicketTypeID = $TicketType[0];
-		$TicketTypeName = $TicketType[1];
-		$TicketTypePrice = $TicketType[2];
-		$TicketTypeAmount = $TicketType[3];
-	      ?>
-
-	      <?php //*** If Valid Option: Add Button Into HTML *** ?>
-	      <?php if($TicketOfVisitorPrice < $TicketTypePrice): ?>
-		<form action ="<?php if(!found){ echo /*Action URL: */ '<!-- URL HERE -->'; }else{ /*Exclude form link*/ } ?>"
-		      method="post">
-		  <input type="submit"
-			 class="btn btn-primary <?php if($TicketTypeAmount == 0){ echo 'disabled'; } ?>"
-			 value="<?php echo $TicketTypeName.' ('.$TicketTypeAmount.')' ?>">
-		  <input type="hidden"
-			 name="action"
-			 value="registerPerson">
-		  <input type="hidden"
-			 name="ticketTypeID"
-			 value="<?php echo $TicketTypeID ?>">
-		</form>
-	      <?php elseif ($TicketOfVisitorPrice == $TicketTypePrice): ?>
-	      <?php //*** Add Unclickable Button With Visitor's Current Ticket Type *** ?>
-		<div class="btn btn-default disabled">
-		  <?php echo 'Current Ticket: '.$TicketTypeName; ?>
-		</div>
-	      <?php endif; ?>
-	    <?php endforeach; ?>
-	  </div>
-	</div>
-        
-        <!--- Horizontal Spacer --->
-        <div class="">
-        </div>
-         
-        <!--- Button: Register --->  
-        <div class="col-xs-4">
-            <form action="
-                  <?php
-                    if(!$found)
-                    {
-                      echo '<!-- URL HERE -->';
-                    }
-                    else
-                    {
-                      /* Exclude form link */
-                    }
-                  ?>"
-                  method="post">
-                 <input class="
-                        btn btn-primary
-                        <?php
-                          if ( !$found ) 
-                          { 
-                            /* Keep button enabled */
-                          }
-                          else
-                          {
-                            /* Disable button */
-                            echo 'disabled';
-                          }
-                        ?>"
-                        type="submit"
-                        value="Register">
-                <input name="action"
-                       type="hidden"
-                       value="registerPerson">
-            </form>
-        </div>
-          
-        <!--- Horizontal Spacer --->
-        <div class="col-xs-1">
-        </div>
-      </div>
+            </div><!- End Of Confirmation Box ->
+          </form>
+        </div><!- End of col-xs-12 ->
+      </div><!- End of row ->
     
       <!-- Vertical Spacing -->
       <div class="page-vert-space">
@@ -256,19 +270,45 @@ if($_SESSION['found'] == false) {
       -->
 	  <div class="row">
 	    <div class="col-xs-12">
-            <button class="btn btn-default">
+              <button class="btn btn-default">
                 <a href="../view/findPerson.php">
-                    <span class="glyphicon glyphicon-arrow-left"></span>&nbsp;Go Back
-              </a>
-            </button>
+                  <span class="glyphicon glyphicon-arrow-left"></span>&nbsp;Go Back
+                </a>
+              </button>
 	    </div>
 	  </div>
+	    
       <!--- Bottom Padding --->
       <div class="page-bottom-padding"> 
       </div>
-        
-      <!-- end of bootstrap container -->
-    </div>
+    </div><!-- end of bootstrap container -->	  
+	  
+    <!-
+    === JAVASCRIPT ===========================================
+    ->
+    <script type=”text/javascript”>
+      function enableButton(htmlElementID)
+      {
+        var htmlElement = document.getElementById(htmlElementID);
+        htmlElement.classList.remove(“disabled”);
+      }
+
+      function updateConfirmationBoxMsg()
+      {
+        var htmlElements = document.getElementsByName(‘register-and-upgrade-button’);
+        var msgBoxElement = document.getElementById(‘confirmation-box-text’);
+        for (element of htmlElements)
+        {
+          if(element.checked)
+          { 
+            msgBoxElement.innerHTML
+              = “Are you sure?\n”
+              + “You’ve seleced the ticket type: \n”
+              + element.nextSibling.innerHTML; 
+          }
+        }
+      }
+    </script>
     <script src="../../dist/my-com.js" type="text/javascript"></script>
   </body>
 </html>
