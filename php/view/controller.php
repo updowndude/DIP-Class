@@ -31,8 +31,36 @@
           include 'php/view/findperson.php';
           break;
       case 'registerPerson':
-          //Your Code Here
-          
+          $ticketTypeID = $_POST['ticketTypeID'];
+          $pdoObj = getAccess();
+          $query =
+            '
+            INSERT INTO
+            Visitors
+            (fName, lName, phone, address)
+            VALUES
+            (:fName, :lName, :phone, :address);
+            
+            INSERT INTO
+            TicketAssignment
+            (VisitorID, TicketTypeID)
+            VALUES
+            ((SELECT VisitorID 
+              FROM Visitors 
+              WHERE fName = :fName
+                AND lName = :lName 
+                AND phone = :phone 
+                AND address = :address)
+             , :ticketTypeID);
+             ';
+          $statement = $pdoObj->prepare($query);
+          $statement->bindValue(':fName', $_SESSION['sqlValues']['---']);
+          $statement->bindValue(':lName', $_SESSION['sqlValues']['---']);
+          $statement->bindValue(':phone', $_SESSION['sqlValues']['---']);
+          $statement->bindValue(':address', $_SESSION['sqlValues']['---']);
+          $statement->bindValue(':ticketTypeID', $ticketTypeID);
+          $statement->execute();
+          $statement->closeCursor();
           include 'php/view/findperson.php';
           break;
   }
