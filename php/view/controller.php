@@ -37,9 +37,9 @@
             '
             INSERT INTO
             Visitors
-            (fName, lName, phone, address)
+            (FName, LName, PhoneNumber, Address, Email)
             VALUES
-            (:fName, :lName, :phone, :address);
+            (:fName, :lName, :phone, :address, :email);
             
             INSERT INTO
             TicketAssignment
@@ -47,17 +47,19 @@
             VALUES
             ((SELECT VisitorID 
               FROM Visitors 
-              WHERE fName = :fName
-                AND lName = :lName 
-                AND phone = :phone 
-                AND address = :address)
+              WHERE FName = :fName
+                AND LName = :lName 
+                AND PhoneNumber = :phone 
+                AND Address = :address
+                AND Email = :email)
              , :ticketTypeID);
              ';
           $statement = $pdoObj->prepare($query);
-          $statement->bindValue(':fName', $_SESSION['sqlValues']['---']);
-          $statement->bindValue(':lName', $_SESSION['sqlValues']['---']);
-          $statement->bindValue(':phone', $_SESSION['sqlValues']['---']);
-          $statement->bindValue(':address', $_SESSION['sqlValues']['---']);
+          $statement->bindValue(':fName', $_SESSION['sqlValues']['FName']);
+          $statement->bindValue(':lName', $_SESSION['sqlValues']['LName']);
+          $statement->bindValue(':phone', $_SESSION['sqlValues']['PhoneNumber']);
+          $statement->bindValue(':address', $_SESSION['sqlValues']['Address']);
+          $statement->bindValue(':email', $_SESSION['sqlValues']['Email']);
           $statement->bindValue(':ticketTypeID', $ticketTypeID);
           $statement->execute();
           $statement->closeCursor();
