@@ -1,3 +1,4 @@
+<?php session_start(); ?>
 <!--
 ====== DOCUMENT I\O INFO ======
 VARIABLES REQUIRED:
@@ -16,6 +17,7 @@ value: registerPerson
 intended datatype: string
 -->
 <?php
+require_once '../model/db.php';
 //*** SQL Related PHP ***
 //**********************
   $ticketTypeCountQuery
@@ -75,10 +77,8 @@ if($_SESSION['found'] == false) {
     </style>
     <link rel="icon", type="image/x-icon", href="../../images/favicon.ico">
     <link rel="stylesheet" href="../../dist/myStyle.css">
-    <!-- TODO: get css myStyle.css to work correctly (panels don't show -->
-    <!--<link rel="stylesheet" href="myStyle.css">-->
   </head>
-  <body>
+  <body id="handleVisiter">
     <div class="container">
       <!--- Top Padding --->
       <div class="page-top-padding">
@@ -125,7 +125,7 @@ if($_SESSION['found'] == false) {
                 <?php endif; ?>
               </div><!- End Of Panel Heading ->
               <div class="panel-body">
-                // *** Generate Vertical Button Group From MySQL Data ***
+                <?php // *** Generate Vertical Button Group From MySQL Data *** ?>
                 <div class="btn-group-vertical">
                 <?php foreach /* thing in */ ($ticketTypeCountQuery AS $ticketType) :?>
                   <?php
@@ -157,7 +157,7 @@ if($_SESSION['found'] == false) {
                                onclick="enableButton('register-and-update-button')">
                         <!- radio button text ->
                         <div>
-                          <?php echo $ticketTypeName.' ($'.$ticketTypePrice.')\nRemaining: '.$ticketTypeAvailable ?>
+                          <?php echo nl2br($ticketTypeName.' ($'.$ticketTypePrice.") \n Remaining: ".$ticketTypeAvailable) ?>
                         </div>
                       </label>
                     <?php endif; ?>
@@ -210,7 +210,7 @@ if($_SESSION['found'] == false) {
                         onclick="updateConfirmationBoxMsg()">
                   <?php
                   //*** Apply Choosen Button Text *** ?>
-                  <?php echo '"'.$buttonText.'"'?>
+                  <?php echo $buttonText ?>
                 </button>
               </div><!- End Of Panel Footer ->
             </div><!- End Of Panel ->
@@ -306,6 +306,8 @@ if($_SESSION['found'] == false) {
         }
       }
     </script>
-    <script src="../../dist/my-com.js" type="text/javascript"></script>
+    <script type="text/javascript">
+        <?php echo file_get_contents("../../dist/my-com.js") ?>
+    </script>
   </body>
 </html>

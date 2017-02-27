@@ -13,39 +13,30 @@ function actions() {
       $address = $_POST['address'];
       $email = $_POST['email'];
 
-      if((strlen($address) != 0) && (strlen($phone) == 0)) {
+      if ((strlen($fName) != 0) && (strlen($lName) != 0) && (strlen($phone) != 0) && (strlen($address) != 0) && (strlen($email) != 0)) {
           $sqlValues = handSQL('SELECT *
        from Visitors
-       where ((FName = :fname) && (LName = :lname) && (Address = :address))
-       LIMIT 1', [':fname', ':lname', ':address'], [$fName, $lName, $address], 0);
-      } elseif ((strlen($address) != 0) && (strlen($phone) == 0)) {
+       where ((FName like :fname) && (LName like :lname) && (PhoneNumber like :phoneNumber) && (Address like :adress) && (Email like :email))
+       LIMIT 1', [':fname', ':lname', ':phoneNumber',':adress', ':email'], [$fName, $lName, $phone, $address, $email], 0);
+      } elseif ((strlen($fName) != 0) && (strlen($lName) != 0) && (strlen($phone) != 0) && (strlen($address) != 0)) {
           $sqlValues = handSQL('SELECT *
        from Visitors
-       where ((FName = :fname) && (LName = :lname) && (PhoneNumber = :phoneNumber))
-       LIMIT 1', [':fname', ':lname', ':phoneNumber'], [$fName, $lName, $phone], 0);
-      } elseif ((strlen($address) != 0) && (strlen($phone) != 0)) {
-          $sqlValues = handSQL('SELECT *
-       from Visitors
-       where ((FName = :fname) && (LName = :lname) && (PhoneNumber = :phoneNumber) && (Address = :adress))
+       where ((FName like :fname) && (LName like :lname) && (PhoneNumber like :phoneNumber) && (Address like :adress))
        LIMIT 1', [':fname', ':lname', ':phoneNumber',':adress'], [$fName, $lName, $phone, $address], 0);
-      } elseif ((strlen($phone) != 0) && (strlen($fName) == 0) && (strlen($lName) == 0) && (strlen($address) == 0) && (strlen($email) == 0)) {
+      }if((strlen($fName) != 0) && (strlen($lName) != 0) && (strlen($address) != 0)) {
           $sqlValues = handSQL('SELECT *
        from Visitors
-       where PhoneNumber = :phoneNumber
-       LIMIT 1', [':phoneNumber'], [$phone], 0);
-
-          $phone = $sqlValues['PhoneNumber'];
-          $fName = $sqlValues['FName'];
-          $lName = $sqlValues['LName'];
-          $address = $sqlValues['Address'];
-          $email = $sqlValues['Email'];
-
-          require('../view/findPerson.php');
-          exit();
+       where ((FName like :fname) && (LName like :lname) && (Address like :address))
+       LIMIT 1', [':fname', ':lname', ':address'], [$fName, $lName, $address], 0);
+      } elseif ((strlen($fName) != 0) && (strlen($lName) != 0) && (strlen($phone) != 0)) {
+          $sqlValues = handSQL('SELECT *
+       from Visitors
+       where ((FName like :fname) && (LName like :lname) && (PhoneNumber like :phoneNumber))
+       LIMIT 1', [':fname', ':lname', ':phoneNumber'], [$fName, $lName, $phone], 0);
       } else {
           $sqlValues = handSQL('SELECT *
        from Visitors
-       where ((FName = :fname) && (LName = :lname))
+       where ((FName like :fname) && (LName like :lname))
        LIMIT 1', [':fname', ':lname'], [$fName, $lName], 0);
       }
 
@@ -57,9 +48,41 @@ function actions() {
         $_SESSION['sqlValues'] = $sqlValues;
       }
 
-      require('../view/HandleVisiter.php');
-  } elseif ($action == 'lookUp') {
+      $_SESSION['PhoneNumber'] = "";
+      $_SESSION['FName'] = "";
+      $_SESSION['LName'] = "";
+      $_SESSION['Address'] = "";
+      $_SESSION['Email'] = "";
 
+      header('Location: ../view/visitor');
+  } elseif ($action == 'searchByPhone') {
+      $phone = $_POST['phone-number'];
+      $fName = $_POST['first-name'];
+      $lName = $_POST['last-name'];
+      $address = $_POST['address'];
+      $email = $_POST['email'];
+
+      if ((strlen($phone) != 0) && (strlen($fName) == 0) && (strlen($lName) == 0) && (strlen($address) == 0) && (strlen($email) == 0)) {
+          $sqlValues = handSQL('SELECT *
+       from Visitors
+       where PhoneNumber like :phoneNumber
+       LIMIT 1', [':phoneNumber'], [$phone], 0);
+
+          $_SESSION['PhoneNumber'] = $sqlValues['PhoneNumber'];
+          $_SESSION['FName'] = $sqlValues['FName'];
+          $_SESSION['LName'] = $sqlValues['LName'];
+          $_SESSION['Address'] = $sqlValues['Address'];
+          $_SESSION['Email'] = $sqlValues['Email'];
+      } else {
+          $_SESSION['PhoneNumber'] = "";
+          $_SESSION['FName'] = "";
+          $_SESSION['LName'] = "";
+          $_SESSION['Address'] = "";
+          $_SESSION['Email'] = "";
+      }
+
+      header('Location: ../view/lookup');
+      exit();
   } else {
     header('Location: ../view/404.php');
   }

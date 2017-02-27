@@ -3,6 +3,8 @@
 		<footer>
 
 		</footer>
-        <script src="dist/my-com.js" type="text/javascript"></script>
+        <script type="text/javascript">
+            <?php echo file_get_contents("dist/my-com.js") ?>
+        </script>
 	</body>
 </html>

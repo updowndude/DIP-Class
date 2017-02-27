@@ -1,2 +1,4 @@
 RewriteEngine on
 ErrorDocument 404 /DIP-Class/php/view/404.php
+RewriteRule ^php/view/visitor php/view/HandleVisiter.php [NC,L]
+RewriteRule ^php/view/lookup php/view/findperson.php [NC,L]
