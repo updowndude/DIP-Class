@@ -1,9 +1,9 @@
 <?php
   //--- REQUIRES AND INCLUDES ---
-  //require( some database php );
+  require_once('C:/xampp/htdocs/designAndImplementation/php/model/db.php');
 
   //--- RETRIEVE VARIABLES ---
-  $action = filter_input("INPUT_POST", "action", FILTER_SANITIZE_STRING);
+  $action = filter_input(INPUT_POST, "action", FILTER_SANITIZE_STRING);
 
   //--- CONTROLLER ---
   switch($action)
@@ -37,9 +37,9 @@
             '
             INSERT INTO
             Visitors
-            (FName, LName, PhoneNumber, Address, Email)
+            (fName, lName, phone, address)
             VALUES
-            (:fName, :lName, :phone, :address, :email);
+            (:fName, :lName, :phone, :address);
             
             INSERT INTO
             TicketAssignment
@@ -47,19 +47,17 @@
             VALUES
             ((SELECT VisitorID 
               FROM Visitors 
-              WHERE FName = :fName
-                AND LName = :lName 
-                AND PhoneNumber = :phone 
-                AND Address = :address
-                AND Email = :email)
+              WHERE fName = :fName
+                AND lName = :lName 
+                AND phone = :phone 
+                AND address = :address)
              , :ticketTypeID);
              ';
           $statement = $pdoObj->prepare($query);
           $statement->bindValue(':fName', $_SESSION['sqlValues']['FName']);
           $statement->bindValue(':lName', $_SESSION['sqlValues']['LName']);
-          $statement->bindValue(':phone', $_SESSION['sqlValues']['PhoneNumber']);
+          $statement->bindValue(':phone', $_SESSION['sqlValues']['Phone']);
           $statement->bindValue(':address', $_SESSION['sqlValues']['Address']);
-          $statement->bindValue(':email', $_SESSION['sqlValues']['Email']);
           $statement->bindValue(':ticketTypeID', $ticketTypeID);
           $statement->execute();
           $statement->closeCursor();
