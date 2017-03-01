@@ -42,7 +42,7 @@
 				$_SESSION['loggedInUser']=$name;
 
 				//redirect user to contacts page
-				header('Location: php/view/findperson.php');
+				header('Location: php/view/lookup');
 
 			//hashed password not verified
 			}else{

@@ -28,7 +28,7 @@ if(document.body.id == 'findPersonBody') {
 
             elmInputs.forEach((curPlaced) => {
                 if((curPlaced.value.trim().length == 0) && ((curPlaced.name == 'last-name') || (curPlaced.name == 'first-name'))) {
-                    if((elmInputs[0].value.trim().length < 8) || (elmInputs[0].name != 'phone-number')) {
+                    if((elmInputs[5].value.trim().length < 8) || (elmInputs[5].name != 'phone-number')) {
                         blnSumbit = false;
                         curPlaced.classList.add('myError');
                         btnFindPerson.setAttribute('disabled','disabled');
