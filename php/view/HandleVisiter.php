@@ -1,4 +1,3 @@
-<?php session_start(); ?>
 <!--
 ====== DOCUMENT I\O INFO ======
 VARIABLES REQUIRED:
@@ -17,7 +16,6 @@ value: registerPerson
 intended datatype: string
 -->
 <?php
-require_once '../model/db.php';
 //*** SQL Related PHP ***
 //**********************
   $ticketTypeCountQuery
@@ -77,8 +75,10 @@ if($_SESSION['found'] == false) {
     </style>
     <link rel="icon", type="image/x-icon", href="../../images/favicon.ico">
     <link rel="stylesheet" href="../../dist/myStyle.css">
+    <!-- TODO: get css myStyle.css to work correctly (panels don't show -->
+    <!--<link rel="stylesheet" href="myStyle.css">-->
   </head>
-  <body id="handleVisiter">
+  <body>
     <div class="container">
       <!--- Top Padding --->
       <div class="page-top-padding">
@@ -109,7 +109,7 @@ if($_SESSION['found'] == false) {
           <!-
           === FORM: REGISTRATION/ UPGRADE ==================
           ->
-          <form action=<?php echo '"'.($found?'php/view/findperson.php':'').'"'?> method="post">
+          <form action="../view/findPerson.php" method="post">
             <!-
             *** Message Panel: Visitor Found? ***
             ************************************
@@ -125,8 +125,9 @@ if($_SESSION['found'] == false) {
                 <?php endif; ?>
               </div><!- End Of Panel Heading ->
               <div class="panel-body">
-                <?php // *** Generate Vertical Button Group From MySQL Data *** ?>
-                <div class="btn-group-vertical">
+                <?php
+                //*** Generate Vertical Button Group From MySQL Data *** ?>
+                <div class="btn-group btn-group-vertical" data-toggle="buttons">
                 <?php foreach /* thing in */ ($ticketTypeCountQuery AS $ticketType) :?>
                   <?php
                     $ticketTypeID = $ticketType[0];
@@ -149,15 +150,14 @@ if($_SESSION['found'] == false) {
                                       //if ticket type sold out, disable button
                                       if($ticketTypeAvailable == 0)
                                       { echo 'disabled'; }
-                                    ?>"
-                             data-toggle="button">
+                                    ?>">
                         <input type="radio"
                                name="selected-ticket-type-option"
                                value=<?php echo '"'.$ticketTypeID.'"'?>
-                               onclick="enableButton('register-and-update-button')">
+                               onclick="enableButton('register-and-upgrade-button')">
                         <!- radio button text ->
                         <div>
-                          <?php echo nl2br($ticketTypeName.' ($'.$ticketTypePrice.") \n Remaining: ".$ticketTypeAvailable) ?>
+                          <?php echo $ticketTypeName.' ($'.$ticketTypePrice.')<br>Remaining: '.$ticketTypeAvailable ?>
                         </div>
                       </label>
                     <?php endif; ?>
@@ -178,7 +178,7 @@ if($_SESSION['found'] == false) {
                       <?php if($ticketOfVisitorPrice == $ticketTypePrice): ?>
                         <label class="btn btn-default disabled">
                           <div>
-                            <?php echo 'Current Ticket: '.$ticketTypeName.'\nPrice: $'.$ticketTypePrice; ?>
+                            <?php echo 'Current Ticket: '.$ticketTypeName.'<br>Price: $'.$ticketTypePrice; ?>
                           </div>
                         </label>
                       <?php
@@ -207,7 +207,8 @@ if($_SESSION['found'] == false) {
                         class="btn btn-primary disabled"
                         data-target="#confirmation-box"
                         data-toggle="modal"
-                        onclick="updateConfirmationBoxMsg()">
+                        onclick="updateConfirmationBoxMsg()"
+                        disabled>
                   <?php
                   //*** Apply Choosen Button Text *** ?>
                   <?php echo $buttonText ?>
@@ -239,7 +240,7 @@ if($_SESSION['found'] == false) {
                     </button>
                     <input type="submit" 
                            class="btn btn-default"
-                           data-dismiss="modal" 
+                           
                            value="Yes">
                     <input type="hidden"
                            name="action"
@@ -283,31 +284,32 @@ if($_SESSION['found'] == false) {
     <!-
     === JAVASCRIPT ===========================================
     ->
-    <script type=”text/javascript”>
+    <script type="text/javascript">
       function enableButton(htmlElementID)
       {
         var htmlElement = document.getElementById(htmlElementID);
-        htmlElement.classList.remove(“disabled”);
+        htmlElement.classList.remove("disabled");
+        htmlElement.disabled = false;
       }
 
       function updateConfirmationBoxMsg()
       {
-        var htmlElements = document.getElementsByName(‘register-and-upgrade-button’);
-        var msgBoxElement = document.getElementById(‘confirmation-box-text’);
+        var htmlElements = document.getElementsByName('selected-ticket-type-option');
+        var msgBoxElement = document.getElementById('confirmation-box-text');
         for (element of htmlElements)
         {
+          
           if(element.checked)
           { 
+              
             msgBoxElement.innerHTML
-              = “Are you sure?\n”
-              + “You’ve seleced the ticket type: \n”
-              + element.nextSibling.innerHTML; 
+              = "Are you sure?<br>"
+              + "You’ve seleced the ticket type: <br>"
+              + element.parentElement.children[1].innerHTML;
           }
         }
       }
     </script>
-    <script type="text/javascript">
-        <?php echo file_get_contents("../../dist/my-com.js") ?>
-    </script>
+    <script src="../../dist/my-com.js" type="text/javascript"></script>
   </body>
 </html>
