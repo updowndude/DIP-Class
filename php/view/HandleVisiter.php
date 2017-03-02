@@ -23,7 +23,7 @@ require '../model/db.php';
 
   $ticketTypeCountQuery
     = handSQL
-    ('SELECT TicketTypes.TicketTypeID, TicketTypes.Name, TicketTypes.Price, Available.Total
+    ('SELECT TicketTypes.TicketTypeID, TicketTypes.Name, TicketTypes.Price, Available.Total, TicketTypes.Description
       FROM TicketTypes INNER JOIN Available ON TicketTypes.AvailableID = Available.AvailableID'
     , [] ///* Function Default Value */
     , [] ///* Function Default Value */
@@ -137,6 +137,7 @@ if($_SESSION['found'] == false) {
                     $ticketTypeName = $ticketType[1];
                     $ticketTypePrice = $ticketType[2];
                     $ticketTypeAvailable = $ticketType[3];
+                    $ticketTypeDescription = $ticketType[4];
                   ?>
                     <?php
                     /*Note:
@@ -160,7 +161,7 @@ if($_SESSION['found'] == false) {
                                onclick="enableButton('register-and-upgrade-button')">
                         <!- radio button text ->
                         <div>
-                          <?php echo $ticketTypeName.' ($'.$ticketTypePrice.')<br>Remaining: '.$ticketTypeAvailable ?>
+                          <?php echo $ticketTypeName.' ($'.$ticketTypePrice.')<br>Remaining: '.$ticketTypeAvailable.'<br>-------- Description --------<br>'.$ticketTypeDescription ?>
                         </div>
                       </label>
                     <?php endif; ?>
@@ -181,7 +182,7 @@ if($_SESSION['found'] == false) {
                       <?php if($ticketOfVisitorPrice == $ticketTypePrice): ?>
                         <label class="btn btn-default disabled">
                           <div>
-                            <?php echo 'Current Ticket: '.$ticketTypeName.'<br>Price: $'.$ticketTypePrice; ?>
+                            <?php echo 'Current Ticket: '.$ticketTypeName.'<br>Price: $'.$ticketTypePrice.'<br>-------- Description --------<br>'.$ticketTypeDescription ?>
                           </div>
                         </label>
                       <?php
