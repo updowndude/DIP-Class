@@ -1,6 +1,6 @@
 <?php
   //--- REQUIRES AND INCLUDES ---
-  require_once('C:/xampp/htdocs/designAndImplementation/php/model/db.php');
+    require '../model/db.php';
 
   //--- RETRIEVE VARIABLES ---
   $action = filter_input(INPUT_POST, "action", FILTER_SANITIZE_STRING);

@@ -13,8 +13,7 @@
     <div class="row">
         <div class="col-centered">
             <h1 class="text-center">Visitor Lookup</h1>
-            <br>
-            <div action="../controller/search.php" method="post" id="searchPerson">
+            <form action="../controller/search.php" method="post" id="searchPerson">
                 <div class="panel-group">
                     <div class="panel panel-default">
                         <div class="panel-heading">
@@ -22,28 +21,25 @@
                         </div>
                         <div id="pBodyBasicInfro" class="panel-body panel-collapse collapse">
                             <div class="form-group">
-                                <label>ID</label>
-                                <input class="form-control" type="tel" value="<?php
-                                if(isset( $_SESSION['PhoneNumber']) == true) {
-                                    echo  $_SESSION['PhoneNumber'];
-                                }
-                                ?>" placeholder="Phone Number" name="phone-number">
-                            </div>
-                            <div class="form-group">
                                 <label>First Name</label>
                                 <input class="form-control" value="<?php
                                 if(isset($_SESSION['FName']) == true) {
                                     echo $_SESSION['FName'];
-                                }
-                                ?>" type="text" placeholder="First Name" name="first-name">
+                                } ?>" type="text" placeholder="First Name" name="first-name">
                             </div>
                             <div class="form-group">
                                 <label>Last Name</label>
                                 <input class="form-control" value="<?php
                                 if(isset( $_SESSION['LName']) == true) {
                                     echo  $_SESSION['LName'];
-                                }
-                                ?>" type="text" placeholder="Last Name" name="last-name">
+                                } ?>" type="text" placeholder="Last Name" name="last-name">
+                            </div>
+                            <div class="form-group">
+                                <label>Date of Birth</label>
+                                <input class="form-control" value="<?php
+                                if(isset( $_SESSION['DOB']) == true) {
+                                    echo  $_SESSION['DOB'];
+                                } ?>" type="text" placeholder="Date of Birth YYYY/DD/MM" name="DOB">
                             </div>
                         </div>
                     </div>
@@ -57,20 +53,18 @@
                                 <input class="form-control" value="<?php
                                 if(isset( $_SESSION['Address']) == true) {
                                     echo  $_SESSION['Address'];
-                                }
-                                ?>" type="text" placeholder="Anddress" name="address">
+                                } ?>" type="text" placeholder="Anddress" name="address">
                             </div>
                             <div class="form-group">
                                 <label>City</label>
-                                <input class="form-control" type="tel" value="<?php
-                                if(isset( $_SESSION['PhoneNumber']) == true) {
-                                    echo  $_SESSION['PhoneNumber'];
-                                }
-                                ?>" placeholder="Phone Number" name="phone-number">
+                                <input class="form-control" type="text" value="<?php
+                                if(isset( $_SESSION['City']) == true) {
+                                    echo  $_SESSION['City'];
+                                } ?>" placeholder="City" name="city">
                             </div>
                             <div class="form-group">
                                 <label>State</label>
-                                <select class="form-control">
+                                <select class="form-control" name="State">
                                     <option value="AL">Alabama</option>
                                     <option value="AK">Alaska</option>
                                     <option value="AZ">Arizona</option>
@@ -81,7 +75,7 @@
                                     <option value="DE">Delaware</option>
                                     <option value="DC">District Of Columbia</option>
                                     <option value="FL">Florida</option>
-                                    <option value="GA">Georgia</option>
+                                    <option value="GA" selected="selected">Georgia</option>
                                     <option value="HI">Hawaii</option>
                                     <option value="ID">Idaho</option>
                                     <option value="IL">Illinois</option>
@@ -126,7 +120,7 @@
                             </div>
                             <div class="form-group">
                                 <label>Country</label>
-                                <select class="form-control">
+                                <select name="Country" class="form-control">
                                     <option value="AF">Afghanistan</option>
                                     <option value="AX">Åland Islands</option>
                                     <option value="AL">Albania</option>
@@ -362,7 +356,7 @@
                                     <option value="UA">Ukraine</option>
                                     <option value="AE">United Arab Emirates</option>
                                     <option value="GB">United Kingdom</option>
-                                    <option value="USA">United States</option>
+                                    <option value="USA" selected="selected">United States</option>
                                     <option value="UM">United States Minor Outlying Islands</option>
                                     <option value="UY">Uruguay</option>
                                     <option value="UZ">Uzbekistan</option>
@@ -386,28 +380,32 @@
                         </div>
                         <div id="pBodyContact" class="panel-body panel-collapse collapse">
                             <div class="form-group">
+                                <label>ID</label>
+                                <input class="form-control" type="text" value="<?php
+                                if(isset( $_SESSION['VisitorID']) == true) {
+                                    echo  $_SESSION['VisitorID'];
+                                } ?>" placeholder="Person ID" name="VisitorID">
+                            </div>
+                            <div class="form-group">
                                 <label>Phone Number</label>
                                 <input class="form-control" type="tel" value="<?php
                                 if(isset( $_SESSION['PhoneNumber']) == true) {
                                     echo  $_SESSION['PhoneNumber'];
-                                }
-                                ?>" placeholder="Phone Number" name="phone-number">
+                                } ?>" placeholder="Phone Number" name="phone-number">
                             </div>
                             <div class="form-group">
                                 <label>Zip</label>
-                                <input class="form-control" type="tel" value="<?php
-                                if(isset( $_SESSION['PhoneNumber']) == true) {
-                                    echo  $_SESSION['PhoneNumber'];
-                                }
-                                ?>" placeholder="Phone Number" name="phone-number">
+                                <input class="form-control" type="text" value="<?php
+                                if(isset( $_SESSION['PostalCode']) == true) {
+                                    echo  $_SESSION['PostalCode'];
+                                } ?>" placeholder="Zip" name="PostalCode">
                             </div>
                             <div class="form-group">
                                 <label>Email</label>
                                 <input class="form-control" value="<?php
                                 if(isset( $_SESSION['Email']) == true) {
                                     echo  $_SESSION['Email'];
-                                }
-                                ?>" type="text" placeholder="Email" name="email">
+                                } ?>" type="text" placeholder="Email" name="email">
                             </div>
                         </div>
                     </div>
@@ -417,11 +415,11 @@
                         <button class="btn btn-default" id="btnClear">Clear</button>
                     </div>
                 </div>
-            </div>
-            <input type="hidden" type="text" id="action" name="action" value="search">
+                <input type="hidden" type="text" id="action" name="action" value="search">
             </form>
         </div>
     </div>
+</div>
     <script type="text/javascript">
         <?php echo file_get_contents("../../dist/my-com.js") ?>
     </script>

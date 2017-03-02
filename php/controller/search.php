@@ -2,7 +2,7 @@
 session_start();
 
 function actions() {
-    require_once '../model/db.php';
+    require '../model/db.php';
 
     $action = $_POST['action'];
 
@@ -12,6 +12,8 @@ function actions() {
       $lName = $_POST['last-name'];
       $address = $_POST['address'];
       $email = $_POST['email'];
+
+      echo myTest();
 
       if ((strlen($fName) != 0) && (strlen($lName) != 0) && (strlen($phone) != 0) && (strlen($address) != 0) && (strlen($email) != 0)) {
           $sqlValues = handSQL('SELECT *
@@ -53,32 +55,48 @@ function actions() {
       $_SESSION['LName'] = "";
       $_SESSION['Address'] = "";
       $_SESSION['Email'] = "";
+      $_SESSION['VisitorID'] = "";
+      $_SESSION['City'] = "";
+      $_SESSION['StateProvince'] = "";
+      $_SESSION['Country'] = "";
+      $_SESSION['PostalCode'] = "";
+      $_SESSION['DOB'] = "";
 
       header('Location: ../view/visitor');
   } elseif ($action == 'searchByPhone') {
-      $phone = $_POST['phone-number'];
+      $DOB = $_POST['DOB'];
       $fName = $_POST['first-name'];
       $lName = $_POST['last-name'];
-      $address = $_POST['address'];
-      $email = $_POST['email'];
 
-      if ((strlen($phone) != 0) && (strlen($fName) == 0) && (strlen($lName) == 0) && (strlen($address) == 0) && (strlen($email) == 0)) {
+      if ((strlen($DOB) != 0) && (strlen($fName) != 0) && (strlen($lName) != 0)) {
           $sqlValues = handSQL('SELECT *
        from Visitors
-       where PhoneNumber like :phoneNumber
-       LIMIT 1', [':phoneNumber'], [$phone], 0);
+       where ((DOB like :DOB) && (FName like :FName) && (LName like :LName))
+       LIMIT 1', [':DOB',':FName',':LName'], [$DOB,$fName,$lName], 0);
 
           $_SESSION['PhoneNumber'] = $sqlValues['PhoneNumber'];
           $_SESSION['FName'] = $sqlValues['FName'];
           $_SESSION['LName'] = $sqlValues['LName'];
           $_SESSION['Address'] = $sqlValues['Address'];
           $_SESSION['Email'] = $sqlValues['Email'];
+          $_SESSION['VisitorID'] = $sqlValues['VisitorID'];
+          $_SESSION['City'] = $sqlValues['City'];
+          $_SESSION['StateProvince'] = $sqlValues['StateProvince'];
+          $_SESSION['Country'] = $sqlValues['Country'];
+          $_SESSION['PostalCode'] = $sqlValues['PostalCode'];
+          $_SESSION['DOB'] = $sqlValues['DOB'];
       } else {
           $_SESSION['PhoneNumber'] = "";
           $_SESSION['FName'] = "";
           $_SESSION['LName'] = "";
           $_SESSION['Address'] = "";
           $_SESSION['Email'] = "";
+          $_SESSION['VisitorID'] = "";
+          $_SESSION['City'] = "";
+          $_SESSION['StateProvince'] = "";
+          $_SESSION['Country'] = "";
+          $_SESSION['PostalCode'] = "";
+          $_SESSION['DOB'] = "";
       }
 
       header('Location: ../view/lookup');
@@ -86,6 +104,21 @@ function actions() {
   } else {
     header('Location: ../view/404.php');
   }
+}
+
+function myTest() {
+    $aryBlnHasValue = new SplFixedArray($_SERVER['CONTENT_LENGTH']);
+    $aryPostValues =  array_values($_POST);
+    for ($lcv =0;$lcv<sizeof($_POST);$lcv++) {
+        if(strlen($aryPostValues[$lcv]) == 0) {
+            $aryBlnHasValue[$lcv] = false;
+        } else {
+            $aryBlnHasValue[$lcv] = true;
+        }
+    }
+
+    echo sizeof($aryBlnHasValue);
+    var_dump($_POST);
 }
 
 actions();

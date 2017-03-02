@@ -1,3 +1,4 @@
+<?php session_start(); ?>
 <!--
 ====== DOCUMENT I\O INFO ======
 VARIABLES REQUIRED:
@@ -18,6 +19,8 @@ intended datatype: string
 <?php
 //*** SQL Related PHP ***
 //**********************
+require '../model/db.php';
+
   $ticketTypeCountQuery
     = handSQL
     ('SELECT TicketTypes.TicketTypeID, TicketTypes.Name, TicketTypes.Price, Available.Total

@@ -25,20 +25,28 @@ if(document.body.id == 'findPersonBody') {
     elmInputs.forEach((cur) => {
         cur.addEventListener('input', () => {
             let blnSumbit = true;
+            let intRight = 0;
 
             elmInputs.forEach((curPlaced) => {
-                if((curPlaced.value.trim().length == 0) && ((curPlaced.name == 'last-name') || (curPlaced.name == 'first-name'))) {
-                    if((elmInputs[5].value.trim().length < 8) || (elmInputs[5].name != 'phone-number')) {
-                        blnSumbit = false;
-                        curPlaced.classList.add('myError');
-                        btnFindPerson.setAttribute('disabled','disabled');
-                    } else {
-                        blnSumbit = true;
-                        curPlaced.classList.remove('myError');
-                        btnFindPerson.removeAttribute('disabled');
-                    }
+                (curPlaced.value.trim().length != 0) && ((curPlaced.name == 'last-name') || (curPlaced.name == 'DOB') || (curPlaced.name == 'first-name')) ? intRight++ : null;
+
+                if(intRight === 3) {
+                    blnSumbit = true;
+                    btnFindPerson.removeAttribute('disabled');
+
+                    elmInputs.forEach((element, index, array) => {
+                       if(index <= 2) {
+                           element.classList.remove('myError');
+                       }
+                    });
                 } else {
-                    curPlaced.classList.remove('myError');
+                    blnSumbit = false;
+                    elmInputs.forEach((element, index, array) => {
+                        if(index <= 2) {
+                            element.classList.add('myError');
+                        }
+                    });
+                    btnFindPerson.setAttribute('disabled','disabled');
                 }
             });
 
