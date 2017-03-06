@@ -15,7 +15,7 @@ if(document.body.id == 'findPersonBody') {
     const btnFindPerson = document.querySelector('#searchPhone');
 
     elmInputs.forEach((cur2) => {
-        if((cur2.value.trim().length == 0) && ((cur2.name == 'last-name') || (cur2.name == 'first-name'))) {
+        if((cur2.value.trim().length == 0) && ((cur2.name == 'LName') || (cur2.name == 'FName'))) {
             blnRemoveSumbit = false;
         }
     });
@@ -28,7 +28,9 @@ if(document.body.id == 'findPersonBody') {
             let intRight = 0;
 
             elmInputs.forEach((curPlaced) => {
-                (curPlaced.value.trim().length != 0) && ((curPlaced.name == 'last-name') || (curPlaced.name == 'DOB') || (curPlaced.name == 'first-name')) ? intRight++ : null;
+                (curPlaced.value.trim().length != 0) && ((curPlaced.name == 'LName') || (curPlaced.name == 'FName')) ? intRight++ : null;
+
+                (/^[1-9]{1}\d{3}-\d{2}-\d{2}$/.test(curPlaced.value.trim()) == true) && ((curPlaced.name == 'DOB')) ? intRight++ : null;
 
                 if(intRight === 3) {
                     blnSumbit = true;

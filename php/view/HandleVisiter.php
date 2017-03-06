@@ -29,6 +29,7 @@ require '../model/db.php';
     , [] ///* Function Default Value */
     , 1 /* Fetch All Rows */
     );
+
   $ticketOfVisitorQuery
     = handSQL
     ('SELECT
@@ -39,7 +40,7 @@ require '../model/db.php';
         :visitorID = TicketAssignment.VisitorID
         AND TicketAssignment.TicketTypeID = TicketTypes.TicketTypeID'
     , [":visitorID"]
-    , [$_SESSION["sqlValues"]["VisitorID"]]
+    , [$_SESSION["sqlValues"][0]["VisitorID"]]
     , 0
     );
   $ticketOfVisitorPrice = $ticketOfVisitorQuery[0];

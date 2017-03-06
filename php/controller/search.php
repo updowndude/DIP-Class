@@ -7,40 +7,7 @@ function actions() {
     $action = $_POST['action'];
 
   if ($action == 'search') {
-      $phone = $_POST['phone-number'];
-      $fName = $_POST['first-name'];
-      $lName = $_POST['last-name'];
-      $address = $_POST['address'];
-      $email = $_POST['email'];
-
-      echo myTest();
-
-      if ((strlen($fName) != 0) && (strlen($lName) != 0) && (strlen($phone) != 0) && (strlen($address) != 0) && (strlen($email) != 0)) {
-          $sqlValues = handSQL('SELECT *
-       from Visitors
-       where ((FName like :fname) && (LName like :lname) && (PhoneNumber like :phoneNumber) && (Address like :adress) && (Email like :email))
-       LIMIT 1', [':fname', ':lname', ':phoneNumber',':adress', ':email'], [$fName, $lName, $phone, $address, $email], 0);
-      } elseif ((strlen($fName) != 0) && (strlen($lName) != 0) && (strlen($phone) != 0) && (strlen($address) != 0)) {
-          $sqlValues = handSQL('SELECT *
-       from Visitors
-       where ((FName like :fname) && (LName like :lname) && (PhoneNumber like :phoneNumber) && (Address like :adress))
-       LIMIT 1', [':fname', ':lname', ':phoneNumber',':adress'], [$fName, $lName, $phone, $address], 0);
-      }if((strlen($fName) != 0) && (strlen($lName) != 0) && (strlen($address) != 0)) {
-          $sqlValues = handSQL('SELECT *
-       from Visitors
-       where ((FName like :fname) && (LName like :lname) && (Address like :address))
-       LIMIT 1', [':fname', ':lname', ':address'], [$fName, $lName, $address], 0);
-      } elseif ((strlen($fName) != 0) && (strlen($lName) != 0) && (strlen($phone) != 0)) {
-          $sqlValues = handSQL('SELECT *
-       from Visitors
-       where ((FName like :fname) && (LName like :lname) && (PhoneNumber like :phoneNumber))
-       LIMIT 1', [':fname', ':lname', ':phoneNumber'], [$fName, $lName, $phone], 0);
-      } else {
-          $sqlValues = handSQL('SELECT *
-       from Visitors
-       where ((FName like :fname) && (LName like :lname))
-       LIMIT 1', [':fname', ':lname'], [$fName, $lName], 0);
-      }
+      $sqlValues = findPersonHelper();
 
       if ($sqlValues == 0) {
         $_SESSION['found'] = false;
@@ -61,30 +28,40 @@ function actions() {
       $_SESSION['Country'] = "";
       $_SESSION['PostalCode'] = "";
       $_SESSION['DOB'] = "";
+      $_SESSION['sqlValuesForMutiPeople'] = [];
 
       header('Location: ../view/visitor');
   } elseif ($action == 'searchByPhone') {
-      $DOB = $_POST['DOB'];
-      $fName = $_POST['first-name'];
-      $lName = $_POST['last-name'];
 
-      if ((strlen($DOB) != 0) && (strlen($fName) != 0) && (strlen($lName) != 0)) {
-          $sqlValues = handSQL('SELECT *
-       from Visitors
-       where ((DOB like :DOB) && (FName like :FName) && (LName like :LName))
-       LIMIT 1', [':DOB',':FName',':LName'], [$DOB,$fName,$lName], 0);
+      $sqlValues = findPersonHelper();
 
-          $_SESSION['PhoneNumber'] = $sqlValues['PhoneNumber'];
-          $_SESSION['FName'] = $sqlValues['FName'];
-          $_SESSION['LName'] = $sqlValues['LName'];
-          $_SESSION['Address'] = $sqlValues['Address'];
-          $_SESSION['Email'] = $sqlValues['Email'];
-          $_SESSION['VisitorID'] = $sqlValues['VisitorID'];
-          $_SESSION['City'] = $sqlValues['City'];
-          $_SESSION['StateProvince'] = $sqlValues['StateProvince'];
-          $_SESSION['Country'] = $sqlValues['Country'];
-          $_SESSION['PostalCode'] = $sqlValues['PostalCode'];
-          $_SESSION['DOB'] = $sqlValues['DOB'];
+      if (count($sqlValues) != 0) {
+          if(count($sqlValues) == 1) {
+              $_SESSION['PhoneNumber'] = $sqlValues['PhoneNumber'];
+              $_SESSION['FName'] = $sqlValues['FName'];
+              $_SESSION['LName'] = $sqlValues['LName'];
+              $_SESSION['Address'] = $sqlValues['Address'];
+              $_SESSION['Email'] = $sqlValues['Email'];
+              $_SESSION['VisitorID'] = $sqlValues['VisitorID'];
+              $_SESSION['City'] = $sqlValues['City'];
+              $_SESSION['StateProvince'] = $sqlValues['StateProvince'];
+              $_SESSION['Country'] = $sqlValues['Country'];
+              $_SESSION['PostalCode'] = $sqlValues['PostalCode'];
+              $_SESSION['DOB'] = $sqlValues['DOB'];
+          } else {
+              $_SESSION['sqlValuesForMutiPeople'] = $sqlValues;
+              $_SESSION['PhoneNumber'] = $sqlValues[0]['PhoneNumber'];
+              $_SESSION['FName'] = $sqlValues[0]['FName'];
+              $_SESSION['LName'] = $sqlValues[0]['LName'];
+              $_SESSION['Address'] = $sqlValues[0]['Address'];
+              $_SESSION['Email'] = $sqlValues[0]['Email'];
+              $_SESSION['VisitorID'] = $sqlValues[0]['VisitorID'];
+              $_SESSION['City'] = $sqlValues[0]['City'];
+              $_SESSION['StateProvince'] = $sqlValues[0]['StateProvince'];
+              $_SESSION['Country'] = $sqlValues[0]['Country'];
+              $_SESSION['PostalCode'] = $sqlValues[0]['PostalCode'];
+              $_SESSION['DOB'] = $sqlValues[0]['DOB'];
+          }
       } else {
           $_SESSION['PhoneNumber'] = "";
           $_SESSION['FName'] = "";
@@ -101,24 +78,68 @@ function actions() {
 
       header('Location: ../view/lookup');
       exit();
+  }  elseif ($action == 'choosePerson'){
+        $sqlValues = handSQL("SELECT *
+                              FROM Visitors
+                              where VisitorID = :ID", [":ID"], [$_POST["choosePerson"]], 0);
+
+      $_SESSION['PhoneNumber'] = $sqlValues['PhoneNumber'];
+      $_SESSION['FName'] = $sqlValues['FName'];
+      $_SESSION['LName'] = $sqlValues['LName'];
+      $_SESSION['Address'] = $sqlValues['Address'];
+      $_SESSION['Email'] = $sqlValues['Email'];
+      $_SESSION['VisitorID'] = $sqlValues['VisitorID'];
+      $_SESSION['City'] = $sqlValues['City'];
+      $_SESSION['StateProvince'] = $sqlValues['StateProvince'];
+      $_SESSION['Country'] = $sqlValues['Country'];
+      $_SESSION['PostalCode'] = $sqlValues['PostalCode'];
+      $_SESSION['DOB'] = $sqlValues['DOB'];
+
+      header('Location: ../view/lookup');
+      exit();
   } else {
-    header('Location: ../view/404.php');
+    header('Location: ../view/404');
   }
 }
 
-function myTest() {
-    $aryBlnHasValue = new SplFixedArray($_SERVER['CONTENT_LENGTH']);
+function findPersonHelper() {
+    $aryBlnHasValue = new SplFixedArray(sizeof($_POST));
+    $aryHandSQLValues = [];
+    $aryHandSQLKeys = [];
     $aryPostValues =  array_values($_POST);
+    $aryKeys = array_keys($_POST);
+    $strWhere = "SELECT *
+       from Visitors
+       where (";
+    $blnOnce = false;
+    $curPlaceForArys = 0;
+
     for ($lcv =0;$lcv<sizeof($_POST);$lcv++) {
-        if(strlen($aryPostValues[$lcv]) == 0) {
+        if((strlen($aryPostValues[$lcv]) == 0) || ($aryKeys[$lcv] == "action")) {
             $aryBlnHasValue[$lcv] = false;
         } else {
             $aryBlnHasValue[$lcv] = true;
         }
     }
 
-    echo sizeof($aryBlnHasValue);
-    var_dump($_POST);
+    for ($lcv2 =0;$lcv2<sizeof($_POST);$lcv2++) {
+        if($aryBlnHasValue[$lcv2] == true) {
+            if($blnOnce == false){
+                $blnOnce = true;
+                $strWhere .= "({$aryKeys[$lcv2]} = :{$aryKeys[$lcv2]})";
+                $aryHandSQLKeys[$curPlaceForArys] = ":{$aryKeys[$lcv2]}";
+                $aryHandSQLValues[$curPlaceForArys] = $aryPostValues[$lcv2];
+            } else {
+                $strWhere .= " && ({$aryKeys[$lcv2]} like :{$aryKeys[$lcv2]})";
+                $aryHandSQLKeys[$curPlaceForArys] = ":{$aryKeys[$lcv2]}";
+                $aryHandSQLValues[$curPlaceForArys] = $aryPostValues[$lcv2];
+            }
+            $curPlaceForArys++;
+        }
+    }
+
+    $strWhere .= ")";
+    return handSQL($strWhere, $aryHandSQLKeys, $aryHandSQLValues, 1);
 }
 
 actions();
