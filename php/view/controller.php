@@ -1,6 +1,7 @@
+<?php if (!isset($_SESSION)){ session_start(); } ?>
 <?php
   //--- REQUIRES AND INCLUDES ---
-    require '../model/db.php';
+    require_once '../model/db.php';
 
   //--- RETRIEVE VARIABLES ---
   $action = filter_input(INPUT_POST, "action", FILTER_SANITIZE_STRING);
@@ -9,8 +10,8 @@
   switch($action)
   {
       case 'upgradePerson':
-          $upgradeTicketTypeID = $_POST["ticketTypeID"];
-          $visitorID = $_SESSION["sqlValues"]["VisitorID"];
+          $upgradeTicketTypeID = $_POST['selected-ticket-type-option'];
+          $visitorID = $_SESSION['VisitorID'];
           $pdoObj = getAccess();
           $query =
             '
@@ -28,16 +29,16 @@
           $statement->execute();
           $statement->closeCursor();
       
-          include 'php/view/findperson.php';
+          include '../view/findperson.php';
           break;
       case 'registerPerson':
-          $ticketTypeID = $_POST['ticketTypeID'];
+          $ticketTypeID = $_POST['selected-ticket-type-option'];
           $pdoObj = getAccess();
           $query =
             '
             INSERT INTO
             Visitors
-            (fName, lName, phone, address)
+            (fName, lName, phoneNumber, address)
             VALUES
             (:fName, :lName, :phone, :address);
             
@@ -53,15 +54,16 @@
                 AND address = :address)
              , :ticketTypeID);
              ';
+          //var_dump($_SESSION['FName']);
           $statement = $pdoObj->prepare($query);
-          $statement->bindValue(':fName', $_SESSION['sqlValues']['FName']);
-          $statement->bindValue(':lName', $_SESSION['sqlValues']['LName']);
-          $statement->bindValue(':phone', $_SESSION['sqlValues']['Phone']);
-          $statement->bindValue(':address', $_SESSION['sqlValues']['Address']);
+          $statement->bindValue(':fName', $_SESSION['FName']);
+          $statement->bindValue(':lName', $_SESSION['LName']);
+          $statement->bindValue(':phone', $_SESSION['PhoneNumber']);
+          $statement->bindValue(':address', $_SESSION['Address']);
           $statement->bindValue(':ticketTypeID', $ticketTypeID);
           $statement->execute();
           $statement->closeCursor();
-          include 'php/view/findperson.php';
+          include '../view/findperson.php';
           break;
   }
 ?>
