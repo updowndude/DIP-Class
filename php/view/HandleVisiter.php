@@ -1,4 +1,4 @@
-<?php session_start(); ?>
+<?php if(!isset($_SESSION)){ session_start(); } ?>
 <!--
 ====== DOCUMENT I\O INFO ======
 VARIABLES REQUIRED:
