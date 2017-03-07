@@ -2,7 +2,6 @@
 <?php
   //--- REQUIRES AND INCLUDES ---
     require_once '../model/db.php';
-    var_dump($_SESSION);
 
   //--- RETRIEVE VARIABLES ---
   $action = filter_input(INPUT_POST, "action", FILTER_SANITIZE_STRING);
