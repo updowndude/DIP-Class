@@ -1,3 +1,4 @@
+<?php if (!isset($_SESSION)){ session_start(); } ?>
 <?php
   //--- REQUIRES AND INCLUDES ---
     require '../model/db.php';
