@@ -21,7 +21,7 @@
             SET
               TicketAssignment.TicketTypeID = :ticketTypeID
             WHERE
-              VisitorID = :visitorID
+              TicketAssignment.VisitorID = :visitorID
             ';
           $statement = $pdoObj->prepare($query);
           $statement->bindValue(':ticketTypeID',$upgradeTicketTypeID);
@@ -38,9 +38,9 @@
             '
             INSERT INTO
             Visitors
-            (fName, lName, phoneNumber, address)
+            (FName, LName, DOB, Address, City, StateProvince, Country, PhoneNumber, PostalCode)
             VALUES
-            (:fName, :lName, :phone, :address);
+            (:fName, :lName, :dob, :address, :city, :stateProvince, country, :phoneNumber, :postalCode);
             
             INSERT INTO
             TicketAssignment
@@ -48,19 +48,28 @@
             VALUES
             ((SELECT VisitorID 
               FROM Visitors 
-              WHERE fName = :fName
-                AND lName = :lName 
-                AND phone = :phone 
-                AND address = :address)
+              WHERE (FName = :fName OR :fName IS NULL)
+                AND (LName = :lName OR :lName IS NULL) 
+                AND (DOB = :dob OR :dob IS NULL)
+                AND (Address = :address OR :address IS NULL)
+                AND (City = :city OR :city IS NULL)
+                AND (StateProvince = :stateProvince OR :stateProvince IS NULL)
+                AND (Country = :country OR :country IS NULL)
+                AND (PhoneNumber = :phoneNumber OR :phoneNumber IS NULL)
+                AND (PostalCode = :postalCode OR :postalCode IS NULL)
              , :ticketTypeID);
              ';
           //var_dump($_SESSION['FName']);
           $statement = $pdoObj->prepare($query);
           $statement->bindValue(':fName', $_SESSION['FName']);
           $statement->bindValue(':lName', $_SESSION['LName']);
-          $statement->bindValue(':phone', $_SESSION['PhoneNumber']);
+          $statement->bindValue(':dob', $_SESSION['DOB']);
           $statement->bindValue(':address', $_SESSION['Address']);
-          $statement->bindValue(':ticketTypeID', $ticketTypeID);
+          $statement->bindValue(':city', $_SESSION['City']);
+          $statement->bindValue(':stateProvince', $_SESSION['StateProvince']);
+          $statement->bindValue(':country', $_SESSION['Country']);
+          $statement->bindValue(':phoneNumber', $_SESSION['PhoneNumber']);
+          $statement->bindValue(':postalCode', $_SESSION['PostalCode']);
           $statement->execute();
           $statement->closeCursor();
           include '../view/findperson.php';
