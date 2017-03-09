@@ -366,7 +366,7 @@ $aryCountry = explode("\n",$countries);
                                 <input class="form-control" value="<?php
                                 if(isset( $_SESSION['Address']) == true) {
                                     echo  $_SESSION['Address'];
-                                } ?>" type="text" placeholder="Anddress" name="Address">
+                                } ?>" type="text" placeholder="Address" name="Address">
                             </div>
                             <div class="form-group">
                                 <label>City</label>
