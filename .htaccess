@@ -2,4 +2,6 @@ RewriteEngine on
 RewriteRule ^php/view/visitor php/view/HandleVisiter.php [NC,L]
 RewriteRule ^php/view/lookup php/view/findperson.php [NC,L]
 RewriteRule ^php/view/404 php/view/404.php [NC,L]
+RewriteRule ^php/includes/logout php/includes/logout.php [NC,L]
+RewriteRule ^home index.php [NC,L]
 ErrorDocument 404 /DIP-Class/php/view/404

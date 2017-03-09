@@ -8,6 +8,14 @@ document.querySelectorAll('#searchPerson input').forEach((cur) => {
 });*/
 import bsn from 'bootstrap.native';
 
+if('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('/DIP-Class/sWorker.js', {scope: 'DIP-Class/*'}).then((reg) => {
+        console.log('worked');
+    }).catch((err) => {
+        console.log(err);
+    });3
+}
+
 if(document.body.id == 'findPersonBody') {
     let blnRemoveSumbit = true;
     const elmInputs = document.querySelectorAll('#searchPerson input');
@@ -56,7 +64,11 @@ if(document.body.id == 'findPersonBody') {
         });
     });
 
-    btnFindPerson.addEventListener('click', (event) => {
+    document.querySelector('#btnLogout').addEventListener('click', (event) => {
+
+    });
+
+    btnFindPerson.addEventListener('click', () => {
         document.querySelector('#action').value = "searchByPhone";
     });
 

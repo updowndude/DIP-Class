@@ -1,10 +1,27 @@
 <?php
 session_start();
 
+function main() {
+    require('defense.php');
+    if(($_SERVER['REQUEST_METHOD'] === 'POST') && (checkToken() == true) && (checkDomain() == true)) {
+        $_SESSION['IPAddress'] = $_SERVER['REMOTE_ADDR'];
+        $_SESSION['BrowserData'] = $_SERVER['HTTP_USER_AGENT'];
+        $_SESSION['loginValid'] = true;
+        $_SESSION['loginTime'] = date('Y-m-d H:i:s');
+        actions();
+    } else {
+        exit('Something happened');
+    }
+}
+
 function actions() {
     require '../model/db.php';
 
-    $action = $_POST['action'];
+    $aryMyValues = allowedValues([
+       'FName','LName','DOB','Address','City','StateProvince','Country','VisitorID','PhoneNumber','PostalCode','Email','action', 'choosePerson'
+    ]);
+
+    $action = $aryMyValues['action'];
 
   if ($action == 'search') {
       $sqlValues = findPersonHelper();
@@ -81,7 +98,7 @@ function actions() {
   }  elseif ($action == 'choosePerson'){
         $sqlValues = handSQL("SELECT *
                               FROM Visitors
-                              where VisitorID = :ID", [":ID"], [$_POST["choosePerson"]], 0);
+                              where VisitorID = :ID", [":ID"], [$aryMyValues["choosePerson"]], 0);
 
       $_SESSION['PhoneNumber'] = $sqlValues['PhoneNumber'];
       $_SESSION['FName'] = $sqlValues['FName'];
@@ -103,18 +120,22 @@ function actions() {
 }
 
 function findPersonHelper() {
-    $aryBlnHasValue = new SplFixedArray(sizeof($_POST));
+    $aryMyValues = allowedValues([
+        'FName','LName','DOB','Address','City','StateProvince','Country','VisitorID','PhoneNumber','PostalCode','Email','action'
+    ]);
+
+    $aryBlnHasValue = new SplFixedArray(sizeof($aryMyValues));
     $aryHandSQLValues = [];
     $aryHandSQLKeys = [];
-    $aryPostValues =  array_values($_POST);
-    $aryKeys = array_keys($_POST);
+    $aryPostValues =  array_values($aryMyValues);
+    $aryKeys = array_keys($aryMyValues);
     $strWhere = "SELECT *
        from Visitors
        where (";
     $blnOnce = false;
     $curPlaceForArys = 0;
 
-    for ($lcv =0;$lcv<sizeof($_POST);$lcv++) {
+    for ($lcv =0;$lcv<sizeof($aryMyValues);$lcv++) {
         if((strlen($aryPostValues[$lcv]) == 0) || ($aryKeys[$lcv] == "action")) {
             $aryBlnHasValue[$lcv] = false;
         } else {
@@ -122,7 +143,7 @@ function findPersonHelper() {
         }
     }
 
-    for ($lcv2 =0;$lcv2<sizeof($_POST);$lcv2++) {
+    for ($lcv2 =0;$lcv2<sizeof($aryMyValues);$lcv2++) {
         if($aryBlnHasValue[$lcv2] == true) {
             if($blnOnce == false){
                 $blnOnce = true;
@@ -142,5 +163,5 @@ function findPersonHelper() {
     return handSQL($strWhere, $aryHandSQLKeys, $aryHandSQLValues, 1);
 }
 
-actions();
+main();
  ?>

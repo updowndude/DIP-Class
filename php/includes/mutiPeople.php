@@ -27,6 +27,10 @@
                 </div>
             <button type="submit" class="btn btn-default" id="findPerson">Choose person</button>
             <input type="hidden" type="text" id="action" name="action" value="choosePerson">
+                <?php
+                    // require('../controller/defense.php');
+                    echo makeToken();
+                ?>
             </form>
         </div>
 </div>
