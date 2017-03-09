@@ -17,9 +17,9 @@
                         <?php
                             foreach ($_SESSION['sqlValuesForMutiPeople'] as $curPerson) {
                                 if($curPerson["VisitorID"] == $_SESSION['VisitorID']) {
-                                    echo "<option value=\"{$curPerson["VisitorID"]}\" selected=\"selected\">{$curPerson["FName"]} {$curPerson["LName"]}</option>";
+                                    echo "<option value=\"{$curPerson["VisitorID"]}\" selected=\"selected\">{$curPerson["FName"]} {$curPerson["LName"]} {$curPerson["Email"]} {$curPerson["PhoneNumber"]}</option>";
                                 } else {
-                                    echo "<option value=\"{$curPerson["VisitorID"]}\">{$curPerson["FName"]} {$curPerson["LName"]}</option>";
+                                    echo "<option value=\"{$curPerson["VisitorID"]}\">{$curPerson["FName"]} {$curPerson["LName"]} {$curPerson["Email"]} {$curPerson["PhoneNumber"]}</option>";
                                 }
                             }
                         ?>
