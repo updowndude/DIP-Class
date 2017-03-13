@@ -358,7 +358,7 @@ $aryCountry = explode("\n",$countries);
                     </div>
                     <div class="panel panel-default">
                         <div class="panel-heading">
-                            <a data-toggle="collapse" href="#pBodyAddressGroup">Adress group</a>
+                            <a data-toggle="collapse" href="#pBodyAddressGroup">Address group</a>
                         </div>
                         <div id="pBodyAddressGroup" class="panel-body panel-collapse collapse">
                             <div class="form-group">
@@ -422,7 +422,7 @@ $aryCountry = explode("\n",$countries);
                     </div>
                     <div class="panel panel-default">
                         <div class="panel-heading">
-                            <a data-toggle="collapse" href="#pBodyContact">Conact info</a>
+                            <a data-toggle="collapse" href="#pBodyContact">Contact info</a>
                         </div>
                         <div id="pBodyContact" class="panel-body panel-collapse collapse">
                             <div class="form-group">
