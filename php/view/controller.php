@@ -16,8 +16,10 @@
           $query =
             '
             UPDATE
-              (Visitors INNER JOIN TicketAssignment ON Visitors.VisitorID = TicketAssignment.VisitorID)
-              INNER JOIN TicketTypes ON TicketAssignment.TicketTypeID = TicketTypes.TicketTypeID
+              TicketAssignment INNER JOIN
+              TicketTypes
+                  ON TicketAssignment.TicketTypeID
+                  =  TicketTypes.TicketTypeID
             SET
               TicketAssignment.TicketTypeID = :ticketTypeID
             WHERE
@@ -38,13 +40,13 @@
             '
             INSERT INTO
             Visitors
-            (FName, LName, DOB, Address, City, StateProvince, Country, PhoneNumber, PostalCode)
+            (FName, LName, DOB, Address, City, StateProvince, Country, PhoneNumber, PostalCode, Email, Comments)
             VALUES
-            (:fName, :lName, :dob, :address, :city, :stateProvince, country, :phoneNumber, :postalCode);
+            (:fName, :lName, :dob, :address, :city, :stateProvince, country, :phoneNumber, :postalCode, :email, :comments);
             
             INSERT INTO
             TicketAssignment
-            (VisitorID, TicketTypeID)
+            (VisitorID, TicketTypeID, DatePurchased)
             VALUES
             ((SELECT VisitorID 
               FROM Visitors 
@@ -57,9 +59,10 @@
                 AND (Country = :country OR :country IS NULL)
                 AND (PhoneNumber = :phoneNumber OR :phoneNumber IS NULL)
                 AND (PostalCode = :postalCode OR :postalCode IS NULL)
-             , :ticketTypeID);
+                AND (Email = :email OR :email IS NULL))
+             , :ticketTypeID
+             , NOW());
              ';
-          //var_dump($_SESSION['FName']);
           $statement = $pdoObj->prepare($query);
           $statement->bindValue(':fName', $_SESSION['FName']);
           $statement->bindValue(':lName', $_SESSION['LName']);
@@ -70,6 +73,8 @@
           $statement->bindValue(':country', $_SESSION['Country']);
           $statement->bindValue(':phoneNumber', $_SESSION['PhoneNumber']);
           $statement->bindValue(':postalCode', $_SESSION['PostalCode']);
+          $statement->bindValue(':email', $_SESSION['Email']);
+          $statement->bindValue(':comments', $_SESSION['Comments']);
           $statement->execute();
           $statement->closeCursor();
           include '../view/findperson.php';
