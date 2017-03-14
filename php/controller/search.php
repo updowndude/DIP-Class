@@ -54,17 +54,17 @@ function actions() {
 
       if (count($sqlValues) != 0) {
           if(count($sqlValues) == 1) {
-              $_SESSION['PhoneNumber'] = $sqlValues['PhoneNumber'];
-              $_SESSION['FName'] = $sqlValues['FName'];
-              $_SESSION['LName'] = $sqlValues['LName'];
-              $_SESSION['Address'] = $sqlValues['Address'];
-              $_SESSION['Email'] = $sqlValues['Email'];
-              $_SESSION['VisitorID'] = $sqlValues['VisitorID'];
-              $_SESSION['City'] = $sqlValues['City'];
-              $_SESSION['StateProvince'] = $sqlValues['StateProvince'];
-              $_SESSION['Country'] = $sqlValues['Country'];
-              $_SESSION['PostalCode'] = $sqlValues['PostalCode'];
-              $_SESSION['DOB'] = $sqlValues['DOB'];
+              $_SESSION['PhoneNumber'] = $sqlValues[0]['PhoneNumber'];
+              $_SESSION['FName'] = $sqlValues[0]['FName'];
+              $_SESSION['LName'] = $sqlValues[0]['LName'];
+              $_SESSION['Address'] = $sqlValues[0]['Address'];
+              $_SESSION['Email'] = $sqlValues[0]['Email'];
+              $_SESSION['VisitorID'] = $sqlValues[0]['VisitorID'];
+              $_SESSION['City'] = $sqlValues[0]['City'];
+              $_SESSION['StateProvince'] = $sqlValues[0]['StateProvince'];
+              $_SESSION['Country'] = $sqlValues[0]['Country'];
+              $_SESSION['PostalCode'] = $sqlValues[0]['PostalCode'];
+              $_SESSION['DOB'] = $sqlValues[0]['DOB'];
           } else {
               $_SESSION['sqlValuesForMutiPeople'] = $sqlValues;
               $_SESSION['PhoneNumber'] = $sqlValues[0]['PhoneNumber'];
