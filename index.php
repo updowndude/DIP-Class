@@ -41,19 +41,24 @@
 				//data stored in session variables
 				$_SESSION['loggedInUser']=$name;
 
-				//redirect user to contacts page
-				header('Location: php/view/lookup');
+				if($name == 'maingateadmin') {
+                    //redirect user to contacts page
+                    header('Location: php/view/admin');
+                } else {
+                    //redirect user to contacts page
+                    header('Location: php/view/lookup');
+                }
 
 			//hashed password not verified
 			}else{
 				//error message
-				$loginError="<div class='alert alert-danger'>Incorrect username/password combination. Check your username and password.<a class='close' data-dismiss='alert'>&times;</a></div>";
+				$loginError="<div class='alert alert-danger' id='myAlert'>Incorrect username/password combination. Check your username and password.</div>";
 			}//data return verification
 	
 		//user does not exist
 		}else{
 		//error message
-		$loginError="<div class='alert alert-danger'>Incorrect username. Are you registered?<a class='close' data-dismiss='alert'>&times;</a></div>";
+		    $loginError="<div class='alert alert-danger' id='myAlert'>Incorrect username. Are you registered?</div>";
 		}//
 	}//if login form submitted
 
@@ -91,7 +96,7 @@
 </div><br><br>
 
 
-<form class="form-inline text-center" action="<?php echo htmlspecialchars($_SERVER['PHP_SELF']); ?>" method="post">
+<form class="form-inline text-center" action="home" method="post">
 	<div class="form-group">
 		<label for="login-username" class="sr-only">Username</label>
 		<input type="text" class="form-control input-lg" id="login-username" placeholder="username" name="username" value="<?php echo $formUsername; ?>">
@@ -102,7 +107,11 @@
 	</div><br><br>
 	<button type="submit" class="btn btn-info btn-lg" name="login">Login</button>
 </form>
-
+    <?php
+        if (isset($loginError) == true) {
+            echo $loginError;
+        }
+    ?>
 <!--echo password_hash("maingate", PASSWORD_DEFAULT);-->
 	
 <?php
