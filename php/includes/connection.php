@@ -1,11 +1,5 @@
 <?php
 
-	/*//atspace live connection
-	$server="pdb11.atspace.me";
-	$username="2054557_contacts";
-	$password="databasepassword01";
-	$db="2054557_contacts";*/
-
 	//localhost connection
 	$server="localhost";
 	$username="root";
