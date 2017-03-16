@@ -1,0 +1,14 @@
+visitors only enter once
+basic info panel default is open 
+show and edit comment 
+move DOB
+after buy a ticket 
+color scheme 
+fix upgrade problem 
+filter out week long tickets
+maingateadim page
+Offline
+Add to home screen 
+quantity of tickets
+live https
+clean up 404 page
