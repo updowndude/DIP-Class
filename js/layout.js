@@ -38,9 +38,7 @@ if(document.body.id == 'findPersonBody') {
             elmInputs.forEach((curPlaced) => {
                 (curPlaced.value.trim().length != 0) && ((curPlaced.name == 'LName') || (curPlaced.name == 'FName')) ? intRight++ : null;
 
-                (/^[1-9]{1}\d{3}-\d{2}-\d{2}$/.test(curPlaced.value.trim()) == true) && ((curPlaced.name == 'DOB')) ? intRight++ : null;
-
-                if(intRight === 3) {
+                if(intRight === 2) {
                     blnSumbit = true;
                     btnFindPerson.removeAttribute('disabled');
 

@@ -18,7 +18,7 @@ function actions() {
     require '../model/db.php';
 
     $aryMyValues = allowedValues([
-       'FName','LName','DOB','Address','City','StateProvince','Country','VisitorID','PhoneNumber','PostalCode','Email','action', 'choosePerson'
+       'FName','LName','DOB','Address','City','StateProvince','Country','VisitorID','PhoneNumber','PostalCode','Email','action', 'choosePerson','comment'
     ]);
 
     $action = $aryMyValues['action'];
@@ -53,32 +53,22 @@ function actions() {
       $sqlValues = findPersonHelper();
 
       if (count($sqlValues) != 0) {
-          if(count($sqlValues) == 1) {
-              $_SESSION['PhoneNumber'] = $sqlValues[0]['PhoneNumber'];
-              $_SESSION['FName'] = $sqlValues[0]['FName'];
-              $_SESSION['LName'] = $sqlValues[0]['LName'];
-              $_SESSION['Address'] = $sqlValues[0]['Address'];
-              $_SESSION['Email'] = $sqlValues[0]['Email'];
-              $_SESSION['VisitorID'] = $sqlValues[0]['VisitorID'];
-              $_SESSION['City'] = $sqlValues[0]['City'];
-              $_SESSION['StateProvince'] = $sqlValues[0]['StateProvince'];
-              $_SESSION['Country'] = $sqlValues[0]['Country'];
-              $_SESSION['PostalCode'] = $sqlValues[0]['PostalCode'];
-              $_SESSION['DOB'] = $sqlValues[0]['DOB'];
-          } else {
+          if(count($sqlValues) >= 2) {
               $_SESSION['sqlValuesForMutiPeople'] = $sqlValues;
-              $_SESSION['PhoneNumber'] = $sqlValues[0]['PhoneNumber'];
-              $_SESSION['FName'] = $sqlValues[0]['FName'];
-              $_SESSION['LName'] = $sqlValues[0]['LName'];
-              $_SESSION['Address'] = $sqlValues[0]['Address'];
-              $_SESSION['Email'] = $sqlValues[0]['Email'];
-              $_SESSION['VisitorID'] = $sqlValues[0]['VisitorID'];
-              $_SESSION['City'] = $sqlValues[0]['City'];
-              $_SESSION['StateProvince'] = $sqlValues[0]['StateProvince'];
-              $_SESSION['Country'] = $sqlValues[0]['Country'];
-              $_SESSION['PostalCode'] = $sqlValues[0]['PostalCode'];
-              $_SESSION['DOB'] = $sqlValues[0]['DOB'];
           }
+
+          $_SESSION['PhoneNumber'] = $sqlValues[0]['PhoneNumber'];
+          $_SESSION['FName'] = $sqlValues[0]['FName'];
+          $_SESSION['LName'] = $sqlValues[0]['LName'];
+          $_SESSION['Address'] = $sqlValues[0]['Address'];
+          $_SESSION['Email'] = $sqlValues[0]['Email'];
+          $_SESSION['VisitorID'] = $sqlValues[0]['VisitorID'];
+          $_SESSION['City'] = $sqlValues[0]['City'];
+          $_SESSION['StateProvince'] = $sqlValues[0]['StateProvince'];
+          $_SESSION['Country'] = $sqlValues[0]['Country'];
+          $_SESSION['PostalCode'] = $sqlValues[0]['PostalCode'];
+          $_SESSION['DOB'] = $sqlValues[0]['DOB'];
+          $_SESSION['Comments'] = $sqlValues[0]['Comments'];
       } else {
           $_SESSION['PhoneNumber'] = "";
           $_SESSION['FName'] = "";
@@ -96,7 +86,7 @@ function actions() {
       header('Location: ../view/lookup');
       exit();
   }  elseif ($action == 'choosePerson'){
-        $sqlValues = handSQL("SELECT *
+      $sqlValues = handSQL("SELECT *
                               FROM Visitors
                               where VisitorID = :ID", [":ID"], [$aryMyValues["choosePerson"]], 0);
 
@@ -111,10 +101,23 @@ function actions() {
       $_SESSION['Country'] = $sqlValues['Country'];
       $_SESSION['PostalCode'] = $sqlValues['PostalCode'];
       $_SESSION['DOB'] = $sqlValues['DOB'];
+      $_SESSION['Comments'] = $sqlValues['Comments'];
 
       header('Location: ../view/lookup');
       exit();
-  } else {
+  } elseif ($action == 'commentsUpdate') {
+      $sqlValues = handSQL("update Visitors
+                              set Comments = :Comment
+                              where VisitorID = :ID", [":Comment",":ID"], [$aryMyValues["comment"], $aryMyValues["VisitorID"]], 2);
+      $sqlValues = handSQL("SELECT *
+                              FROM Visitors
+                              where VisitorID = :ID", [":ID"], [$aryMyValues["VisitorID"]], 0);
+
+      $_SESSION['Comments'] = $sqlValues['Comments'];
+
+      header('Location: ../view/lookup');
+  }
+  else {
     header('Location: ../view/404');
   }
 }

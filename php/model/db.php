@@ -59,6 +59,8 @@
                 $newFeedback = $statement -> fetch();
             } elseif ($intGetValues == 1) {
                 $newFeedback = $statement -> fetchAll();
+            } else {
+                $newFeedback = "";
             }
 
             $statement->closeCursor();

@@ -347,13 +347,6 @@ $aryCountry = explode("\n",$countries);
                                     echo  $_SESSION['LName'];
                                 } ?>" type="text" placeholder="Last Name" name="LName">
                             </div>
-                            <div class="form-group">
-                                <label>Date of Birth</label>
-                                <input class="form-control" value="<?php
-                                if(isset( $_SESSION['DOB']) == true) {
-                                    echo  $_SESSION['DOB'];
-                                } ?>" type="text" placeholder="Date of Birth YYYY/DD/MM" name="DOB">
-                            </div>
                         </div>
                     </div>
                     <div class="panel panel-default">
@@ -453,6 +446,13 @@ $aryCountry = explode("\n",$countries);
                                     echo  $_SESSION['Email'];
                                 } ?>" type="text" placeholder="Email" name="Email">
                             </div>
+                            <div class="form-group">
+                                <label>Date of Birth</label>
+                                <input class="form-control" value="<?php
+                                if(isset( $_SESSION['DOB']) == true) {
+                                    echo  $_SESSION['DOB'];
+                                } ?>" type="text" placeholder="Date of Birth YYYY/DD/MM" name="DOB">
+                            </div>
                         </div>
                     </div>
                     <div class="btn-group" role="group">
@@ -473,6 +473,11 @@ $aryCountry = explode("\n",$countries);
                 if(sizeof($_SESSION['sqlValuesForMutiPeople'])>= 2){
                     require "../includes/mutiPeople.php";
                 }
+            }
+            ?>
+            <?php
+            if((isset($_SESSION['FName']) == true) && (isset($_SESSION['LName']) == true) && (isset($_SESSION['DOB']) == true)) {
+                require "../includes/comments.php";
             }
             ?>
         </div>

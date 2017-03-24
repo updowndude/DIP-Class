@@ -35,19 +35,14 @@ gulp.task('jsx', () => {
 					exclude: /node_modules/,
 					query: {
 						presets: [['es2015', {modules: false}]],
-						plugins: ['async-to-promises', 'transform-object-rest-spread']
+						plugins: ['async-to-promises']
 					}
 				}]
 			},
 			output: {
 				filename: 'my-com.js'
 			},
-			resolve: {
-				alias: {
-					vue$: 'vue/dist/vue.common.js'
-				}
-			},
-			devtool: 'inline-sourcemap',
+			// devtool: 'inline-sourcemap',
 			plugins: [new webpack.optimize.UglifyJsPlugin()]
 		}))
 		.pipe(gulp.dest('dist'))

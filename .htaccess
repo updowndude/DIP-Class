@@ -5,4 +5,6 @@ RewriteRule ^php/view/404 php/view/404.php [NC,L]
 RewriteRule ^php/includes/logout php/includes/logout.php [NC,L]
 RewriteRule ^php/view/admin php/view/admin.php [NC,L]
 RewriteRule ^home index.php [NC,L]
+RewriteCond %{HTTPS} off
+RewriteRule (.*) https://%{HTTP_HOST}%{REQUEST_URI}
 ErrorDocument 404 /DIP-Class/php/view/404

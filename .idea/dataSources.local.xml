@@ -9,7 +9,9 @@
       <case-sensitivity plain-identifiers="mixed" quoted-identifiers="upper" />
       <secret-storage>master_key</secret-storage>
       <user-name>root</user-name>
+      <introspection-schemas>*:Festival_DB</introspection-schemas>
       <resolve-scope>Festival_DB:</resolve-scope>
+      <unqualified-resolve-schemas>Festival_DB:</unqualified-resolve-schemas>
     </data-source>
   </component>
 </project>

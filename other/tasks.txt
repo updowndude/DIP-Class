@@ -1,8 +1,6 @@
 visitors only enter once
 basic info panel default is open 
-show and edit comment 
-move DOB
-after buy a ticket 
+after buy a ticket
 color scheme 
 fix upgrade problem 
 filter out week long tickets
