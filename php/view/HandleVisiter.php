@@ -40,7 +40,7 @@ $ticketOfVisitorQuery
            :visitorID = TicketAssignment.VisitorID
            AND TicketAssignment.TicketTypeID = TicketTypes.TicketTypeID'
     , [":visitorID"]
-    , [$_SESSION["sqlValues"][0]["VisitorID"]]
+    , [$_SESSION["VisitorID"]]
     , 0
 );
 $ticketOfVisitorPrice = $ticketOfVisitorQuery[0];
@@ -168,26 +168,25 @@ if($_SESSION['found'] == false) {
                                 /*Note:
                                  *If visitor is registered in MySQL database,
                                  *then show visitor’s current ticket type
-                                 */
-                                ?>
+                                 */?>
                                 <?php if(/* visitor is */ $found) :?>
                                     <?php
                                     /*Note:
-                                     *Else, if retrieved ticket type is the visitor’s ticket
+                                     *If retrieved ticket type is the visitor’s ticket
                                      *type, then create unclickable option to show the
                                      *visitor’s current ticket type
                                      */?>
                                     <?php if($ticketOfVisitorPrice == $ticketTypePrice): ?>
-                                        <label class="btn btn-default disabled">
+                                        <label class="btn btn-info disabled">
                                             <div>
                                                 <?php echo 'Current Ticket: '.$ticketTypeName.'<br>Price: $'.$ticketTypePrice.'<br>-------- Description --------<br>'.$ticketTypeDescription ?>
                                             </div>
                                         </label>
                                         <?php
                                         /*Note:
-                                         *The last else statement is excluded due to being
-                                         *uneeded. The comment that would’ve been above the
-                                         *statement is kept to clarify how the program should work.
+                                         *The last else statement is commented out due to being
+                                         *uneeded. It's kept as a commented out statement
+                                         *to clarify how the program should work.
                                          */
                                         //else, don’t display invalid upgrade option (retrieved ticket type) ?>
                                     <?php endif; ?>
