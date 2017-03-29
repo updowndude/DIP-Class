@@ -9,7 +9,7 @@ document.querySelectorAll('#searchPerson input').forEach((cur) => {
 import bsn from 'bootstrap.native';
 
 if('serviceWorker' in navigator) {
-    navigator.serviceWorker.register('/DIP-Class/sWorker.js', {scope: 'DIP-Class/*'}).then((reg) => {
+    navigator.serviceWorker.register('/maingate/sWorker.js', {scope: 'maingate/*'}).then((reg) => {
         console.log('worked');
     }).catch((err) => {
         console.log(err);

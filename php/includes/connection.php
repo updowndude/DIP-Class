@@ -1,10 +1,9 @@
 <?php
-
 	//localhost connection
 	$server="localhost";
-	$username="root";
+	$username="dips2017_mainGat";
 	$password="root";
-	$db="Festival_DB";
+	$db="dips2017_Festival_DB";
 
 	$conn=new mysqli($server,$username,$password,$db);
 
@@ -12,7 +11,4 @@
         echo mysqli_connect_error();
         exit;
     }
-
-
-
 ?>

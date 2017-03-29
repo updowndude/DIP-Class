@@ -1,0 +1,21 @@
+{
+  "name": "MG",
+  "short_name": "Maingate",
+  "start_url": "home",
+  "display": "standalone",
+  "background_color": "#ff8080",
+  "theme_color": "#ff8080",
+  "description": "Maingate for DIP class",
+  "icons": [{
+    "src": "images/Fire.png",
+    "sizes": "144x144",
+    "type": "image/png"
+  },{
+    "src": "images/Fire.png",
+    "sizes": "192x192",
+    "type": "image/png"
+  }],
+  "related_applications": [{
+    "platform": "web"
+  }]
+}
