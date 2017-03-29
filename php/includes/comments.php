@@ -25,6 +25,7 @@
             } ?>" placeholder="VisitorID" name="VisitorID">
             <?php
             // require('../controller/defense.php');
+            // for secutry
             echo makeToken();
             ?>
         </form>

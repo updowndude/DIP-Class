@@ -1,11 +1,12 @@
 <?php
 	//localhost connection
+    // talks to the database
 	$server="localhost";
-	$username="dips2017_mainGat";
+	$username="root";
 	$password="root";
-	$db="dips2017_Festival_DB";
+    $db="Festival_DB";
 
-	$conn=new mysqli($server,$username,$password,$db);
+    $conn=new mysqli($server,$username,$password,$db);
 
     if(mysqli_connect_error()){
         echo mysqli_connect_error();

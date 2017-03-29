@@ -107,10 +107,12 @@
 		<label for="login-password" class="sr-only">Password</label>
 		<input type="password" class="form-control input-lg" id="login-password" placeholder="password" name="password" value="<?php echo $formPass; ?>">
 	</div><br><br>
-	<button type="submit" class="btn btn-success btn-lg" name="login">Login</button>
+	<button type="submit" class="btn btn-info btn-lg" name="login">Login</button>
 </form>
     <?php
+        // check to see there a login error
         if (isset($loginError) == true) {
+            // display the login erro
             echo $loginError;
         }
     ?>

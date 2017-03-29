@@ -15,10 +15,14 @@
                 <div class="form-group">
                     <select class="form-control" name="choosePerson">
                         <?php
+                        // loops though the people in query
                             foreach ($_SESSION['sqlValuesForMutiPeople'] as $curPerson) {
+                                // check current person to display the correct vallue
                                 if($curPerson["VisitorID"] == $_SESSION['VisitorID']) {
+                                    // current person
                                     echo "<option value=\"{$curPerson["VisitorID"]}\" selected=\"selected\">{$curPerson["FName"]} {$curPerson["LName"]} {$curPerson["Email"]} {$curPerson["PhoneNumber"]}</option>";
                                 } else {
+                                    // stander output
                                     echo "<option value=\"{$curPerson["VisitorID"]}\">{$curPerson["FName"]} {$curPerson["LName"]} {$curPerson["Email"]} {$curPerson["PhoneNumber"]}</option>";
                                 }
                             }
@@ -29,6 +33,7 @@
             <input type="hidden" type="text" id="action" name="action" value="choosePerson">
                 <?php
                     // require('../controller/defense.php');
+                    // for secutry
                     echo makeToken();
                 ?>
             </form>

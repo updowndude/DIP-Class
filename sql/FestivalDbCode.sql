@@ -1,5 +1,9 @@
-USE dips2017_Festival_DB;
+-- makes the database
+DROP Database IF EXISTS Festival_DB;
+CREATE DATABASE Festival_DB;
+USE Festival_DB;
 
+-- makes the tables
 DROP TABLE IF EXISTS Users;
 CREATE TABLE Users (
   UserID INT AUTO_INCREMENT PRIMARY KEY,
@@ -159,6 +163,7 @@ CREATE TABLE Announcements (
   FOREIGN KEY (DateID) REFERENCES Dates(DateID)
 );
 
+-- adds values into tables
 INSERT INTO Available (AvailableID,Total)
 VALUES
   (1,2400),

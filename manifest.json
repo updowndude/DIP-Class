@@ -1,8 +1,9 @@
 {
   "name": "MG",
   "short_name": "Maingate",
-  "start_url": "home",
   "display": "standalone",
+  "start_url": "home",
+  "lang": "en-US",
   "background_color": "#ff8080",
   "theme_color": "#ff8080",
   "description": "Maingate for DIP class",

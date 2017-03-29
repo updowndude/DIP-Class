@@ -1,9 +1,11 @@
 <?php
+// check if the session has started
 if(!isset($_SESSION))
 {
     session_start();
 }
 
+// holds all of the states in one string
 $States =  "<option value=\"\"></option>
                                    <option value=\"AL\">Alabama</option>
                                    <option value=\"AK\">Alaska</option>
@@ -57,6 +59,7 @@ $States =  "<option value=\"\"></option>
                                    <option value=\"WI\">Wisconsin</option>
                                    <option value=\"WY\">Wyoming</option>";
 
+// holds all of the countries
 $countries = " <option value=\"\"></option>
                                    <option value=\"AF\">Afghanistan</option>
                                    <option value=\"AX\">Åland Islands</option>
@@ -308,6 +311,7 @@ $countries = " <option value=\"\"></option>
                                    <option value=\"ZM\">Zambia</option>
                                    <option value=\"ZW\">Zimbabwe</option>";
 
+// turns the strings into arrays
 $aryState = explode("\n",$States);
 $aryCountry = explode("\n",$countries);
 ?>
@@ -337,7 +341,9 @@ $aryCountry = explode("\n",$countries);
                             <div class="form-group">
                                 <label>First Name</label>
                                 <input class="form-control" value="<?php
+                                // see if there value
                                 if(isset($_SESSION['FName']) == true) {
+                                    // puts the value
                                     echo $_SESSION['FName'];
                                 } ?>" type="text" placeholder="First Name" name="FName">
                             </div>
@@ -374,12 +380,18 @@ $aryCountry = explode("\n",$countries);
                                 <select class="form-control" name="StateProvince">
                                     <?php
                                     // http://stackoverflow.com/questions/8251426/insert-string-at-specified-position
+                                    // loops though the array
                                     foreach ($aryState as $curState) {
+                                        // remove spaces
                                         $curState = trim($curState);
+                                        // check to if the value is there
                                         if(isset($_SESSION['StateProvince']) == true) {
+                                            // focus on the correct value in session varible
                                             if (substr($curState, strpos($curState, "value=")+7,2) == $_SESSION['StateProvince']) {
+                                                // outputs focus value
                                                 echo substr($curState, 0, strpos($curState, "value=")+10) . "selected=\"selected\"" . substr($curState, strpos($curState, "value=")+10);
                                             } else {
+                                                // stanrd value
                                                 echo $curState;
                                             }
                                         } else {
@@ -471,13 +483,17 @@ $aryCountry = explode("\n",$countries);
             </form>
             <?php
             if(isset($_SESSION['sqlValuesForMutiPeople']) == true) {
+                // checks the number of people return from the query
                 if(sizeof($_SESSION['sqlValuesForMutiPeople'])>= 2){
+                    // display the panel for it
                     require "../includes/mutiPeople.php";
                 }
             }
             ?>
             <?php
-            if((isset($_SESSION['FName']) == true) && (isset($_SESSION['LName']) == true) && (isset($_SESSION['DOB']) == true)) {
+            // check if there a person alright there
+            if((isset($_SESSION['FName']) == true) && (isset($_SESSION['LName']) == true)) {
+                // display the panel for it
                 require "../includes/comments.php";
             }
             ?>
@@ -485,6 +501,7 @@ $aryCountry = explode("\n",$countries);
     </div>
 </div>
 <script type="text/javascript">
+    // get the Javascript
     <?php echo file_get_contents("../../dist/my-com.js") ?>
 </script>
 </body>
