@@ -5,8 +5,6 @@ color scheme
 fix upgrade problem 
 filter out week long tickets
 maingateadim page
-Offline
-Add to home screen 
 quantity of tickets
 live https
 clean up 404 page

@@ -316,6 +316,7 @@ $aryCountry = explode("\n",$countries);
     <title>Main Gate</title>
     <meta charset="utf-8">
     <meta name="theme-color" content="#ff8080">
+    <link rel="manifest" href="../../manifest.json">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" type="text/css" href="../../dist/myStyle.css" />
     <link rel="icon" type="image/x-icon" href="../../images/favicon.ico"/>

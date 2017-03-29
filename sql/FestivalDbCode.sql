@@ -1,6 +1,4 @@
-DROP Database IF EXISTS Festival_DB;
-CREATE DATABASE Festival_DB;
-USE Festival_DB;
+USE dips2017_Festival_DB;
 
 DROP TABLE IF EXISTS Users;
 CREATE TABLE Users (
@@ -56,6 +54,7 @@ CREATE TABLE TicketAssignment (
   TicketTypeID INT NOT NULL,
   DatePurchased DATE NOT NULL,
   Paid BOOLEAN,
+  CheckedIN BOOLEAN,
   LicensePlate VARCHAR(10),
   LicenseIssuedIn VARCHAR(20),
   FOREIGN KEY (VisitorID) REFERENCES Visitors(VisitorID),
@@ -71,8 +70,8 @@ CREATE TABLE DateAssignment (
   FOREIGN KEY (TicketID) REFERENCES TicketAssignment(TicketID)
 );
 
-DROP TABLE IF EXISTS MerchandiseCategory;
-CREATE TABLE MerchandiseCategory (
+DROP TABLE IF EXISTS Merchandisecategory;
+CREATE TABLE Merchandisecategory (
   MerchCatID INT PRIMARY KEY AUTO_INCREMENT,
   MerchCatName VARCHAR(15) NOT NULL
 );
@@ -85,7 +84,16 @@ CREATE TABLE Merchandise (
   QtySold INT DEFAULT 0,
   Price VARCHAR(7) NOT NULL,
   MerchCatID INT NOT NULL,
-  FOREIGN KEY (MerchCatID) REFERENCES MerchandiseCategory(MerchCatID)
+  FOREIGN KEY (MerchCatID) REFERENCES Merchandisecategory(MerchCatID)
+);
+
+DROP TABLE IF EXISTS MerchSales;
+CREATE TABLE MerchSales (
+  MerchSalesID INT PRIMARY KEY AUTO_INCREMENT,
+  MerchID INT NOT NULL,
+  DateID INT NOT NULL,
+  FOREIGN KEY (MerchID) REFERENCES Merchandise(MerchID),
+  FOREIGN KEY (DateID) REFERENCES Dates(DateID)
 );
 
 DROP TABLE IF EXISTS Performers;
@@ -146,6 +154,7 @@ DROP TABLE IF EXISTS Announcements;
 CREATE TABLE Announcements (
   AnnounceID INT PRIMARY KEY AUTO_INCREMENT,
   DateID INT NOT NULL,
+  AnnouncementTitle VARCHAR(255) NOT NULL,
   AnnouncementText VARCHAR(255) NOT NULL,
   FOREIGN KEY (DateID) REFERENCES Dates(DateID)
 );
@@ -167,65 +176,69 @@ VALUES
   (5,'DayUnderTwelve','15.00','Day-long festival access for <12 and >5',2),
   (6,'DayUnderFive','0.00','Day-long festival access for <5',2),
   (7,'WeekParkingGeneral','25.00','Week-long general parking access',3),
-  (8,'DayParkingGeneral','25.00','Day-long general parking access',3),
-  (9,'WeekParkingVIP','25.00','Week-long VIP parking access',4),
+  (8,'DayParkingGeneral','5.00','Day-long general parking access',3),
+  (9,'WeekParkingVIP','50.00','Week-long VIP parking access',4),
   (10,'DayParkingVIP','10.00','Day-long VIP parking access',4),
-  (11,'WeekParkingRV','25.00','Week-long RV parking access',5),
-  (12,'DayParkingRV','10.00','Day-long RV parking access',5),
+  (11,'WeekParkingRV','100.00','Week-long RV parking access',5),
+  (12,'DayParkingRV','20.00','Day-long RV parking access',5),
   (13,'DayCampingAdult','25.00','Day-long camping access for an adult',1),
   (14,'DayCampingUnderTwelve','15.00','Day-long camping access for <12 and >5',1),
   (15,'DayCampingUnderFive','0.00','Day-long camping access for <5',1);
 
-INSERT INTO Users (Username, Password, AccessLevel) VALUES ("maingateadmin", "$2y$10$hpfuFl/vAy/yBxDUXxpiZO3SKDNXAPtFiK06PB/uy8eDexm.xg8PG", 1),
-  ("maingate", "$2y$10$jsyTg2xtarh36OzbtfFshuzIUl7fWs/nUKOTUg88JByrBmGoHQQGq", 2),
-  ("Abebouno984","$2y$10$UsGG.gWoIG/RrngDTN9EAODQG9V/SwsDBT9U7rxrW6Lnvzu0TepYa",5),
-  ("Balaonethmi6jpz","$2y$10$Hm3woCCAOfjXJAEw93VANe1b8VFB9IfDeabEHDExx4gaPf14PXcxK",5),
-  ("ChronCy264","$2y$10$sKXOpYVL9KEGYOE7oDNHy.WLYDV2fGeOjF27qkmXwWD3.cxWLjaje",5),
-  ("Hiwayment5v","$2y$10$l2ovpfjzqZJOCu9iedeya.4KSrfhk73z43K2wzb7KGlhDbqD64jqC",5),
-  ("Knightfire18","$2y$10$Ja/XH/irCSJr7eeRjzJRZ.NLkpkcl1BQ3lojBmFJlvmcdxysXbqH.",5),
-  ("Nsmilepart5Bb","$2y$10$PspEzQF27yUjLevlKG0iXuoRI8yYuYm5B6gcIyUXp14JKLrrmgCPe",5),
-  ("Airadorta463","$2y$10$hMuVTSdGTaxJZMlmEJ0tSO8xcbSOTWGJP7C4XJO0SjZTtU6KC8vVW",5),
-  ("Buckebu6yo","$2y$10$2b9AYwRRBfSHo5RyhcvuCu0Thu.rM3Pen4JX5YWCPOI/3snMb.bCi",5),
-  ("Dingteho4aJz","$2y$10$OZ2xs6zYFYwmyeAQ22jAKuX9vrerzv3kf7pJixVlVK7xDUhT2FngW",5),
-  ("Ignorce66Q4","$2y$10$DbPsdtAzp/W7HHk0eFIsIuNXAwJXl/9JTRDb/p2bTRYH/G/TzGqnm",5),
-  ("LogiroliX1y","$2y$10$WQ6imIuBr6z83bbvaH3juO/K5aHljrjJ796meQSr/UrXHUC3XpNqO",5),
-  ("Peakerento55G","$2y$10$ouilbegoxApTc937S5mwOuSVMq3LdJlgkjIeMOUXLUhegdYsKyaY6",5),
-  ("AllopholeM2F","$2y$10$Ba8q/wYA6vTeDa/aLraJ.eE3ef3h4RJY66XZMR1CWvJn0/EAzTmAS",5),
-  ("Cewiress5KO","$2y$10$YOnmw3zDaX8cKIMm5uURn.GoT66tb4vWphQdOddoJqXPiRocqJQue",5),
-  ("Elkalati538","$2y$10$OGBG.0LWCoFrs7SCfbdv0uR3jC2tpz0k5w5rv03qZKbNIEsdjZklq",5),
-  ("IncentrZ9o","$2y$10$MR.3LIOKRYYjDkXOMtcICuWWpHHDA3zwD2T5A0chisZw3AI1N/KXe",5),
-  ("Mainligen83GO","$2y$10$FEDT76vgTd0Mgbu0adPUfuS9ZpO3o3lYYFAKvsKABoDKS1FbBoGPu",5),
-  ("Peetsaway7DqU","$2y$10$ffsh9bdWSJMaX5EMhBGxLeBkBfdZi1Wui0rOYM9cQwrijoWlMFj7C",5),
-  ("Amylerwor82Mi","$2y$10$Uc971FLifz.HxgVCoPxq0e1x6sFntcqfyjhtzh2m72xnnQeuMy/vW",5),
-  ("Chiaridesk3Hq","$2y$10$rHRm063ZyW737NYo1vE8KOZHtfX.s9hikkQvtc6l3BRuFyJ0cmECu",5),
-  ("Fixerbesi6qZ","$2y$10$GXa4Qbw25mEPG899o7LyY.xLI6SHpclpeYy9GwwtNHXk3K3E6jy8G",5),
-  ("InformerbyQ4","$2y$10$uGuo//8NEuALBgWBUxVRT.1JdW/D60Z6wNgQO8aaeUReBbygru2FS",5),
-  ("Marketek0o","$2y$10$3.ja1SeM1GFBL2lYyhHqFeQtywcD0L/EjTM0tfBTwOz3XD5r65HAm",5),
-  ("Polypsa91D","$2y$10$jqfJ/YbQZ0EPZIxQdm7nkOEWhkNhqWCVJzkaSSordx8cDDo0licX.",5),
-  ("BagoDevDiscover2I","$2y$10$tsCTzlt6NiqRxJ.MwfUTA.U3JDZlpauS73qIG6IkHu.ypiKIEJIXS",5),
-  ("Chrissie0cF","$2y$10$AP6TtWxxeyS60ksBugrUtO5QrKc1b2D4/LoLHzl1A4c4TzjCWxmKG",5),
-  ("Hearson8084","$2y$10$PzT5QXfcmqtSrniIiMtyzOOj6wcFIwGO2FctvJMt5XVxkOeXygI3q",5),
-  ("Italfotch8K","$2y$10$FjrF07V57Fz3MDTFVQpLLePucxQAaae0hWNSKs4Pv4F4OK.bCJwFO",5),
-  ("Mentone97o","$2y$10$k1VqI1OiHvwLzKGI32ldFuEJS7c5UEiKCuGH68XfZ4KJS.MxGig8G",5),
-  ("Pothobs33g","$2y$10$4w.MBSnZ0IkIt7v7/gqeCuJzO3pJ2sEVzr2fIbzNxKFjLO9i1nf/W",5),
-  ("Aguelasz0b","$2y$10$Ekw2EoDj.1UhBK8bRfyjU.TMyuewF/gCXujUgVfaDioZRygnbmCHK",5),
-  ("Consfokk9z","$2y$10$IrV6FgoQz5mivT.0lVT4.egn0KiZ6LnA5oZjE5nj0ULY74koWRwJS",5),
-  ("Dudetiger06","$2y$10$TxPJWHsyhImbVZltuNBlEu6h2cs/.8u/WVjirU6vgVWi0MEkVGVbC",5),
-  ("xLegolasx1337","$2y$10$rmgMSKH8Q2k/u7Vyx1jrguOKstv2O55FB491Ttuw5GkqUseTAjID2",5),
-  ("DOOMsPartan69","$2y$10$k4GAKZSlNCRo0b3UjmRSA.TYFE/CBaWehbkhghnSlNw.K9GhVx19O",5),
-  ("Phatcat64","$2y$10$rKlx4KDxQppWQdjObwBbsO2RkO2CFzZFnNUhbDxpgHFRcmCPAqeA.",5),
-  ("Trumpdumper2","$2y$10$fgWBOkwKw4lUZ8kdKjQA6uxihrqniGQ00Tn7UHILdwxf5HjRZAqPq",5),
-  ("CoolGuyXXX69","$2y$10$epppD6fLZIiscqPVa/E8m.8WeZZhIVP9tHEvMxu4Ak2VK7cFMKOUi",5),
-  ("Kidjo6o0","$2y$10$fmIQTtMdoy6y9wlPkkZiMuMJejbZV20CFWgaxjvMTnCKpST8l1HCu",5),
-  ("Lovelywort20U","$2y$10$19lTUay3i2hUKGOL80EkbuyZGV3OA8JSJyqBoM0UROyHaU5PzXUle",5),
-  ("FourTman9f","$2y$10$IOYf1HAOJZmHu34OrbFrfe3KxjyNVq4ABP1J0oT.NFXgkymZIYRJC",5);
+INSERT INTO Users (Username, Password, AccessLevel) VALUES ("thebigcheese", "$2y$10$Lle9WvZM/rOrGF3IeltFN.O5EC5TqIvptb9HR7pDFe8EtyD0T7fRa", 5), -- Festival Chief
+  ("maingateadmin", "$2y$10$hpfuFl/vAy/yBxDUXxpiZO3SKDNXAPtFiK06PB/uy8eDexm.xg8PG", 4), -- main gate admin
+  ("infocenteradmin", "$2y$10$t7STijXiAboszVmxNKT.De0YVtUVmZjuGcHlSqSPuX6lFXKHSPUHm", 4), /* info center admin*/
+  ("websiteadmin", "$2y$10$TOp1BC8Dyrpeb7dkb.pyveV1sJw2yO/MPJSFkAYVsa4PDysISDUxi", 4), /* Web Site admin*/
+  ("maingate", "$2y$10$jsyTg2xtarh36OzbtfFshuzIUl7fWs/nUKOTUg88JByrBmGoHQQGq", 2), /* main gate user*/
+  ("infocenter", "$2y$10$ktPOfB.0W.YppBWtMqabhelZJwCzYxZPSSwdhXcCHACf2FF1R4wjy", 3), /* info center user admin*/
+  ("Abebouno984","$2y$10$UsGG.gWoIG/RrngDTN9EAODQG9V/SwsDBT9U7rxrW6Lnvzu0TepYa",1),
+  ("Balaonethmi6jpz","$2y$10$Hm3woCCAOfjXJAEw93VANe1b8VFB9IfDeabEHDExx4gaPf14PXcxK",1),
+  ("ChronCy264","$2y$10$sKXOpYVL9KEGYOE7oDNHy.WLYDV2fGeOjF27qkmXwWD3.cxWLjaje",1),
+  ("Hiwayment5v","$2y$10$l2ovpfjzqZJOCu9iedeya.4KSrfhk73z43K2wzb7KGlhDbqD64jqC",1),
+  ("Knightfire18","$2y$10$Ja/XH/irCSJr7eeRjzJRZ.NLkpkcl1BQ3lojBmFJlvmcdxysXbqH.",1),
+  ("Nsmilepart5Bb","$2y$10$PspEzQF27yUjLevlKG0iXuoRI8yYuYm5B6gcIyUXp14JKLrrmgCPe",1),
+  ("Airadorta463","$2y$10$hMuVTSdGTaxJZMlmEJ0tSO8xcbSOTWGJP7C4XJO0SjZTtU6KC8vVW",1),
+  ("Buckebu6yo","$2y$10$2b9AYwRRBfSHo5RyhcvuCu0Thu.rM3Pen4JX5YWCPOI/3snMb.bCi",1),
+  ("Dingteho4aJz","$2y$10$OZ2xs6zYFYwmyeAQ22jAKuX9vrerzv3kf7pJixVlVK7xDUhT2FngW",1),
+  ("Ignorce66Q4","$2y$10$DbPsdtAzp/W7HHk0eFIsIuNXAwJXl/9JTRDb/p2bTRYH/G/TzGqnm",1),
+  ("LogiroliX1y","$2y$10$WQ6imIuBr6z83bbvaH3juO/K5aHljrjJ796meQSr/UrXHUC3XpNqO",1),
+  ("Peakerento55G","$2y$10$ouilbegoxApTc937S5mwOuSVMq3LdJlgkjIeMOUXLUhegdYsKyaY6",1),
+  ("AllopholeM2F","$2y$10$Ba8q/wYA6vTeDa/aLraJ.eE3ef3h4RJY66XZMR1CWvJn0/EAzTmAS",1),
+  ("Cewiress5KO","$2y$10$YOnmw3zDaX8cKIMm5uURn.GoT66tb4vWphQdOddoJqXPiRocqJQue",1),
+  ("Elkalati538","$2y$10$OGBG.0LWCoFrs7SCfbdv0uR3jC2tpz0k5w5rv03qZKbNIEsdjZklq",1),
+  ("IncentrZ9o","$2y$10$MR.3LIOKRYYjDkXOMtcICuWWpHHDA3zwD2T5A0chisZw3AI1N/KXe",1),
+  ("Mainligen83GO","$2y$10$FEDT76vgTd0Mgbu0adPUfuS9ZpO3o3lYYFAKvsKABoDKS1FbBoGPu",1),
+  ("Peetsaway7DqU","$2y$10$ffsh9bdWSJMaX5EMhBGxLeBkBfdZi1Wui0rOYM9cQwrijoWlMFj7C",1),
+  ("Amylerwor82Mi","$2y$10$Uc971FLifz.HxgVCoPxq0e1x6sFntcqfyjhtzh2m72xnnQeuMy/vW",1),
+  ("Chiaridesk3Hq","$2y$10$rHRm063ZyW737NYo1vE8KOZHtfX.s9hikkQvtc6l3BRuFyJ0cmECu",1),
+  ("Fixerbesi6qZ","$2y$10$GXa4Qbw25mEPG899o7LyY.xLI6SHpclpeYy9GwwtNHXk3K3E6jy8G",1),
+  ("InformerbyQ4","$2y$10$uGuo//8NEuALBgWBUxVRT.1JdW/D60Z6wNgQO8aaeUReBbygru2FS",1),
+  ("Marketek0o","$2y$10$3.ja1SeM1GFBL2lYyhHqFeQtywcD0L/EjTM0tfBTwOz3XD5r65HAm",1),
+  ("Polypsa91D","$2y$10$jqfJ/YbQZ0EPZIxQdm7nkOEWhkNhqWCVJzkaSSordx8cDDo0licX.",1),
+  ("BagoDevDiscover2I","$2y$10$tsCTzlt6NiqRxJ.MwfUTA.U3JDZlpauS73qIG6IkHu.ypiKIEJIXS",1),
+  ("Chrissie0cF","$2y$10$AP6TtWxxeyS60ksBugrUtO5QrKc1b2D4/LoLHzl1A4c4TzjCWxmKG",1),
+  ("Hearson8084","$2y$10$PzT5QXfcmqtSrniIiMtyzOOj6wcFIwGO2FctvJMt5XVxkOeXygI3q",1),
+  ("Italfotch8K","$2y$10$FjrF07V57Fz3MDTFVQpLLePucxQAaae0hWNSKs4Pv4F4OK.bCJwFO",1),
+  ("Mentone97o","$2y$10$k1VqI1OiHvwLzKGI32ldFuEJS7c5UEiKCuGH68XfZ4KJS.MxGig8G",1),
+  ("Pothobs33g","$2y$10$4w.MBSnZ0IkIt7v7/gqeCuJzO3pJ2sEVzr2fIbzNxKFjLO9i1nf/W",1),
+  ("Aguelasz0b","$2y$10$Ekw2EoDj.1UhBK8bRfyjU.TMyuewF/gCXujUgVfaDioZRygnbmCHK",1),
+  ("Consfokk9z","$2y$10$IrV6FgoQz5mivT.0lVT4.egn0KiZ6LnA5oZjE5nj0ULY74koWRwJS",1),
+  ("Dudetiger06","$2y$10$TxPJWHsyhImbVZltuNBlEu6h2cs/.8u/WVjirU6vgVWi0MEkVGVbC",1),
+  ("xLegolasx1337","$2y$10$rmgMSKH8Q2k/u7Vyx1jrguOKstv2O55FB491Ttuw5GkqUseTAjID2",1),
+  ("DOOMsPartan69","$2y$10$k4GAKZSlNCRo0b3UjmRSA.TYFE/CBaWehbkhghnSlNw.K9GhVx19O",1),
+  ("Phatcat64","$2y$10$rKlx4KDxQppWQdjObwBbsO2RkO2CFzZFnNUhbDxpgHFRcmCPAqeA.",1),
+  ("Trumpdumper2","$2y$10$fgWBOkwKw4lUZ8kdKjQA6uxihrqniGQ00Tn7UHILdwxf5HjRZAqPq",1),
+  ("CoolGuyXXX69","$2y$10$epppD6fLZIiscqPVa/E8m.8WeZZhIVP9tHEvMxu4Ak2VK7cFMKOUi",1),
+  ("Kidjo6o0","$2y$10$fmIQTtMdoy6y9wlPkkZiMuMJejbZV20CFWgaxjvMTnCKpST8l1HCu",1),
+  ("Lovelywort20U","$2y$10$19lTUay3i2hUKGOL80EkbuyZGV3OA8JSJyqBoM0UROyHaU5PzXUle",1),
+  ("FourTman9f","$2y$10$IOYf1HAOJZmHu34OrbFrfe3KxjyNVq4ABP1J0oT.NFXgkymZIYRJC",1);
 
 INSERT INTO Visitors (UserID,FName,LName,PhoneNumber,Email,DOB,Address,City,StateProvince,Country,PostalCode) VALUES (1,"Ivana","Knight","915-9094","taciti.sociosqu.ad@cubilia.co.uk","1960-09-04","Ap #841-6590 Purus St.","Cincinnati","OH","USA","74260"),(2,"Keith","Stout","1-708-497-8050","lacus@parturient.com","1943-07-05","P.O. Box 497, 9000 Nisi Road","Springdale","AR","USA","72774"),(3,"Georgia","Noble","1-382-628-6678","nulla.vulputate.dui@loremeumetus.net","1923-12-27","Ap #397-6623 Sem Road","Springdale","AR","USA","72305"),(4,"Emma","Horn","1-596-313-9666","ut.cursus@Suspendissenonleo.co.uk","1944-02-13","P.O. Box 112, 5467 Sagittis Avenue","San Diego","CA","USA","91783"),(5,"Octavia","Henson","1-305-920-5566","auctor.quis@hendreritDonecporttitor.co.uk","1994-06-07","7591 Ipsum Ave","San Francisco","CA","USA","95739"),(6,"Melyssa","Dickson","1-688-580-9503","neque.pellentesque@at.com","1950-05-07","P.O. Box 411, 6803 Natoque Street","Worcester","MA","USA","92666"),(7,"Virginia","Casey","1-488-436-0759","at@atnisi.ca","1960-12-22","Ap #150-9078 Diam Ave","Pittsburgh","PA","USA","32047"),(8,"Tatiana","Paul","1-940-972-7757","in@erosnectellus.co.uk","1974-02-05","Ap #127-9626 Nascetur Ave","Bellevue","WA","USA","16890"),(9,"Germane","Wilder","1-460-403-0942","amet@erat.net","1918-12-04","Ap #193-4962 Vel Street","Cambridge","MA","USA","53519"),(10,"Carol","Fischer","1-913-143-1312","Vivamus.nibh@nec.com","1988-06-12","460-9997 Magna. Street","Chesapeake","VA","USA","64865");
 INSERT INTO Visitors (UserID,FName,LName,PhoneNumber,Email,DOB,Address,City,StateProvince,Country,PostalCode) VALUES (11,"Judah","Cook","395-9297","urna.suscipit.nonummy@semelit.com","1915-10-31","6364 Aliquam Road","Las Vegas","NV","USA","59968"),(12,"Rashad","Hunter","1-319-327-7745","enim@nisiMauris.edu","1990-06-28","Ap #283-3343 Nam Avenue","Bridgeport","CT","USA","75933"),(13,"Abel","Sweeney","743-1895","placerat.orci@lectusCumsociis.net","1969-05-24","Ap #429-3729 Risus Avenue","Olympia","WA","USA","12690"),(14,"Blythe","Davenport","932-2493","Duis.cursus@iaculisneceleifend.ca","1928-11-09","Ap #311-430 Dis Rd.","Shreveport","LA","USA","30715"),(15,"Amela","Mays","914-8975","a.auctor@mieleifend.ca","1907-05-15","600-6130 Vel Rd.","Springfield","IL","USA","29957"),(16,"Howard","Logan","1-136-560-0589","id@molestie.com","1942-10-04","P.O. Box 273, 944 Et Rd.","Auburn","ME","USA","84656"),(17,"Mason","Benson","599-7938","libero.Integer@idmagna.com","1992-05-06","Ap #414-2698 Sagittis Av.","New Orleans","LA","USA","14976"),(18,"Adele","Becker","960-7799","ultrices.Duis@adipiscinglacusUt.net","1907-12-15","P.O. Box 862, 9481 Fames Rd.","Tacoma","WA","USA","68800"),(19,"Iris","Murray","1-373-784-7154","mauris@gravida.co.uk","1933-10-08","876 Congue. Avenue","Austin","TX","USA","62652"),(20,"Aubrey","Wilder","715-4129","sit.amet@nec.edu","1985-01-29","6838 Phasellus Avenue","Topeka","KS","USA","96885");
 INSERT INTO Visitors (UserID,FName,LName,PhoneNumber,Email,DOB,Address,City,StateProvince,Country,PostalCode) VALUES (21,"Jolene","Nicholson","851-0894","tellus@quam.org","1995-08-04","Ap #688-3743 Praesent St.","Little Rock","AR","USA","71520"),(22,"Stacey","Berry","744-8223","ornare@tellus.net","2000-12-20","346-372 Et Rd.","Racine","WI","USA","75297"),(23,"Cheyenne","Ortiz","432-5355","non@egestasDuisac.org","1956-10-14","P.O. Box 989, 3910 Donec Street","West Valley City","UT","USA","92589"),(24,"Jared","Harding","411-0428","luctus@leoelementumsem.net","1968-04-16","8648 Lectus St.","Kenosha","WI","USA","96512"),(25,"Nissim","Pollard","1-412-727-7668","taciti@eutellus.com","1997-04-26","P.O. Box 606, 3682 Tincidunt. St.","Iowa City","IA","USA","76904"),(26,"Kelsey","Gregory","1-583-900-4541","rhoncus.id.mollis@ipsumSuspendisse.org","1928-10-01","P.O. Box 663, 463 Cras Rd.","South Bend","IN","USA","57149"),(27,"Rosalyn","Bonner","921-5796","purus.ac@lorem.co.uk","1909-11-26","6146 Nibh. Av.","Essex","VT","USA","45339"),(28,"Lucy","Mcknight","392-5258","ac.sem.ut@eu.ca","1923-01-18","P.O. Box 400, 3324 Aliquet Rd.","Worcester","MA","USA","23713"),(29,"Hillary","Dorsey","503-0719","senectus.et.netus@dolor.ca","1905-06-21","Ap #357-2468 Amet Street","Phoenix","AZ","USA","86132"),(30,"Maisie","Guthrie","1-628-638-7140","Aliquam.erat@Duis.com","1977-07-24","572-8404 Eros Ave","Milwaukee","WI","USA","82136");
 INSERT INTO Visitors (UserID,FName,LName,PhoneNumber,Email,DOB,Address,City,StateProvince,Country,PostalCode) VALUES (31,"Zachery","Sheppard","1-172-170-1073","lacus.varius@semmollis.org","1982-08-03","683-2990 Mattis St.","Orlando","FL","USA","77507"),(32,"Cedric","Casey","683-0547","nec@Cras.edu","1921-10-03","1956 Conubia St.","Bellevue","NE","USA","45152"),(33,"Maris","Dejesus","498-3981","urna@duiFusce.net","1967-05-06","996-9836 Magnis Street","Jonesboro","AR","USA","71965"),(34,"Pascale","Knox","1-844-455-2260","consectetuer.rhoncus@rutrummagnaCras.com","1992-07-31","825-6181 Nec Rd.","Louisville","KY","USA","95455"),(35,"Megan","Schroeder","140-7705","egestas.blandit@ligulaAenean.ca","1968-02-01","373-3142 Mi Rd.","Topeka","KS","USA","42462"),(36,"Phoebe","Henderson","822-0618","Ut@id.co.uk","1912-03-24","1035 Odio. Rd.","Chicago","IL","USA","37731"),(37,"Hayfa","Carroll","593-4958","tellus@arcuSed.ca","1976-04-15","Ap #680-7263 Massa St.","Sioux City","IA","USA","92650"),(38,"Leilani","Arnold","1-173-843-7510","eget.magna@in.edu","1905-07-10","915-684 Dolor Av.","Kansas City","MO","USA","45198"),(39,"Jared","Kirk","854-8609","Duis@placeratvelitQuisque.ca","1944-08-30","2038 Risus. Avenue","Salt Lake City","UT","USA","58905"),(40,"Nichole","Pearson","679-0807","penatibus@Donecluctusaliquet.edu","1930-08-25","1433 Odio. Road","Chesapeake","VA","USA","24340");
 
-INSERT INTO merchandisecategory (MerchCatName) VALUES ("Aparrel"), ("Food/Drink"), ("Firewood"), ("Misc"), ("FirstAid"), ("Collectibles");
+INSERT INTO Merchandisecategory (MerchCatName) VALUES ("Aparrel"), ("Food/Drink"), ("Firewood"), ("Misc"), ("FirstAid"), ("Collectibles");
 
 INSERT INTO Merchandise (MerchName, QtyMax, Price, MerchCatID) VALUES ("Reusable Cup", 1200, "$8.00", 6), ("Soda", 12000, "$1.50", 2), ("Water", 15000, "$1.00", 2), ("Chips", 5000, "$1.50", 2), ("Hamburger", 3500, "$2.50", 2), ("Hot Dog", 4000, "$2.00", 2), ("Beer", 10000, "$4.00", 2),
   ("Firewood", 10000, "$5.00", 3), ("Ice", 5000, "$1.50", 4), ("Band Aids", 200, "$4.00", 5), ("Aloe Vera", 100, "$3.00", 5), ("Sunscreen", 200, "$2.00", 5), ("Ointment", 100, "$8.00", 5), ("Tylenol", 100, "$4.00", 5), ("Tums", 100, "$4.00", 5), ("Child Small T-Shirt", 50, "$15.00", 1),

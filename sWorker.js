@@ -5,29 +5,27 @@ this.addEventListener('install', (event) => {
     event.waitUntil(
         caches.open('v1').then((cache) => {
             return cache.addAll([
-                '/DIP-Class/',
-                '/DIP-Class/dist/myStyle.css',
-                '/DIP-Class/dist/my-com.js',
-                '/DIP-Class/dist/offline.html',
-                '/DIP-Class/images/favicon.ico'
+                '/maingate/',
+                '/maingate/dist/myStyle.css',
+                '/maingate/dist/my-com.js',
+                '/maingate/dist/offline.html',
+                '/maingate/images/favicon.ico'
             ]);
         })
     );
 });
 
-this.addEventListener('fetch', (event) => {
-    console.log(event.request.url);
-
-    let response;
-    event.respondWith(caches.match(event.request).catch(() => {
-        return fetch(event.request);
-    }).then((r)  => {
-        response = r;
-        caches.open('v1').then((cache) => {
-            cache.put(event.request, response);
-        });
-        return response.clone();
-    }).catch(() => {
-        return caches.match('/DIP-Class/dist/offline.html');
-    }));
+this.addEventListener('fetch', function(event) {
+    event.respondWith(
+        caches.match(event.request).then((resp) => {
+            return resp || fetch(event.request).then((response) => {
+                    caches.open('v1').then((cache) => {
+                        cache.put(event.request, response.clone());
+                    });
+                    return response;
+                });
+        }).catch(() => {
+            return caches.match('/maingate/dist/offline.html');
+        })
+    );
 });

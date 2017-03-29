@@ -66,6 +66,7 @@ if($_SESSION['found'] == false) {
     <meta charset="utf-8">
     <meta name="theme-color" content="#ff8080">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="manifest" href="../../manifest.json">
     <style>
         .page-vert-space {
             height: /*-- VALUE --*/5px;
