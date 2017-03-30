@@ -9,7 +9,7 @@ clean up 404 page
 
 
 maingateadim page
-Arrivals vs. Expected Guests, either total or per day
+- Arrivals vs. Expected Guests, either total or per day
 - VIP parking, RV camping, General Camping actual vs. expected, either total or per day
 - Upgrade activity and revenue, either total or per day
 - Number of guests on the grounds, either current, per day, or total over the week

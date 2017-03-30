@@ -20,8 +20,10 @@
 <div class="container">
     <h1><abbr title="Administrator">Admin</abbr></h1>
     <div class="panel panel-default">
-        <div class="panel-heading">Panel Heading</div>
-        <div class="panel-body">Panel Content</div>
+        <div class="panel-heading"><abbr title="Administrator">Admin</abbr></div>
+        <div class="panel-body">
+
+        </div>
     </div>
 </div>
 <script type="text/javascript">
