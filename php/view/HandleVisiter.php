@@ -23,7 +23,7 @@ require '../model/db.php';
 
 $ticketTypeCountQuery
     = handSQL
-('SELECT TicketTypes.TicketTypeID, TicketTypes.Name, TicketTypes.Price, Available.Total, TicketTypes.Description
+    ('SELECT TicketTypes.TicketTypeID, TicketTypes.Name, TicketTypes.Price, Available.Total, TicketTypes.Description
          FROM TicketTypes INNER JOIN Available ON TicketTypes.AvailableID = Available.AvailableID'
     , [] ///* Function Default Value */
     , [] ///* Function Default Value */
@@ -32,18 +32,17 @@ $ticketTypeCountQuery
 
 $ticketOfVisitorQuery
     = handSQL
-('SELECT
-           TicketTypes.Price
-         FROM
-           TicketAssignment INNER JOIN TicketTypes ON TicketAssignment.TicketTypeID = TicketTypes.TicketTypeID
-         WHERE
-           :visitorID = TicketAssignment.VisitorID
-           AND TicketAssignment.TicketTypeID = TicketTypes.TicketTypeID'
-    , [":visitorID"]
-    , [$_SESSION["VisitorID"]]
+    ('SELECT TicketTypes.Price, TicketTypes.Name
+      FROM
+          TicketAssignment INNER JOIN TicketTypes ON TicketAssignment.TicketTypeID = TicketTypes.TicketTypeID
+      WHERE
+          TicketAssignment.VisitorID = :visitorID'
+    , [':visitorID']
+    , [$_SESSION['sqlValues'][0]['VisitorID']]
     , 0
 );
-$ticketOfVisitorPrice = $ticketOfVisitorQuery[0];
+$ticketOfVisitorPrice = $ticketOfVisitorQuery['Price'];
+$ticketOfVisitorName = $ticketOfVisitorQuery['Name'];
 ?>
 <?php
 if($_SESSION['found'] == false) {
@@ -177,7 +176,7 @@ if($_SESSION['found'] == false) {
                                      *type, then create unclickable option to show the
                                      *visitor’s current ticket type
                                      */?>
-                                    <?php if($ticketOfVisitorPrice == $ticketTypePrice): ?>
+                                    <?php if($ticketOfVisitorPrice == $ticketTypePrice && $ticketOfVisitorName == $ticketTypeName): ?>
                                         <label class="btn btn-info disabled">
                                             <div>
                                                 <?php echo 'Current Ticket: '.$ticketTypeName.'<br>Price: $'.$ticketTypePrice.'<br>-------- Description --------<br>'.$ticketTypeDescription ?>
