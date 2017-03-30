@@ -10,4 +10,4 @@ RewriteRule ^home index.php [NC,L]
 RewriteCond %{HTTPS} off
 RewriteRule (.*) https://%{HTTP_HOST}%{REQUEST_URI}
 # custom error page
-ErrorDocument 404 /maingate/php/view/404
+ErrorDocument 404 /Dip-Class/php/view/404

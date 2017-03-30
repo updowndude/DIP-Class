@@ -20,11 +20,30 @@
 <div class="container">
     <h1><abbr title="Administrator">Admin</abbr></h1>
     <div class="panel panel-default">
-        <div class="panel-heading"><abbr title="Administrator">Admin</abbr></div>
-        <div class="panel-body">
+        <div class="panel-heading"><a data-toggle="collapse" href="#pAVG">Arrivals vs. Expected Guests</a></div>
+        <div id="pAVG" class="panel-body panel-collapse collapse">
 
         </div>
     </div>
+    <div class="panel panel-default">
+        <div class="panel-heading"><a data-toggle="collapse" href="#pCamping">VIP parking, RV camping, General Camping actual vs. expected</a></div>
+        <div id="pCamping" class="panel-body panel-collapse collapse">
+
+        </div>
+    </div>
+    <div class="panel panel-default">
+        <div class="panel-heading"><a data-toggle="collapse" href="#pUAR">Upgrade activity and revenue</a></div>
+        <div id="pUAR" class="panel-body panel-collapse collapse">
+
+        </div>
+    </div>
+    <div class="panel panel-default">
+        <div class="panel-heading"><a data-toggle="collapse" href="#pNGG">Number of guests on the grounds</a></div>
+        <div id="pNGG" class="panel-body panel-collapse collapse">
+
+        </div>
+    </div>
+    <a class="btn btn-default" id="btnLogout" href="../includes/logout">Logout</a
 </div>
 <script type="text/javascript">
     // get the Javascript
