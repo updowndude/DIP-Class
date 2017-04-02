@@ -11,10 +11,10 @@
     <title>Main Gate</title>
     <meta charset="utf-8">
     <meta name="theme-color" content="#ff8080">
-    <link rel="manifest" href="../../manifest.json">
+    <link rel="manifest" href="manifest.json">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" type="text/css" href="../../dist/myStyle.css" />
-    <link rel="icon" type="image/x-icon" href="../../images/favicon.ico"/>
+    <link rel="stylesheet" type="text/css" href="dist/myStyle.css" />
+    <link rel="icon" type="image/x-icon" href="images/favicon.ico"/>
 </head>
 <body id="adimPage">
 <div class="container">
@@ -43,7 +43,7 @@
 
         </div>
     </div>
-    <a class="btn btn-default" id="btnLogout" href="../includes/logout">Logout</a
+    <a class="btn btn-default" id="btnLogout" href="logout">Logout</a
 </div>
 <script type="text/javascript">
     // get the Javascript

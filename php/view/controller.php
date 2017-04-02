@@ -27,57 +27,105 @@
             ';
           $statement = $pdoObj->prepare($query);
           $statement->bindValue(':ticketTypeID',$upgradeTicketTypeID);
-          $statement->bindValue(':visitorID','$visitorID');
+          $statement->bindValue(':visitorID',$visitorID);
           $statement->execute();
           $statement->closeCursor();
-      
-          include '../view/findperson.php';
+
+          $_SESSION['PhoneNumber'] = "";
+          $_SESSION['FName'] = "";
+          $_SESSION['LName'] = "";
+          $_SESSION['Address'] = "";
+          $_SESSION['Email'] = "";
+          $_SESSION['VisitorID'] = "";
+          $_SESSION['City'] = "";
+          $_SESSION['StateProvince'] = "";
+          $_SESSION['Country'] = "";
+          $_SESSION['PostalCode'] = "";
+          $_SESSION['DOB'] = "";
+          $_SESSION['Comments'] = "";
+          $_SESSION['sqlValuesForMutiPeople'] = [];
+
+          header('Location: lookup');
           break;
       case 'registerPerson':
           $ticketTypeID = $_POST['selected-ticket-type-option'];
           $pdoObj = getAccess();
-          $query =
-            '
-            INSERT INTO
-            Visitors
-            (FName, LName, DOB, Address, City, StateProvince, Country, PhoneNumber, PostalCode, Email, Comments)
-            VALUES
-            (:fName, :lName, :dob, :address, :city, :stateProvince, country, :phoneNumber, :postalCode, :email, :comments);
-            
-            INSERT INTO
+
+          $fullName = $_SESSION['FName'].$_SESSION['LName'];
+          handSQL("INSERT INTO Users (Username, Password, AccessLevel)
+             VALUES (:Username, '', 1)
+          ",[":Username"],[$fullName],2);
+
+          $sqlValues = handSQL("SELECT * FROM Users WHERE Username = :Username
+          ",[":Username"],[$fullName],0);
+
+          $secQuery = "INSERT INTO
             TicketAssignment
             (VisitorID, TicketTypeID, DatePurchased)
             VALUES
             ((SELECT VisitorID 
-              FROM Visitors 
-              WHERE (FName = :fName OR :fName IS NULL)
-                AND (LName = :lName OR :lName IS NULL) 
-                AND (DOB = :dob OR :dob IS NULL)
-                AND (Address = :address OR :address IS NULL)
-                AND (City = :city OR :city IS NULL)
-                AND (StateProvince = :stateProvince OR :stateProvince IS NULL)
-                AND (Country = :country OR :country IS NULL)
-                AND (PhoneNumber = :phoneNumber OR :phoneNumber IS NULL)
-                AND (PostalCode = :postalCode OR :postalCode IS NULL)
-                AND (Email = :email OR :email IS NULL))
+              FROM Visitors  WHERE";
+
+          $arySessionKey = array_keys($_SESSION);
+          $intTmp = sizeof($arySessionKey) -1;
+
+          for($lcv = 0;$lcv<sizeof($arySessionKey);$lcv++) {
+              if((($arySessionKey[$lcv] == "FName") || ($arySessionKey[$lcv] == "LName") || ($arySessionKey[$lcv] == "DOB") ||
+                      ($arySessionKey[$lcv] == "Address") || ($arySessionKey[$lcv] == "City") || ($arySessionKey[$lcv] == "StateProvince") ||
+                      ($arySessionKey[$lcv] == "Country") || ($arySessionKey[$lcv] == "PhoneNumber") || ($arySessionKey[$lcv] == "PostalCode") ||
+                      ($arySessionKey[$lcv] == "Email") || ($arySessionKey[$lcv] == "Comments")) && (strlen($_SESSION[$arySessionKey[$lcv]]) != 0)) {
+                 if($lcv !== $intTmp) {
+                     $secQuery .= "({$arySessionKey[$lcv]} = :{$arySessionKey[$lcv]}) AND";
+                 }
+              }
+          }
+          $secQuery = substr($secQuery, 0, strlen($secQuery) - 3);
+          $secQuery .= ")
              , :ticketTypeID
-             , NOW());
-             ';
+             , NOW());";
+          $query =
+            "
+            INSERT INTO
+            Visitors
+            (UserID,FName, LName, DOB, Address, City, StateProvince, Country, PhoneNumber, PostalCode, Email, Comments)
+            VALUES
+            (:UserID,:FName, :LName, :DOB, :Address, :City, :StateProvince, :Country, :PhoneNumber, :PostalCode, :Email, :Comments);
+            
+            {$secQuery}
+             ";
+
           $statement = $pdoObj->prepare($query);
-          $statement->bindValue(':fName', $_SESSION['FName']);
-          $statement->bindValue(':lName', $_SESSION['LName']);
-          $statement->bindValue(':dob', $_SESSION['DOB']);
-          $statement->bindValue(':address', $_SESSION['Address']);
-          $statement->bindValue(':city', $_SESSION['City']);
-          $statement->bindValue(':stateProvince', $_SESSION['StateProvince']);
-          $statement->bindValue(':country', $_SESSION['Country']);
-          $statement->bindValue(':phoneNumber', $_SESSION['PhoneNumber']);
-          $statement->bindValue(':postalCode', $_SESSION['PostalCode']);
-          $statement->bindValue(':email', $_SESSION['Email']);
-          $statement->bindValue(':comments', $_SESSION['Comments']);
+          $statement->bindValue(':UserID', $sqlValues['UserID']);
+          $statement->bindValue(':FName', $_SESSION['FName']);
+          $statement->bindValue(':LName', $_SESSION['LName']);
+          $statement->bindValue(':DOB', $_SESSION['DOB']);
+          $statement->bindValue(':Address', $_SESSION['Address']);
+          $statement->bindValue(':City', $_SESSION['City']);
+          $statement->bindValue(':StateProvince', $_SESSION['StateProvince']);
+          $statement->bindValue(':Country', $_SESSION['Country']);
+          $statement->bindValue(':PhoneNumber', $_SESSION['PhoneNumber']);
+          $statement->bindValue(':PostalCode', $_SESSION['PostalCode']);
+          $statement->bindValue(':Email', $_SESSION['Email']);
+          $statement->bindValue(':Comments', $_SESSION['Comments']);
+          $statement->bindValue(':ticketTypeID', $ticketTypeID);
           $statement->execute();
           $statement->closeCursor();
-          include '../view/findperson.php';
+
+          $_SESSION['PhoneNumber'] = "";
+          $_SESSION['FName'] = "";
+          $_SESSION['LName'] = "";
+          $_SESSION['Address'] = "";
+          $_SESSION['Email'] = "";
+          $_SESSION['VisitorID'] = "";
+          $_SESSION['City'] = "";
+          $_SESSION['StateProvince'] = "";
+          $_SESSION['Country'] = "";
+          $_SESSION['PostalCode'] = "";
+          $_SESSION['DOB'] = "";
+          $_SESSION['Comments'] = "";
+          $_SESSION['sqlValuesForMutiPeople'] = [];
+
+          header('Location: lookup');
           break;
   }
 ?>

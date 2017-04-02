@@ -37,31 +37,31 @@ function actions() {
       $sqlValues = findPersonHelper();
 
       // check if there a value
-      if ($sqlValues == 0) {
-        $_SESSION['found'] = false;
-          $_SESSION['sqlValues'] = null;
+      if (count($sqlValues) == 0) {
+        $_SESSION['found'] = 0;
       } else {
         // outpout value
-        $_SESSION['found'] = true;
-        $_SESSION['sqlValues'] = $sqlValues;
+        $_SESSION['found'] = 1;
       }
 
-      // reset all of session varibles
-      $_SESSION['PhoneNumber'] = "";
-      $_SESSION['FName'] = "";
-      $_SESSION['LName'] = "";
-      $_SESSION['Address'] = "";
-      $_SESSION['Email'] = "";
-      $_SESSION['VisitorID'] = "";
-      $_SESSION['City'] = "";
-      $_SESSION['StateProvince'] = "";
-      $_SESSION['Country'] = "";
-      $_SESSION['PostalCode'] = "";
-      $_SESSION['DOB'] = "";
-      $_SESSION['sqlValuesForMutiPeople'] = [];
+      // set all of session to what was entered
+      $_SESSION['PhoneNumber'] = $aryMyValues["PhoneNumber"];
+      $_SESSION['FName'] = $aryMyValues["FName"];
+      $_SESSION['LName'] = $aryMyValues["LName"];
+      $_SESSION['Address'] = $aryMyValues["Address"];
+      $_SESSION['Email'] = $aryMyValues["Email"];
+      $_SESSION['VisitorID'] = $aryMyValues["VisitorID"];
+      $_SESSION['City'] = $aryMyValues["City"];
+      $_SESSION['StateProvince'] = $aryMyValues["StateProvince"];
+      $_SESSION['Country'] = $aryMyValues["Country"];
+      $_SESSION['PostalCode'] = $aryMyValues["PostalCode"];
+      $_SESSION['DOB'] = $aryMyValues["DOB"];
+      $_SESSION['Comments'] = $aryMyValues["comment"];
+      $_SESSION['sqlValuesForMutiPeople'] = $sqlValues;
+      $_SESSION['sqlValues'] = $sqlValues;
 
       // goes to next page
-      header('Location: ../view/visitor');
+      header('Location: ../../visitor');
       // looking up a person
   } elseif ($action == 'searchByPhone') {
 
@@ -98,11 +98,12 @@ function actions() {
           $_SESSION['StateProvince'] = "";
           $_SESSION['Country'] = "";
           $_SESSION['PostalCode'] = "";
+          $_SESSION['Comments'] = "";
           $_SESSION['DOB'] = "";
       }
 
       // return to the page
-      header('Location: ../view/lookup');
+      header('Location: ../../lookup');
       // stop php from running
       exit();
   }  elseif ($action == 'choosePerson'){
@@ -123,7 +124,7 @@ function actions() {
       $_SESSION['DOB'] = $sqlValues['DOB'];
       $_SESSION['Comments'] = $sqlValues['Comments'];
 
-      header('Location: ../view/lookup');
+      header('Location: ../../lookup');
       exit();
       // update to a comment
   } elseif ($action == 'commentsUpdate') {
@@ -143,7 +144,7 @@ function actions() {
   }
   else {
      // not a valued action
-    header('Location: ../view/404');
+    header('Location: ../../404A');
   }
 }
 

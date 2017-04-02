@@ -17,7 +17,7 @@
 		$formPass=validateFormData($_POST['password']);
 		
 		//connect to database
-		include 'php/includes/connection.php';
+		require 'php/includes/connection.php';
 		
 		//create query
 		$query="
@@ -43,10 +43,10 @@
 
 				if($name == 'maingateadmin') {
                     //redirect user to contacts page
-                    header('Location: php/view/admin');
+                    header('Location: admin');
                 } else {
                     //redirect user to contacts page
-                    header('Location: php/view/lookup');
+                    header('Location: lookup');
                 }
 
 			//hashed password not verified
@@ -120,5 +120,5 @@
 	
 <?php
 	//footer
-	include 'php/includes/footer.php';
+	require 'php/includes/footer.php';
 ?>

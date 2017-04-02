@@ -21,6 +21,26 @@
 //**********************
 require '../model/db.php';
 
+if(count($_SESSION['sqlValues']) == 0) {
+    $ticketOfVisitorPrice = null;
+    $ticketOfVisitorName = null;
+} else {
+    $ticketOfVisitorQuery
+        = handSQL
+    ('SELECT TicketTypes.Price, TicketTypes.Name
+      FROM
+          TicketAssignment INNER JOIN TicketTypes ON TicketAssignment.TicketTypeID = TicketTypes.TicketTypeID
+      WHERE
+          TicketAssignment.VisitorID = :visitorID'
+        , [':visitorID']
+        , [$_SESSION['sqlValues'][0]['VisitorID']]
+        , 0
+    );
+
+    $ticketOfVisitorPrice = $ticketOfVisitorQuery['Price'];
+    $ticketOfVisitorName = $ticketOfVisitorQuery['Name'];
+}
+
 $ticketTypeCountQuery
     = handSQL
     ('SELECT TicketTypes.TicketTypeID, TicketTypes.Name, TicketTypes.Price, Available.Total, TicketTypes.Description
@@ -30,26 +50,12 @@ $ticketTypeCountQuery
     , 1 /* Fetch All Rows */
 );
 
-$ticketOfVisitorQuery
-    = handSQL
-    ('SELECT TicketTypes.Price, TicketTypes.Name
-      FROM
-          TicketAssignment INNER JOIN TicketTypes ON TicketAssignment.TicketTypeID = TicketTypes.TicketTypeID
-      WHERE
-          TicketAssignment.VisitorID = :visitorID'
-    , [':visitorID']
-    , [$_SESSION['sqlValues'][0]['VisitorID']]
-    , 0
-);
-$ticketOfVisitorPrice = $ticketOfVisitorQuery['Price'];
-$ticketOfVisitorName = $ticketOfVisitorQuery['Name'];
-?>
-<?php
 if($_SESSION['found'] == false) {
     $found = false;
 } else {
     $found = true;
 }
+
 ?>
 <!DOCTYPE HTML>
 <html>
@@ -65,7 +71,7 @@ if($_SESSION['found'] == false) {
     <meta charset="utf-8">
     <meta name="theme-color" content="#ff8080">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="manifest" href="../../manifest.json">
+    <link rel="manifest" href="manifest.json">
     <style>
         .page-vert-space {
             height: /*-- VALUE --*/5px;
@@ -77,8 +83,8 @@ if($_SESSION['found'] == false) {
             height: /*-- VALUE --*/35px;
         }
     </style>
-    <link rel="icon", type="image/x-icon", href="../../images/favicon.ico">
-    <link rel="stylesheet" href="../../dist/myStyle.css">
+    <link rel="icon", type="image/x-icon", href="images/favicon.ico">
+    <link rel="stylesheet" href="dist/myStyle.css">
     <!-- TODO: get css myStyle.css to work correctly (panels don't show -->
     <!--<link rel="stylesheet" href="myStyle.css">-->
 </head>
@@ -110,7 +116,7 @@ if($_SESSION['found'] == false) {
             <!-
             === FORM: REGISTRATION/ UPGRADE ==================
             ->
-            <form action="findperson.php" method="post">
+            <form action="php/view/controller.php" method="post">
                 <!-
                 *** Message Panel: Visitor Found? ***
                 ************************************
@@ -274,7 +280,7 @@ if($_SESSION['found'] == false) {
        -->
     <div class="row">
         <div class="col-xs-12">
-            <a href="../view/lookup" class="btn btn-default">
+            <a href="lookup" class="btn btn-default">
                 <span class="glyphicon glyphicon-arrow-left"></span>&nbsp;Go Back
             </a>
         </div>

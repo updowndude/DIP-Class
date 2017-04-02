@@ -320,10 +320,10 @@ $aryCountry = explode("\n",$countries);
     <title>Main Gate</title>
     <meta charset="utf-8">
     <meta name="theme-color" content="#ff8080">
-    <link rel="manifest" href="../../manifest.json">
+    <link rel="manifest" href="manifest.json">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" type="text/css" href="../../dist/myStyle.css" />
-    <link rel="icon" type="image/x-icon" href="../../images/favicon.ico"/>
+    <link rel="stylesheet" type="text/css" href="dist/myStyle.css" />
+    <link rel="icon" type="image/x-icon" href="images/favicon.ico"/>
 </head>
 <body id="findPersonBody">
 <div class="container">
@@ -331,13 +331,13 @@ $aryCountry = explode("\n",$countries);
     <div class="row">
         <div class="col-centered">
             <h1 class="text-center">Visitor Lookup</h1>
-            <form action="../controller/search.php" method="post" id="searchPerson">
+            <form action="php/controller/search.php" method="post" id="searchPerson">
                 <div class="panel-group">
                     <div class="panel panel-default">
                         <div class="panel-heading">
                             <a data-toggle="collapse" href="#pBodyBasicInfro">Basic info</a>
                         </div>
-                        <div id="pBodyBasicInfro" class="panel-body panel-collapse collapse">
+                        <div id="pBodyBasicInfro" class="in panel-body panel-collapse collapse">
                             <div class="form-group">
                                 <label>First Name</label>
                                 <input class="form-control" value="<?php
@@ -472,7 +472,7 @@ $aryCountry = explode("\n",$countries);
                         <button type="submit" class="btn btn-default" id="findPerson">Find person</button>
                         <button type="submit" class="btn btn-default" id="searchPhone" disabled="disabled">Search by fields</button>
                         <button class="btn btn-default" id="btnClear">Clear</button>
-                        <a class="btn btn-default" id="btnLogout" href="../includes/logout">Logout</a>
+                        <a class="btn btn-default" id="btnLogout" href="logout">Logout</a>
                     </div>
                 </div>
                 <input type="hidden" type="text" id="action" name="action" value="search">
@@ -492,9 +492,11 @@ $aryCountry = explode("\n",$countries);
             ?>
             <?php
             // check if there a person alright there
-            if((isset($_SESSION['FName']) == true) && (isset($_SESSION['LName']) == true)) {
-                // display the panel for it
-                require "../includes/comments.php";
+            if(isset($_SESSION['Comments']) == true) {
+                if (strlen($_SESSION['Comments']) != 0) {
+                    // display the panel for it
+                    require "../includes/comments.php";
+                }
             }
             ?>
         </div>
