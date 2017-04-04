@@ -10,7 +10,7 @@
         <a data-toggle="collapse" href="#pComments">Comments</a>
     </div>
     <div id="pComments" class="panel-body panel-collapse collapse">
-        <form action="../controller/search.php" method="post" id="searchPerson">
+        <form action="php/controller/search.php" method="post" id="searchPerson">
             <div class="form-group">
                 <input class="form-control" type="text" value="<?php
                 if(isset( $_SESSION['Comments']) == true) {

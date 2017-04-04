@@ -3,7 +3,6 @@ DROP Database IF EXISTS Festival_DB;
 CREATE DATABASE Festival_DB;
 USE Festival_DB;
 
--- makes the tables
 DROP TABLE IF EXISTS Users;
 CREATE TABLE Users (
   UserID INT AUTO_INCREMENT PRIMARY KEY,
@@ -163,7 +162,6 @@ CREATE TABLE Announcements (
   FOREIGN KEY (DateID) REFERENCES Dates(DateID)
 );
 
--- adds values into tables
 INSERT INTO Available (AvailableID,Total)
 VALUES
   (1,2400),
@@ -445,3 +443,40 @@ INSERT INTO PerformanceSchedule (PerformerID, StageID, StartTime) VALUES (1, 1, 
   (65, 2, "2017-08-10 20:00:00"), (65, 3, "2017-08-07 14:00:00"),
   (66, 2, "2017-08-10 22:00:00"), (66, 3, "2017-08-12 18:00:00"),
   (67, 2, "2017-08-11 12:00:00"), (67, 3, "2017-08-07 12:00:00");
+
+INSERT INTO TicketAssignment (TicketID, VisitorID, TicketTypeID, DatePurchased, Paid, CheckedIN, LicensePlate, LicenseIssuedIn) VALUES
+  (1, 1, 1, "2017-06-01", true, false, null, null), /* Week-long adult ticket for visitor 1, two people staying for the week */
+  (2, 1, 1, "2017-06-01", true, false, null, null), /* Week-long adult ticket for visitor 1 */
+  (3, 1, 7, "2017-06-01", true, false, 'DHX-1138', 'Ohio'), /* Week-long parking ticket for visitor 1 */
+  (4, 2, 1, "2017-06-02", true, false, null, null), /* Week-long adult ticket for visitor 2, two parents and a kid staying for the week */
+  (5, 2, 1, "2017-06-02", true, false, null, null), /* Week-long adult ticket for visitor 2 */
+  (6, 2, 2, "2017-06-02", true, false, null, null), /* Week-long <12 ticket for visitor 2 */
+  (7, 2, 11, "2017-06-02", true, false, '867-5309', 'Arizona'), /* Week-long RV parking ticket for visitor 2 */
+  (8, 3, 4, "2017-06-03", true, false, null, null), /* Day adult ticket for visitor 3, one person staying for one day */
+  (9, 3, 10, "2017-06-03", true, false, 'SO-SLNCE', 'Arizona'), /* Day VIP parking ticket for visitor 3 */
+  (10, 4, 4, "2017-06-04", true, false, null, null), /* Day adult ticket for visitor 4, one person staying for two days */
+  (11, 4, 4, "2017-06-04", true, false, null, null), /* Day adult ticket for visitor 4 */
+  (12, 4, 13, "2017-06-04", true, false, null, null), /* Day camping ticket for visitor 4 */
+  (13, 4, 13, "2017-06-04", true, false, null, null), /* Day camping ticket for visitor 4 */
+  (14, 4, 8, "2017-06-04", true, false, 'CH8-M8', 'California'), /* Day parking ticket for visitor 4 */
+  (15, 4, 8, "2017-06-04", true, false, 'CH8-M8', 'California'); /* Day parking ticket for visitor 4 */
+
+
+INSERT INTO DateAssignment (DateID, TicketID) VALUES
+  (1, 1), (2, 1), (3, 1), (4, 1), (5, 1), (6, 1), (7, 1), /* Full-Week entries for ticket 1 */
+  (1, 2), (2, 2), (3, 2), (4, 2), (5, 2), (6, 2), (7, 2), /* Full-Week entries for ticket 2 */
+  (1, 3), (2, 3), (3, 3), (4, 3), (5, 3), (6, 3), (7, 3), /* Full-Week entries for ticket 3 */
+  (1, 4), (2, 4), (3, 4), (4, 4), (5, 4), (6, 4), (7, 4), /* Full-Week entries for ticket 4 */
+  (1, 5), (2, 5), (3, 5), (4, 5), (5, 5), (6, 5), (7, 5), /* Full-Week entries for ticket 5 */
+  (1, 6), (2, 6), (3, 6), (4, 6), (5, 6), (6, 6), (7, 6), /* Full-Week entries for ticket 6 */
+  (1, 7), (2, 7), (3, 7), (4, 7), (5, 7), (6, 7), (7, 7), /* Full-Week entries for ticket 7 */
+  (1, 8), /* Day entry for ticket 8 */
+  (1, 9), /* Day entry for ticket 9 */
+  (1, 10), /* Day entry for ticket 10 */
+  (2, 11), /* Day entry for ticket 11 */
+  (1, 12), /* Day entry for ticket 12 */
+  (2, 13), /* Day entry for ticket 13 */
+  (1, 14), /* Day entry for ticket 14 */
+  (2, 15); /* Day entry for ticket 15 */
+
+INSERT INTO CampingAssignment (TicketID, CampingID) VALUES (1, "A01"), (2, "A01"), (4, "A08"), (5, "A08"), (6, "A08"), (12, "C01"), (13, "C01");

@@ -45,7 +45,7 @@
           $_SESSION['Comments'] = "";
           $_SESSION['sqlValuesForMutiPeople'] = [];
 
-          header('Location: lookup');
+          header('Location: ../../lookup');
           break;
       case 'registerPerson':
           $ticketTypeID = $_POST['selected-ticket-type-option'];
@@ -125,7 +125,7 @@
           $_SESSION['Comments'] = "";
           $_SESSION['sqlValuesForMutiPeople'] = [];
 
-          header('Location: lookup');
+          header('Location: ../../lookup');
           break;
   }
 ?>

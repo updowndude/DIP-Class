@@ -140,7 +140,7 @@ function actions() {
       // set that value
       $_SESSION['Comments'] = $sqlValues['Comments'];
 
-      header('Location: ../view/lookup');
+      header('Location: ../../lookup');
   }
   else {
      // not a valued action

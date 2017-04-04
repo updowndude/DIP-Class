@@ -492,11 +492,9 @@ $aryCountry = explode("\n",$countries);
             ?>
             <?php
             // check if there a person alright there
-            if(isset($_SESSION['Comments']) == true) {
-                if (strlen($_SESSION['Comments']) != 0) {
-                    // display the panel for it
-                    require "../includes/comments.php";
-                }
+            if((isset($_SESSION['FName']) == true) && (isset($_SESSION['LName']) == true)) {
+                // display the panel for it
+                require "../includes/comments.php";
             }
             ?>
         </div>
