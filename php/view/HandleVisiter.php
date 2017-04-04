@@ -166,7 +166,7 @@ if($_SESSION['found'] == false) {
                                                onclick="enableButton('register-and-upgrade-button')">
                                         <!- radio button text ->
                                         <div>
-                                            <?php echo $ticketTypeName.' ($'.$ticketTypePrice.')<br>Remaining: '.$ticketTypeAvailable.'<br>-------- Description --------<br>'.$ticketTypeDescription ?>
+                                            <?php echo $ticketTypeName.' ($'.$ticketTypePrice.')<br>Tickets Remaining: '.$ticketTypeAvailable.'<br>-------- Description --------<br>'.$ticketTypeDescription ?>
                                         </div>
                                     </label>
                                 <?php endif; ?>
