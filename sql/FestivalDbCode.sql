@@ -1,7 +1,33 @@
--- makes the database
-DROP Database IF EXISTS Festival_DB;
-CREATE DATABASE Festival_DB;
-USE Festival_DB;
+DROP Database IF EXISTS dips2017_Festival_DB;
+CREATE DATABASE dips2017_Festival_DB;
+USE dips2017_Festival_DB;
+
+DROP TABLE IF EXISTS Quantity;
+CREATE TABLE Quantity (
+  QuantityID INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  QuantityMax INT NOT NULL,
+  QuantityAvailable INT NOT NULL
+);
+
+DROP TABLE IF EXISTS MerchandiseCategory;
+CREATE TABLE MerchandiseCategory (
+  MerchCatID INT PRIMARY KEY AUTO_INCREMENT,
+  MerchCatName VARCHAR(15) NOT NULL
+);
+
+DROP TABLE IF EXISTS Merchandise;
+CREATE TABLE Merchandise (
+  MerchID INT PRIMARY KEY AUTO_INCREMENT,
+  MerchName VARCHAR(25) NOT NULL,
+  Price DECIMAL(4,2) NOT NULL,
+  Image VARCHAR(45) NOT NULL,
+  Description VARCHAR(255),
+  MerchCatID INT NOT NULL,
+  QuantityID INT NOT NULL,
+  FOREIGN KEY (MerchCatID) REFERENCES MerchandiseCategory(MerchCatID),
+  FOREIGN KEY (QuantityID) REFERENCES Quantity(QuantityID)
+);
+
 
 DROP TABLE IF EXISTS Users;
 CREATE TABLE Users (
@@ -29,74 +55,18 @@ CREATE TABLE Visitors (
   FOREIGN KEY (UserID) REFERENCES Users(UserID)
 );
 
-DROP TABLE IF EXISTS Dates;
-CREATE TABLE Dates (
-  DateID INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
-  FestDate Date NOT NULL
-);
-
-DROP TABLE IF EXISTS Available;
-CREATE TABLE Available (
-  AvailableID INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
-  Total INT NOT NULL
-);
-
-DROP TABLE IF EXISTS TicketTypes;
-CREATE TABLE TicketTypes (
-  TicketTypeID INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
-  Name VARCHAR(30) NOT NULL,
-  Price DECIMAL(4,2) NOT NULL,
-  Description VARCHAR(200),
-  AvailableID INT NOT NULL
-);
-
 DROP TABLE IF EXISTS TicketAssignment;
 CREATE TABLE TicketAssignment (
   TicketID INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
   VisitorID INT NOT NULL,
-  TicketTypeID INT NOT NULL,
+  MerchID INT NOT NULL,
   DatePurchased DATE NOT NULL,
   Paid BOOLEAN,
   CheckedIN BOOLEAN,
   LicensePlate VARCHAR(10),
   LicenseIssuedIn VARCHAR(20),
   FOREIGN KEY (VisitorID) REFERENCES Visitors(VisitorID),
-  FOREIGN KEY (TicketID) REFERENCES TicketTypes(TicketTypeID)
-);
-
-DROP TABLE IF EXISTS DateAssignment;
-CREATE TABLE DateAssignment (
-  DateAssignmentID INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
-  DateID INT NOT NULL,
-  TicketID INT NOT NULL,
-  FOREIGN KEY (DateID) REFERENCES Dates(DateID),
-  FOREIGN KEY (TicketID) REFERENCES TicketAssignment(TicketID)
-);
-
-DROP TABLE IF EXISTS Merchandisecategory;
-CREATE TABLE Merchandisecategory (
-  MerchCatID INT PRIMARY KEY AUTO_INCREMENT,
-  MerchCatName VARCHAR(15) NOT NULL
-);
-
-DROP TABLE IF EXISTS Merchandise;
-CREATE TABLE Merchandise (
-  MerchID INT PRIMARY KEY AUTO_INCREMENT,
-  MerchName VARCHAR(25) NOT NULL,
-  QtyMax INT NOT NULL,
-  QtySold INT DEFAULT 0,
-  Price VARCHAR(7) NOT NULL,
-  MerchCatID INT NOT NULL,
-  FOREIGN KEY (MerchCatID) REFERENCES Merchandisecategory(MerchCatID)
-);
-
-DROP TABLE IF EXISTS MerchSales;
-CREATE TABLE MerchSales (
-  MerchSalesID INT PRIMARY KEY AUTO_INCREMENT,
-  MerchID INT NOT NULL,
-  DateID INT NOT NULL,
-  FOREIGN KEY (MerchID) REFERENCES Merchandise(MerchID),
-  FOREIGN KEY (DateID) REFERENCES Dates(DateID)
+  FOREIGN KEY (MerchID) REFERENCES Merchandise(MerchID)
 );
 
 DROP TABLE IF EXISTS Performers;
@@ -144,6 +114,50 @@ CREATE TABLE Camping (
   CampingID CHAR(3) PRIMARY KEY
 );
 
+DROP TABLE IF EXISTS Announcements;
+CREATE TABLE Announcements (
+  AnnounceID INT PRIMARY KEY AUTO_INCREMENT,
+  AnnouncementTitle VARCHAR(255) NOT NULL,
+  AnnouncementText VARCHAR(255) NOT NULL
+);
+
+DROP TABLE IF EXISTS Orders;
+CREATE TABLE Orders (
+  OrderID INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  VisitorID INT NOT NULL,
+  DatePurchased Date NOT NULL,
+  Paid BOOLEAN NOT NULL,
+  FOREIGN KEY (VisitorID) REFERENCES Visitors(VisitorID)
+);
+
+DROP TABLE IF EXISTS TicketAssignment;
+CREATE TABLE TicketAssignment (
+  TicketID INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  VisitorID INT NOT NULL,
+  MerchID INT NOT NULL,
+  DatePurchased DATE NOT NULL,
+  Paid BOOLEAN,
+  CheckedIN BOOLEAN,
+  LicensePlate VARCHAR(10),
+  LicenseIssuedIn VARCHAR(20),
+  QuantityID INT,
+  FOREIGN KEY (VisitorID) REFERENCES Visitors(VisitorID),
+  FOREIGN KEY (QuantityID) REFERENCES Quantity(QuantityID),
+  FOREIGN KEY (MerchID) REFERENCES Merchandise(MerchID)
+);
+
+DROP TABLE IF EXISTS LineItems;
+CREATE TABLE LineItems (
+  LineItemID INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  OrderID INT NOT NULL,
+  MerchID INT NOT NULL,
+  Quantity INT NOT NULL,
+  Discount DECIMAL(2,2) NOT NULL,
+  FOREIGN KEY (OrderID) REFERENCES Orders(OrderID),
+  FOREIGN KEY (MerchID) REFERENCES Merchandise(MerchID)
+
+);
+
 DROP TABLE IF EXISTS CampingAssignment;
 CREATE TABLE CampingAssignment (
   CampAssignID INT PRIMARY KEY AUTO_INCREMENT,
@@ -153,40 +167,167 @@ CREATE TABLE CampingAssignment (
   FOREIGN KEY (CampingID) REFERENCES Camping(CampingID)
 );
 
-DROP TABLE IF EXISTS Announcements;
-CREATE TABLE Announcements (
-  AnnounceID INT PRIMARY KEY AUTO_INCREMENT,
-  DateID INT NOT NULL,
-  AnnouncementTitle VARCHAR(255) NOT NULL,
-  AnnouncementText VARCHAR(255) NOT NULL,
-  FOREIGN KEY (DateID) REFERENCES Dates(DateID)
-);
 
-INSERT INTO Available (AvailableID,Total)
+INSERT INTO Quantity (QuantityID, QuantityMax, QuantityAvailable)
 VALUES
-  (1,2400),
-  (2,900),
-  (3,23100),
-  (4,400),
-  (5,80);
+  (1,2400,2400),
+  (2,900,900),
+  (3,23100,23100),
+  (4,400,400),
+  (5,80,80),
+  (6, 1200, 1200),
+  (7, 15000, 15000),
+  (8, 3500, 3500),
+  (9, 4000, 4000),
+  (10, 5000, 5000),
+  (11, 10000, 10000),
+  (12, 100, 100),
+  (13, 200, 200),
+  (14, 300, 300),
+  (15, 400, 400),
+  (16, 500, 500),
+  (17, 600, 600),
+  (18, 700, 700),
+  (19, 800, 800),
+  (20, 50, 50),
+  (21, 40, 40),
+  (22, 30, 30),
+  (23, 1000, 1000),
+  (24, 12000, 12000),
+  (25, 5000, 5000),
+  (26, 200, 200),
+  (27, 100, 100),
+  (28, 100, 100),
+  (29, 100, 100),
+  (30, 50, 50),
+  (31, 50, 50),
+  (32, 30, 30),
+  (33, 30, 30),
+  (34, 500, 500),
+  (35, 500, 500),
+  (36, 500, 500),
+  (37, 500, 500),
+  (38, 500, 500),
+  (39, 500, 500),
+  (40, 500, 500),
+  (41, 500, 500),
+  (42, 500, 500),
+  (43, 500, 500),
+  (44, 500, 500),
+  (45, 500, 500),
+  (46, 500, 500),
+  (47, 100, 100),
+  (48, 500, 500),
+  (49, 300, 300),
+  (50, 300, 500),
+  (51, 100, 100),
+  (52, 1000, 1000),
+  (53, 10000, 10000),
+  (54,900,900),
+  (55,900,900),
+  (56,900,900),
+  (57,900,900),
+  (58,900,900),
+  (59,900,900),
+  (60,900,900),
+  (61,900,900),
+  (62,900,900),
+  (63,900,900),
+  (64,900,900),
+  (65,900,900),
+  (66,900,900);
 
-INSERT INTO TicketTypes (TicketTypeID,Name,Price,Description,AvailableID)
-VALUES
-  (1,'WeekAdult','200.00','Full-week festival access for an adult',1),
-  (2,'WeekUnderTwelve','100.00','Full-week festival access for <12 and >5',1),
-  (3,'WeekUnderFive','0.00','Full-week festival access for <5',1),
-  (4,'DayAdult','25.00','Day-long festival access for an adult',2),
-  (5,'DayUnderTwelve','15.00','Day-long festival access for <12 and >5',2),
-  (6,'DayUnderFive','0.00','Day-long festival access for <5',2),
-  (7,'WeekParkingGeneral','25.00','Week-long general parking access',3),
-  (8,'DayParkingGeneral','5.00','Day-long general parking access',3),
-  (9,'WeekParkingVIP','50.00','Week-long VIP parking access',4),
-  (10,'DayParkingVIP','10.00','Day-long VIP parking access',4),
-  (11,'WeekParkingRV','100.00','Week-long RV parking access',5),
-  (12,'DayParkingRV','20.00','Day-long RV parking access',5),
-  (13,'DayCampingAdult','25.00','Day-long camping access for an adult',1),
-  (14,'DayCampingUnderTwelve','15.00','Day-long camping access for <12 and >5',1),
-  (15,'DayCampingUnderFive','0.00','Day-long camping access for <5',1);
+INSERT INTO MerchandiseCategory (MerchCatID, MerchCatName) VALUES (1, "Aparrel"), (2, "Food/Drink"), (3, "Firewood"), (4, "Misc"), (5, "FirstAid"), (6, "Collectibles"),
+  (7, "DayAdmissionTickets"), (8, "WeekAdmissionTickets"), (9, "DayParkingTickets"), (10, "WeekParkingTickets"), (11, "DayCampingTickets");
+
+
+INSERT INTO Merchandise (MerchID, MerchName, QuantityID, Price, MerchCatID, Description) VALUES (1, "Reusable Cup", 6, 8.00, 6, null), (2, "Soda", 24, 1.20, 2, null), (3, "Water", 7, 1.00, 2, null), (4, "Chips", 25, 1.20, 2, null), (5, "Hamburger", 8, 2.20, 2, null), (6, "Hot Dog", 9, 2.00, 2, null), (7, "Beer", 11, 4.00, 2, null),
+  (8, "Firewood", 53, 5.00, 3, null), (9, "Ice", 10, 1.20, 4, null), (10, "Band Aids", 13, 4.00, 5, null), (11, "Aloe Vera", 12, 3.00, 5, null), (12, "Sunscreen", 26, 2.00, 5, null), (13, "Ointment", 27, 8.00, 5, null), (14, "Tylenol", 28, 4.00, 5, null), (15, "Tums", 29, 4.00, 5, null), (16, "Child Small T-Shirt", 20, 15.00, 1, null),
+  (17, "Child Medium T-Shirt", 30, 15.00, 1, null), (18, "Child Large T-Shirt", 31, 15.00, 1, null), (19, "Child Small Hoodie", 22, 18.00, 1, null), (20, "Child Medium Hoodie", 32, 18.00, 1, null), (21, "Child Large Hoodie", 33, 18.00, 1, null), (22, "Child Sweatpants", 21, 10.00, 1, null), (23, "Adult Small T-Shirt", 16, 25.00, 1, null),
+  (24, "Adult Medium T-Shirt", 34, 25.00, 1, null), (25, "Adult Large T-Shirt", 18, 25.00, 1, null), (26, "Adult X-Large T-Shirt", 17, 25.00, 1, null), (27, "Adult XXL T-Shirt", 14, 25.00, 1, null), (28, "Adult XXXL T-Shirt", 47, 25.00, 1, null), (29, "Adult Small Hoodie", 35, 22.00, 1, null), (30, "Adult Medium Hoodie", 36, 22.00, 1, null),
+  (31, "Adult Large Hoodie", 37, 22.00, 1, null), (32, "Adult X-Large Hoodie", 38, 22.00, 1, null), (33, "Adult XXL Hoodie", 39, 22.00, 1, null), (34, "Adult XXXL Hoodie", 40, 22.00, 1, null), (35, "Adult Sweatpants", 48, 12.00, 1, null), (36, "Beanie", 15, 15.00, 1, null), (37, "Baseball Cap", 19, 20.00, 1, null),
+  (38, "Jester Hat", 49, 22.00, 1, null), (39, "Accordion Party Hat", 23, 16.00, 1, null), (40, "Child Poncho", 41, 5.00, 1, null), (41, "Adult Poncho", 42, 10.00, 1, null), (42, "Keychain", 43, 8.00, 6, null), (43, "Bobblehead", 44, 12.00, 6, null), (44, "Program", 52, 5.00, 6, null), (45, "Hacky Sack", 45, 2.00, 6, null),
+  (46, "Accordion", 50, 20.00, 6, null), (47, "Child's Accordion", 51, 22.00, 6, null), (48, "Mug", 46, 12.00, 6, null),
+
+  (49, "Ticket Adult_Week", 1, 200.00, 8, 'Full-week festival access for an adult'),
+  (55, "Ticket Adult_Mo", 2, 25.00, 7, 'Monday festival access for an adult'),
+  (56, "Ticket Adult_Tu", 54, 25.00, 7, 'Tuesday festival access for an adult'),
+  (57, "Ticket Adult_We", 55, 25.00, 7, 'Wednesday festival access for an adult'),
+  (58, "Ticket Adult_Th", 56, 25.00, 7, 'Thursday festival access for an adult'),
+  (59, "Ticket Adult_Fr", 57, 25.00, 7, 'Friday festival access for an adult'),
+  (60, "Ticket Adult_Sa", 58, 25.00, 7, 'Saturday festival access for an adult'),
+  (61, "Ticket Adult_Su", 59, 25.00, 7, 'Sunday festival access for an adult'),
+  (50, "Ticket UnderTwelve_Week", 1, 100.00, 8, 'Full-week festival access for children under 12'),
+  (62, "Ticket UnderTwelve_Mo", 2, 15.00, 7, 'Monday festival access for children under 12'),
+  (63, "Ticket UnderTwelve_Tu", 54, 15.00, 7, 'Tuesday festival access for children under 12'),
+  (64, "Ticket UnderTwelve_We", 55, 15.00, 7, 'Wednesday festival access for children under 12'),
+  (65, "Ticket UnderTwelve_Th", 56, 15.00, 7, 'Thursday festival access for children under 12'),
+  (66, "Ticket UnderTwelve_Fr", 57, 15.00, 7, 'Friday festival access for children under 12'),
+  (67, "Ticket UnderTwelve_Sa", 58, 15.00, 7, 'Saturday festival access for children under 12'),
+  (68, "Ticket UnderTwelve_Su", 59, 15.00, 7, 'Sunday festival access for children under 12'),
+  (51, "Ticket UnderFive_Week", 1, 0.00, 8, 'Full-week festival access for children under 5'),
+  (69, "Ticket UnderFive_Mo", 2, 0.00, 7, 'Monday festival access for children under 5'),
+  (70, "Ticket UnderFive_Tu", 54, 0.00, 7, 'Tuesday festival access for children under 5'),
+  (71, "Ticket UnderFive_We", 55, 0.00, 7, 'Wednesday festival access for children under 5'),
+  (72, "Ticket UnderFive_Th", 56, 0.00, 7, 'Thursday festival access for children under 5'),
+  (73, "Ticket UnderFive_Fr", 57, 0.00, 7, 'Friday festival access for children under 5'),
+  (74, "Ticket UnderFive_Sa", 58, 0.00, 7, 'Saturday festival access for children under 5'),
+  (75, "Ticket UnderFive_Su", 59, 0.00, 7, 'Sunday festival access for children under 5'),
+
+  (52, 'WeekParkingGeneral', 3, 25.00, 10,'Week-long general parking access'),
+  (76, 'DayParkingGeneral_Mo', 3, 5.00, 9, 'Monday general parking access'),
+  (77, 'DayParkingGeneral_Tu', 3, 5.00, 9, 'Tuesday general parking access'),
+  (78, 'DayParkingGeneral_We', 3, 5.00, 9, 'Wednesday general parking access'),
+  (79, 'DayParkingGeneral_Th', 3, 5.00, 9, 'Thursday general parking access'),
+  (80, 'DayParkingGeneral_Fr', 3, 5.00, 9, 'Friday general parking access'),
+  (81, 'DayParkingGeneral_Sa', 3, 5.00, 9, 'Saturday general parking access'),
+  (82, 'DayParkingGeneral_Su', 3, 5.00, 9, 'Sunday general parking access'),
+
+  (53, 'WeekParkingVIP', 4, 50.00, 10, 'Week-long VIP parking access'),
+  (83, 'DayParkingVIP_Mo', 4, 10.00, 9, 'Monday VIP parking access'),
+  (84, 'DayParkingVIP_Tu', 4, 10.00, 9, 'Tuesday VIP parking access'),
+  (85, 'DayParkingVIP_We', 4, 10.00, 9, 'Wednesday VIP parking access'),
+  (86, 'DayParkingVIP_Th', 4, 10.00, 9, 'Thursday VIP parking access'),
+  (87, 'DayParkingVIP_Fr', 4, 10.00, 9, 'Friday VIP parking access'),
+  (88, 'DayParkingVIP_Sa', 4, 10.00, 9, 'Saturday VIP parking access'),
+  (89, 'DayParkingVIP_Su', 4, 10.00, 9, 'Sunday VIP parking access'),
+
+  (54, 'WeekParkingRV', 5, 100.00, 10, 'Week-long RV parking access'),
+  (90, 'DayParkingRV_Mo', 5, 20.00, 9, 'Monday RV parking access'),
+  (91, 'DayParkingRV_Tu', 5, 20.00, 9, 'Tuesday RV parking access'),
+  (92, 'DayParkingRV_We', 5, 20.00, 9, 'Wednesday RV parking access'),
+  (93, 'DayParkingRV_Th', 5, 20.00, 9, 'Thursday RV parking access'),
+  (94, 'DayParkingRV_Fr', 5, 20.00, 9, 'Friday RV parking access'),
+  (95, 'DayParkingRV_Sa', 5, 20.00, 9, 'Saturday RV parking access'),
+  (96, 'DayParkingRV_Su', 5, 20.00, 9, 'Sunday RV parking access'),
+
+  (97, 'DayCampingAdult_Mo', 60, 25.00, 11, 'Monday camping access for an adult'),
+  (98, 'DayCampingAdult_Tu', 61, 25.00, 11, 'Tuesday camping access for an adult'),
+  (99, 'DayCampingAdult_We', 62, 25.00, 11, 'Wednesday camping access for an adult'),
+  (100, 'DayCampingAdult_Th', 63, 25.00, 11, 'Thursday camping access for an adult'),
+  (101, 'DayCampingAdult_Fr', 64, 25.00, 11, 'Friday camping access for an adult'),
+  (102, 'DayCampingAdult_Sa', 65, 25.00, 11, 'Saturday camping access for an adult'),
+  (103, 'DayCampingAdult_Su', 66, 25.00, 11, 'Sunday camping access for an adult'),
+
+  (104, 'DayCampingUnderTwelve_Mo', 60, 15.00, 11, 'Monday camping access for children under 12'),
+  (105, 'DayCampingUnderTwelve_Tu', 61, 15.00, 11, 'Tuesday camping access for children under 12'),
+  (106, 'DayCampingUnderTwelve_We', 62, 15.00, 11, 'Wednesday camping access for children under 12'),
+  (107, 'DayCampingUnderTwelve_Th', 63, 15.00, 11, 'Thursday camping access for children under 12'),
+  (108, 'DayCampingUnderTwelve_Fr', 64, 15.00, 11, 'Friday camping access for children under 12'),
+  (109, 'DayCampingUnderTwelve_Sa', 65, 15.00, 11, 'Saturday camping access for children under 12'),
+  (110,'DayCampingUnderTwelve_Su', 66, 15.00, 11, 'Sunday camping access for children under 12'),
+
+  (111, 'DayCampingUnderFive_Mo', 60, 0.00, 11, 'Monday camping access for children under 5'),
+  (112, 'DayCampingUnderFive_Tu', 61, 0.00, 11, 'Tuesday camping access for children under 5'),
+  (113, 'DayCampingUnderFive_We', 62, 0.00, 11, 'Wednesday camping access for children under 5'),
+  (114, 'DayCampingUnderFive_Th', 63, 0.00, 11, 'Thursday camping access for children under 5'),
+  (115, 'DayCampingUnderFive_Fr', 64, 0.00, 11, 'Friday camping access for children under 5'),
+  (116, 'DayCampingUnderFive_Sa', 65, 0.00, 11, 'Saturday camping access for children under 5'),
+  (117, 'DayCampingUnderFive_Su', 66, 0.00, 11, 'Sunday camping access for children under 5');
+
+/*
+	need to adjust the MerchID (the third number in the insert) and also adjust for the change to how we're doing the daily tickets now i believe
+*/
 
 INSERT INTO Users (Username, Password, AccessLevel) VALUES ("thebigcheese", "$2y$10$Lle9WvZM/rOrGF3IeltFN.O5EC5TqIvptb9HR7pDFe8EtyD0T7fRa", 5), -- Festival Chief
   ("maingateadmin", "$2y$10$hpfuFl/vAy/yBxDUXxpiZO3SKDNXAPtFiK06PB/uy8eDexm.xg8PG", 4), -- main gate admin
@@ -240,18 +381,6 @@ INSERT INTO Visitors (UserID,FName,LName,PhoneNumber,Email,DOB,Address,City,Stat
 INSERT INTO Visitors (UserID,FName,LName,PhoneNumber,Email,DOB,Address,City,StateProvince,Country,PostalCode) VALUES (11,"Judah","Cook","395-9297","urna.suscipit.nonummy@semelit.com","1915-10-31","6364 Aliquam Road","Las Vegas","NV","USA","59968"),(12,"Rashad","Hunter","1-319-327-7745","enim@nisiMauris.edu","1990-06-28","Ap #283-3343 Nam Avenue","Bridgeport","CT","USA","75933"),(13,"Abel","Sweeney","743-1895","placerat.orci@lectusCumsociis.net","1969-05-24","Ap #429-3729 Risus Avenue","Olympia","WA","USA","12690"),(14,"Blythe","Davenport","932-2493","Duis.cursus@iaculisneceleifend.ca","1928-11-09","Ap #311-430 Dis Rd.","Shreveport","LA","USA","30715"),(15,"Amela","Mays","914-8975","a.auctor@mieleifend.ca","1907-05-15","600-6130 Vel Rd.","Springfield","IL","USA","29957"),(16,"Howard","Logan","1-136-560-0589","id@molestie.com","1942-10-04","P.O. Box 273, 944 Et Rd.","Auburn","ME","USA","84656"),(17,"Mason","Benson","599-7938","libero.Integer@idmagna.com","1992-05-06","Ap #414-2698 Sagittis Av.","New Orleans","LA","USA","14976"),(18,"Adele","Becker","960-7799","ultrices.Duis@adipiscinglacusUt.net","1907-12-15","P.O. Box 862, 9481 Fames Rd.","Tacoma","WA","USA","68800"),(19,"Iris","Murray","1-373-784-7154","mauris@gravida.co.uk","1933-10-08","876 Congue. Avenue","Austin","TX","USA","62652"),(20,"Aubrey","Wilder","715-4129","sit.amet@nec.edu","1985-01-29","6838 Phasellus Avenue","Topeka","KS","USA","96885");
 INSERT INTO Visitors (UserID,FName,LName,PhoneNumber,Email,DOB,Address,City,StateProvince,Country,PostalCode) VALUES (21,"Jolene","Nicholson","851-0894","tellus@quam.org","1995-08-04","Ap #688-3743 Praesent St.","Little Rock","AR","USA","71520"),(22,"Stacey","Berry","744-8223","ornare@tellus.net","2000-12-20","346-372 Et Rd.","Racine","WI","USA","75297"),(23,"Cheyenne","Ortiz","432-5355","non@egestasDuisac.org","1956-10-14","P.O. Box 989, 3910 Donec Street","West Valley City","UT","USA","92589"),(24,"Jared","Harding","411-0428","luctus@leoelementumsem.net","1968-04-16","8648 Lectus St.","Kenosha","WI","USA","96512"),(25,"Nissim","Pollard","1-412-727-7668","taciti@eutellus.com","1997-04-26","P.O. Box 606, 3682 Tincidunt. St.","Iowa City","IA","USA","76904"),(26,"Kelsey","Gregory","1-583-900-4541","rhoncus.id.mollis@ipsumSuspendisse.org","1928-10-01","P.O. Box 663, 463 Cras Rd.","South Bend","IN","USA","57149"),(27,"Rosalyn","Bonner","921-5796","purus.ac@lorem.co.uk","1909-11-26","6146 Nibh. Av.","Essex","VT","USA","45339"),(28,"Lucy","Mcknight","392-5258","ac.sem.ut@eu.ca","1923-01-18","P.O. Box 400, 3324 Aliquet Rd.","Worcester","MA","USA","23713"),(29,"Hillary","Dorsey","503-0719","senectus.et.netus@dolor.ca","1905-06-21","Ap #357-2468 Amet Street","Phoenix","AZ","USA","86132"),(30,"Maisie","Guthrie","1-628-638-7140","Aliquam.erat@Duis.com","1977-07-24","572-8404 Eros Ave","Milwaukee","WI","USA","82136");
 INSERT INTO Visitors (UserID,FName,LName,PhoneNumber,Email,DOB,Address,City,StateProvince,Country,PostalCode) VALUES (31,"Zachery","Sheppard","1-172-170-1073","lacus.varius@semmollis.org","1982-08-03","683-2990 Mattis St.","Orlando","FL","USA","77507"),(32,"Cedric","Casey","683-0547","nec@Cras.edu","1921-10-03","1956 Conubia St.","Bellevue","NE","USA","45152"),(33,"Maris","Dejesus","498-3981","urna@duiFusce.net","1967-05-06","996-9836 Magnis Street","Jonesboro","AR","USA","71965"),(34,"Pascale","Knox","1-844-455-2260","consectetuer.rhoncus@rutrummagnaCras.com","1992-07-31","825-6181 Nec Rd.","Louisville","KY","USA","95455"),(35,"Megan","Schroeder","140-7705","egestas.blandit@ligulaAenean.ca","1968-02-01","373-3142 Mi Rd.","Topeka","KS","USA","42462"),(36,"Phoebe","Henderson","822-0618","Ut@id.co.uk","1912-03-24","1035 Odio. Rd.","Chicago","IL","USA","37731"),(37,"Hayfa","Carroll","593-4958","tellus@arcuSed.ca","1976-04-15","Ap #680-7263 Massa St.","Sioux City","IA","USA","92650"),(38,"Leilani","Arnold","1-173-843-7510","eget.magna@in.edu","1905-07-10","915-684 Dolor Av.","Kansas City","MO","USA","45198"),(39,"Jared","Kirk","854-8609","Duis@placeratvelitQuisque.ca","1944-08-30","2038 Risus. Avenue","Salt Lake City","UT","USA","58905"),(40,"Nichole","Pearson","679-0807","penatibus@Donecluctusaliquet.edu","1930-08-25","1433 Odio. Road","Chesapeake","VA","USA","24340");
-
-INSERT INTO Merchandisecategory (MerchCatName) VALUES ("Aparrel"), ("Food/Drink"), ("Firewood"), ("Misc"), ("FirstAid"), ("Collectibles");
-
-INSERT INTO Merchandise (MerchName, QtyMax, Price, MerchCatID) VALUES ("Reusable Cup", 1200, "$8.00", 6), ("Soda", 12000, "$1.50", 2), ("Water", 15000, "$1.00", 2), ("Chips", 5000, "$1.50", 2), ("Hamburger", 3500, "$2.50", 2), ("Hot Dog", 4000, "$2.00", 2), ("Beer", 10000, "$4.00", 2),
-  ("Firewood", 10000, "$5.00", 3), ("Ice", 5000, "$1.50", 4), ("Band Aids", 200, "$4.00", 5), ("Aloe Vera", 100, "$3.00", 5), ("Sunscreen", 200, "$2.00", 5), ("Ointment", 100, "$8.00", 5), ("Tylenol", 100, "$4.00", 5), ("Tums", 100, "$4.00", 5), ("Child Small T-Shirt", 50, "$15.00", 1),
-  ("Child Medium T-Shirt", 50, "$15.00", 1), ("Child Large T-Shirt", 50, "$15.00", 1), ("Child Small Hoodie", 30, "$18.00", 1), ("Child Medium Hoodie", 30, "$18.00", 1), ("Child Large Hoodie", 30, "$18.00", 1), ("Child Sweatpants", 40, "$10.00", 1), ("Adult Small T-Shirt", 500, "$25.00", 1),
-  ("Adult Medium T-Shirt", 500, "$25.00", 1), ("Adult Large T-Shirt", 700, "$25.00", 1), ("Adult X-Large T-Shirt", 600, "$25.00", 1), ("Adult XXL T-Shirt", 300, "$25.00", 1), ("Adult XXXL T-Shirt", 100, "$25.00", 1), ("Adult Small Hoodie", 500, "$30.00", 1), ("Adult Medium Hoodie", 500, "$30.00", 1),
-  ("Adult Large Hoodie", 500, "$30.00", 1), ("Adult X-Large Hoodie", 500, "$30.00", 1), ("Adult XXL Hoodie", 500, "$30.00", 1), ("Adult XXXL Hoodie", 500, "$30.00", 1), ("Adult Sweatpants", 100, "$12.00", 1), ("Beanie", 400, "$15.00", 1), ("Baseball Cap", 800, "$20.00", 1),
-  ("Jester Hat", 300, "$30.00", 1), ("Accordion Party Hat", 1000, "$16.00", 1), ("Child Poncho", 500, "$5.00", 1), ("Adult Poncho", 500, "$10.00", 1), ("Keychain", 500, "$8.00", 6), ("Bobblehead", 500, "$12.00", 6), ("Program", 1000, "$5.00", 6), ("Hacky Sack", 500, "$2.00", 6),
-  ("Accordion", 300, "$50.00", 6), ("Child's Accordion", 100, "$30.00", 6), ("Mug", 500, "$12.00", 6);
-
-INSERT INTO Dates (FestDate) VALUES ("2017-08-07"), ("2017-08-08"), ("2017-08-09"), ("2017-08-10"), ("2017-08-11"), ("2017-08-12"), ("2017-08-13");
 
 INSERT INTO Camping (CampingID) VALUES ("A01"), ("A02"), ("A03"), ("A04"), ("A05"), ("A06"), ("A07"), ("A08"), ("A09"), ("A10"), ("B01"), ("B02"), ("B03"), ("B04"), ("B05"), ("B06"), ("B07"), ("B08"), ("B09"), ("B10"),
   ("C01"), ("C02"), ("C03"), ("C04"), ("C05"), ("C06"), ("C07"), ("C08"), ("C09"), ("C10"), ("D01"), ("D02"), ("D03"), ("D04"), ("D05"), ("D06"), ("D07"), ("D08"), ("D09"), ("D10"), ("E01"), ("E02"), ("E03"), ("E04"), ("E05"),
@@ -444,14 +573,14 @@ INSERT INTO PerformanceSchedule (PerformerID, StageID, StartTime) VALUES (1, 1, 
   (66, 2, "2017-08-10 22:00:00"), (66, 3, "2017-08-12 18:00:00"),
   (67, 2, "2017-08-11 12:00:00"), (67, 3, "2017-08-07 12:00:00");
 
-INSERT INTO TicketAssignment (TicketID, VisitorID, TicketTypeID, DatePurchased, Paid, CheckedIN, LicensePlate, LicenseIssuedIn) VALUES
-  (1, 1, 1, "2017-06-01", true, false, null, null), /* Week-long adult ticket for visitor 1, two people staying for the week */
-  (2, 1, 1, "2017-06-01", true, false, null, null), /* Week-long adult ticket for visitor 1 */
-  (3, 1, 7, "2017-06-01", true, false, 'DHX-1138', 'Ohio'), /* Week-long parking ticket for visitor 1 */
-  (4, 2, 1, "2017-06-02", true, false, null, null), /* Week-long adult ticket for visitor 2, two parents and a kid staying for the week */
-  (5, 2, 1, "2017-06-02", true, false, null, null), /* Week-long adult ticket for visitor 2 */
-  (6, 2, 2, "2017-06-02", true, false, null, null), /* Week-long <12 ticket for visitor 2 */
-  (7, 2, 11, "2017-06-02", true, false, '867-5309', 'Arizona'), /* Week-long RV parking ticket for visitor 2 */
+INSERT INTO TicketAssignment (TicketID, VisitorID, MerchID, DatePurchased, Paid, CheckedIn, LicensePlate, LicenseIssuedIn) VALUES
+  (1, 1, 49, "2017-06-01", true, false, null, null), /* Week-long adult ticket for visitor 1, two people staying for the week */
+  (2, 1, 49, "2017-06-01", true, false, null, null), /* Week-long adult ticket for visitor 1 */
+  (3, 1, 52, "2017-06-01", true, false, 'DHX-1138', 'Ohio'), /* Week-long parking ticket for visitor 1 */
+  (4, 2, 49, "2017-06-02", true, false, null, null), /* Week-long adult ticket for visitor 2, two parents and a kid staying for the week */
+  (5, 2, 49, "2017-06-02", true, false, null, null), /* Week-long adult ticket for visitor 2 */
+  (6, 2, 50, "2017-06-02", true, false, null, null), /* Week-long <12 ticket for visitor 2 */
+  (7, 2, 54, "2017-06-02", true, false, '867-5309', 'Arizona'), /* Week-long RV parking ticket for visitor 2 */
   (8, 3, 4, "2017-06-03", true, false, null, null), /* Day adult ticket for visitor 3, one person staying for one day */
   (9, 3, 10, "2017-06-03", true, false, 'SO-SLNCE', 'Arizona'), /* Day VIP parking ticket for visitor 3 */
   (10, 4, 4, "2017-06-04", true, false, null, null), /* Day adult ticket for visitor 4, one person staying for two days */
@@ -460,23 +589,5 @@ INSERT INTO TicketAssignment (TicketID, VisitorID, TicketTypeID, DatePurchased, 
   (13, 4, 13, "2017-06-04", true, false, null, null), /* Day camping ticket for visitor 4 */
   (14, 4, 8, "2017-06-04", true, false, 'CH8-M8', 'California'), /* Day parking ticket for visitor 4 */
   (15, 4, 8, "2017-06-04", true, false, 'CH8-M8', 'California'); /* Day parking ticket for visitor 4 */
-
-
-INSERT INTO DateAssignment (DateID, TicketID) VALUES
-  (1, 1), (2, 1), (3, 1), (4, 1), (5, 1), (6, 1), (7, 1), /* Full-Week entries for ticket 1 */
-  (1, 2), (2, 2), (3, 2), (4, 2), (5, 2), (6, 2), (7, 2), /* Full-Week entries for ticket 2 */
-  (1, 3), (2, 3), (3, 3), (4, 3), (5, 3), (6, 3), (7, 3), /* Full-Week entries for ticket 3 */
-  (1, 4), (2, 4), (3, 4), (4, 4), (5, 4), (6, 4), (7, 4), /* Full-Week entries for ticket 4 */
-  (1, 5), (2, 5), (3, 5), (4, 5), (5, 5), (6, 5), (7, 5), /* Full-Week entries for ticket 5 */
-  (1, 6), (2, 6), (3, 6), (4, 6), (5, 6), (6, 6), (7, 6), /* Full-Week entries for ticket 6 */
-  (1, 7), (2, 7), (3, 7), (4, 7), (5, 7), (6, 7), (7, 7), /* Full-Week entries for ticket 7 */
-  (1, 8), /* Day entry for ticket 8 */
-  (1, 9), /* Day entry for ticket 9 */
-  (1, 10), /* Day entry for ticket 10 */
-  (2, 11), /* Day entry for ticket 11 */
-  (1, 12), /* Day entry for ticket 12 */
-  (2, 13), /* Day entry for ticket 13 */
-  (1, 14), /* Day entry for ticket 14 */
-  (2, 15); /* Day entry for ticket 15 */
 
 INSERT INTO CampingAssignment (TicketID, CampingID) VALUES (1, "A01"), (2, "A01"), (4, "A08"), (5, "A08"), (6, "A08"), (12, "C01"), (13, "C01");

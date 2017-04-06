@@ -493,8 +493,10 @@ $aryCountry = explode("\n",$countries);
             <?php
             // check if there a person alright there
             if((isset($_SESSION['FName']) == true) && (isset($_SESSION['LName']) == true)) {
-                // display the panel for it
-                require "../includes/comments.php";
+                if (($_SESSION['FName'] != "") && ($_SESSION['LName'] != "")){
+                    // display the panel for it
+                    require "../includes/comments.php";
+                }
             }
             ?>
         </div>

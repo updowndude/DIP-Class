@@ -4,7 +4,7 @@
 	$server="localhost";
 	$username="root";
 	$password="root";
-    $db="Festival_DB";
+    $db="dips2017_Festival_DB";
 
     $conn=new mysqli($server,$username,$password,$db);
 

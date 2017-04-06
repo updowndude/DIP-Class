@@ -19,9 +19,11 @@
               TicketAssignment INNER JOIN
               TicketTypes
                   ON TicketAssignment.TicketTypeID
-                  =  TicketTypes.TicketTypeID
+                  =  TicketTypes.TicketTypeID INNER JOIN
+                  Visitors.VisitorID = TicketAssignment.VisitorID
             SET
-              TicketAssignment.TicketTypeID = :ticketTypeID
+              TicketAssignment.TicketTypeID = :ticketTypeID,
+              Visitors.VisitorID = CONCAT(\'Bought on \', CAST(NOW() AS char))
             WHERE
               TicketAssignment.VisitorID = :visitorID
             ';
@@ -65,7 +67,8 @@
             VALUES
             ((SELECT VisitorID 
               FROM Visitors  WHERE";
-
+          $thrQuery = "(SELECT VisitorID 
+              FROM Visitors  WHERE";
           $arySessionKey = array_keys($_SESSION);
           $intTmp = sizeof($arySessionKey) -1;
 
@@ -76,13 +79,18 @@
                       ($arySessionKey[$lcv] == "Email") || ($arySessionKey[$lcv] == "Comments")) && (strlen($_SESSION[$arySessionKey[$lcv]]) != 0)) {
                  if($lcv !== $intTmp) {
                      $secQuery .= "({$arySessionKey[$lcv]} = :{$arySessionKey[$lcv]}) AND";
+                     $thrQuery .= "({$arySessionKey[$lcv]} = :{$arySessionKey[$lcv]}) AND";
                  }
               }
           }
+
           $secQuery = substr($secQuery, 0, strlen($secQuery) - 3);
+          $thrQuery = substr($thrQuery, 0, strlen($thrQuery) - 3);
+
           $secQuery .= ")
              , :ticketTypeID
              , NOW());";
+          $thrQuery .= ");";
           $query =
             "
             INSERT INTO
@@ -92,8 +100,15 @@
             (:UserID,:FName, :LName, :DOB, :Address, :City, :StateProvince, :Country, :PhoneNumber, :PostalCode, :Email, :Comments);
             
             {$secQuery}
+            
+            UPDATE
+              Visitors as v, {$thrQuery} as c
+            SET
+              v.Comments = CONCAT('Bought on ', CAST(NOW() AS char))
+            WHERE
+              v.VisitorID = c.VisitorID
              ";
-
+echo $secQuery;
           $statement = $pdoObj->prepare($query);
           $statement->bindValue(':UserID', $sqlValues['UserID']);
           $statement->bindValue(':FName', $_SESSION['FName']);

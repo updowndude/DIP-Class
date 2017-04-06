@@ -1,4 +1,3 @@
-visitors only enter once
 after buy a ticket
 color scheme 
 filter out week long tickets
