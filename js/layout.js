@@ -9,7 +9,7 @@ if('serviceWorker' in navigator) {
 }
 
 // check to see what page  is being display
-if(document.body.id == 'findPersonBody') {
+if(document.body.id === 'findPersonBody') {
     // remove the sumbit disable
     let blnRemoveSumbit = true;
     // gets input input in main form
@@ -18,18 +18,31 @@ if(document.body.id == 'findPersonBody') {
     const btnSumbit = document.querySelector("#findPerson");
     // gets the search all fields button
     const btnFindPerson = document.querySelector('#searchPhone');
+    // see if today is when they bought a ticket
+    let blnTodayComment = true;
+    // http://stackoverflow.com/questions/1531093/how-do-i-get-the-current-date-in-javascript
+    const now = new Date();
+    const today = now.getFullYear() + "-" + (("0" + (now.getMonth() + 1)).slice(-2)) + "-" + (("0" + now.getDate()).slice(-2));
+    // current first name
+    const strFNameCurValue = elmInputs[0].value;
+    // current last name
+    const strLNameCurValue = elmInputs[1].value;
+
+    if (document.getElementsByName("comment").length !== 0){
+        document.getElementsByName("comment")[0].value.trim().indexOf(today) >= 0 ? blnTodayComment = false : null;
+    }
 
     // loops through inputs
     elmInputs.forEach((cur2) => {
         // check to see if there a value for required fileds
-        if((cur2.value.trim().length == 0) && ((cur2.name == 'LName') || (cur2.name == 'FName'))) {
+        if((cur2.value.trim().length === 0) && ((cur2.name === 'LName') || (cur2.name === 'FName'))) {
             // dons't disable the sumbit
             blnRemoveSumbit = false;
         }
     });
 
     // set disable attribute for button if need to
-    blnRemoveSumbit === false ? btnSumbit.setAttribute('disabled','disabled') : null;
+    ((blnRemoveSumbit === false) || (blnTodayComment === false)) ? btnSumbit.setAttribute('disabled','disabled') : null;
 
     // loops through inputs
     elmInputs.forEach((cur) => {
@@ -42,7 +55,9 @@ if(document.body.id == 'findPersonBody') {
 
             elmInputs.forEach((curPlaced) => {
                 // check to see if there value
-                (curPlaced.value.trim().length != 0) && ((curPlaced.name == 'LName') || (curPlaced.name == 'FName')) ? intRight++ : null;
+                (curPlaced.value.trim().length !== 0) && ((curPlaced.name === 'LName') || (curPlaced.name === 'FName')) ? intRight++ : null;
+                (curPlaced.name === 'FName') && (curPlaced.value.trim() === strFNameCurValue) ? intRight-- : null;
+                (curPlaced.name === 'LName') && (curPlaced.value.trim() === strLNameCurValue) ? intRight-- : null;
 
                 if(intRight === 2) {
                     // remove disable from the submit button

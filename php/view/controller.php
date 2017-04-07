@@ -97,18 +97,11 @@
             Visitors
             (UserID,FName, LName, DOB, Address, City, StateProvince, Country, PhoneNumber, PostalCode, Email, Comments)
             VALUES
-            (:UserID,:FName, :LName, :DOB, :Address, :City, :StateProvince, :Country, :PhoneNumber, :PostalCode, :Email, :Comments);
+            (:UserID,:FName, :LName, :DOB, :Address, :City, :StateProvince, :Country, :PhoneNumber, :PostalCode, :Email, CONCAT('Bought on ', CAST(NOW() AS char)));
             
             {$secQuery}
-            
-            UPDATE
-              Visitors as v, {$thrQuery} as c
-            SET
-              v.Comments = CONCAT('Bought on ', CAST(NOW() AS char))
-            WHERE
-              v.VisitorID = c.VisitorID
              ";
-echo $secQuery;
+
           $statement = $pdoObj->prepare($query);
           $statement->bindValue(':UserID', $sqlValues['UserID']);
           $statement->bindValue(':FName', $_SESSION['FName']);
