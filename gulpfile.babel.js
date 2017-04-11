@@ -16,7 +16,7 @@ gulp.task('sass', () => {
 	// extra transfromer after sass to css
 	const processors = [
 		// minifier for css
-		csswring,
+		// csswring,
 		// use new css
 		cssnext
 	];

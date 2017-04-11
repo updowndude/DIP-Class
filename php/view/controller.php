@@ -24,7 +24,7 @@
                   Visitors.VisitorID = TicketAssignment.VisitorID
             SET
               TicketAssignment.TicketTypeID = :ticketTypeID,
-              Visitors.VisitorID = CONCAT(\'Bought on \', CAST(NOW() AS char))
+              Visitors.Comments = CONCAT(\'Bought on \', CAST(NOW() AS char))
             WHERE
               TicketAssignment.VisitorID = :visitorID
             ';
