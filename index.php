@@ -78,7 +78,7 @@
         <link rel="manifest" href="manifest.json">
         <meta charset="utf-8">
 
-        <title>Main Gate</title>
+        <title>Main Gate Login</title>
 
         <link rel="icon" href="">
 
@@ -95,11 +95,15 @@
 
 
 <div class="text-center">
-	<img src="images/Fire.png" alt="Logo" width="250px" height="250px">
+
+	<img src="images/apocalypse.jpg" alt="Logo" width="500px" height="300px">
+	
 </div><br><br>
 
-
 <form class="form-inline text-center" action="home" method="post">
+
+	<p id="description">Please enter your login information to continue.</p>
+
 	<div class="form-group">
 		<label for="login-username" class="sr-only">Username</label>
 		<input type="text" class="form-control input-lg" id="login-username" placeholder="username" name="username" value="<?php echo $formUsername; ?>">
