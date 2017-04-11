@@ -1,3 +1,5 @@
+// copyright 2017 DipFestival, LLC
+
 import bsn from 'bootstrap.native';
 
 // see if the broswer support service workers

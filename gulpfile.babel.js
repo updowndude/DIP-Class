@@ -1,3 +1,4 @@
+// copyright 2017 DipFestival, LLC
 // by correy winke
 // 10/17/16
 // import the libraries

@@ -1,6 +1,6 @@
 <?php
+// copyright 2017 DipFestival, LLC
 //session_start();
-
 // Actions to perform after every successful login
 function after_successful_login() {
 	// Regenerate session ID to invalidate the old one.

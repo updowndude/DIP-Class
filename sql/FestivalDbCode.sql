@@ -1,3 +1,4 @@
+-- copyright 2017 DipFestival, LLC
 DROP Database IF EXISTS dips2017_Festival_DB;
 CREATE DATABASE dips2017_Festival_DB;
 USE dips2017_Festival_DB;

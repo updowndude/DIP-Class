@@ -1,10 +1,11 @@
 <html>
   <head>
+     <!-- // copyright 2017 DipFestival, LLC -->
     <title>Bad url</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!--<link rel="stylesheet" type="text/css" href="/DIP-Class/dist/myStyle.css">-->
-    <link rel="manifest" href="/manifest.json">
+    <link rel="manifest" href="manifest.json">
     
    	<style>
 		
@@ -83,7 +84,7 @@
 		<div class="inner">
 			<div class="content">
 				<h1>You look lost...</h1>
-				<a href="index.php" class="btnGetMeOutOfHere">Get me out of here!</a>
+				<a href="home" class="btnGetMeOutOfHere">Get me out of here!</a>
 			</div>				
 		</div>
 	</section>

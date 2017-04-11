@@ -1,5 +1,6 @@
 <?php
 // check if the session has started
+// copyright 2017 DipFestival, LLC
 if(!isset($_SESSION))
 {
     session_start();
@@ -502,6 +503,9 @@ $aryCountry = explode("\n",$countries);
         </div>
     </div>
 </div>
+<footer>
+    <p>2017 DipFestival, LLC &copy;</p>
+</footer>
 <script type="text/javascript">
     // get the Javascript
     <?php echo file_get_contents("../../dist/my-com.js") ?>

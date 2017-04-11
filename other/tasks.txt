@@ -1,10 +1,10 @@
+// copyright 2017 DipFestival, LLC
+
 after buy a ticket
 color scheme 
 filter out week long tickets
 quantity of tickets
-clean up 404 page
-can't upgrade if they bought ticket
-copyright files
+can upgrade if they bought ticket
 fix connections
 
 maingateadim page

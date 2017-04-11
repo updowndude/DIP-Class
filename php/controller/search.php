@@ -1,5 +1,6 @@
 <?php
 session_start();
+// copyright 2017 DipFestival, LLC
 
 function main() {
     // get the defense file

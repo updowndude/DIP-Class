@@ -1,5 +1,5 @@
 <?php
-
+// copyright 2017 DipFestival, LLC
     /*Summary:
      *Returns a PDO object that has access to the festival database.
      */

@@ -1,5 +1,6 @@
 <?php if (!isset($_SESSION)){ session_start(); } ?>
 <?php
+// copyright 2017 DipFestival, LLC
   //--- REQUIRES AND INCLUDES ---
     require_once '../model/db.php';
 

@@ -1,5 +1,6 @@
 <?php
-	//localhost connection
+// copyright 2017 DipFestival, LLC
+//localhost connection
     // talks to the database
 	$server="localhost";
 	$username="root";
