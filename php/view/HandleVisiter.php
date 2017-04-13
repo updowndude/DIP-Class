@@ -279,10 +279,13 @@ if($_SESSION['found'] == false) {
        (questioning what button to press next).
        Without the "Go Back" button it is possible
        that the flow of registration could be disrupted.
+
+       Since findperson.php reloads available form data, the back button
+       should take the volunteer back to the entered form data as expected.
        -->
     <div class="row">
         <div class="col-xs-12">
-            <a href="lookup" class="btn btn-default">
+            <a href="findperson.php" class="btn btn-default">
                 <span class="glyphicon glyphicon-arrow-left"></span>&nbsp;Go Back
             </a>
         </div>
