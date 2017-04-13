@@ -214,6 +214,46 @@ function findPersonHelper() {
     // get back the query based on values enterd
     return handSQL($strWhere, $aryHandSQLKeys, $aryHandSQLValues, 1);
 }
+
+/*TODO:
+ *Eliminate parts where ticket date purchesed overwrites the 'Comments' part of
+ *the data entry. (Lines 27 & 101 [4/ 13/ 2017])
+ *
+ *In there place (or near it) insert the data the ticket was bought (SQL FUNCTION: NOW() )
+ *into the table 'Oders'. DatePurchesed.
+ *
+ *and in the same table switch 'Paid' to TRUE
+ */
+
+/*Target:
+ * Just send the content of the below function to the textbox when entered form information
+ * is meant to be reposted on a web page refresh OR where you need that comment information
+ */
+
+function getCommentsAndDatePurchesed()
+{
+    $sendToCommentsField = handSql
+    ('SELECT Visitors.Comments, Orders.DatePurchesed
+		  FROM Visitors INNER JOIN Orders
+			ON Visitors.VisitorID = Orders.VisitorID
+		  WHERE Visitors.VisitorID = :visitorID
+
+		 '
+        , [ $_SESSION['VisitorID'] ]
+        , [ ':visitorID' ]
+        , 0
+    );
+
+    return
+        '[ Ticket Bought On: '.$sendToCommentsField['DatePurchesed'].' ]<br>'
+        .$sendToCommentsField['Comments'];
+
+    // IF ABOVE DOESN'T WORK:
+    //    *return
+    // 	'[ Ticket Bought On: '.$sendToCommentsField[1 /* should be index of 'DatePurchesed' */ ].' ]<br>'
+    //	.$sendToCommentsField[0 /* should be index of 'Comments' */];
+}
+
 // calls the main method
 main();
  ?>

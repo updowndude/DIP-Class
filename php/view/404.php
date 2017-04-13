@@ -72,8 +72,10 @@
 			 color: lightgray; 
 			border: solid lightgray 3px;
 		}
-		
-		
+
+        .content p {
+            color: #ae070a;
+        }
 		
 	</style>
           
@@ -85,6 +87,7 @@
 			<div class="content">
 				<h1>You look lost...</h1>
 				<a href="home" class="btnGetMeOutOfHere">Get me out of here!</a>
+                <p>2017 DipFestival, LLC &copy;</p>
 			</div>				
 		</div>
 	</section>

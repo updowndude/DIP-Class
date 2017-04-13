@@ -17,16 +17,22 @@
           $query =
             '
             UPDATE
-              TicketAssignment INNER JOIN
-              TicketTypes
-                  ON TicketAssignment.TicketTypeID
-                  =  TicketTypes.TicketTypeID INNER JOIN
-                  Visitors.VisitorID = TicketAssignment.VisitorID
+                TicketAssignment
+                    INNER JOIN
+                TicketTypes ON TicketAssignment.TicketTypeID = TicketTypes.TicketTypeID
+                    INNER JOIN	
+                Visitors ON Visitors.VisitorID = TicketAssignment.VisitorID
+                    INNER JOIN
+                Orders ON Orders.VisitorID = Visitors.VisitorID
             SET
-              TicketAssignment.TicketTypeID = :ticketTypeID,
-              Visitors.Comments = CONCAT(\'Bought on \', CAST(NOW() AS char))
+                TicketAssignment.TicketTypeID = :ticketTypeID
+                , Orders.DatePurdchased = NOW()
+                
+                -- ???below needed???
+                -- YES: as fail safe should buisness rules change
+                , Orders.Paid = TRUE
             WHERE
-              TicketAssignment.VisitorID = :visitorID
+                TicketAssignment.VisitorID = :visitorID
             ';
           $statement = $pdoObj->prepare($query);
           $statement->bindValue(':ticketTypeID',$upgradeTicketTypeID);
@@ -96,9 +102,9 @@
             "
             INSERT INTO
             Visitors
-            (UserID,FName, LName, DOB, Address, City, StateProvince, Country, PhoneNumber, PostalCode, Email, Comments)
+            (UserID,FName, LName, DOB, Address, City, StateProvince, Country, PhoneNumber, PostalCode, Email)
             VALUES
-            (:UserID,:FName, :LName, :DOB, :Address, :City, :StateProvince, :Country, :PhoneNumber, :PostalCode, :Email, CONCAT('Bought on ', CAST(NOW() AS char)));
+            (:UserID,:FName, :LName, :DOB, :Address, :City, :StateProvince, :Country, :PhoneNumber, :PostalCode, :Email);
             
             {$secQuery}
              ";
