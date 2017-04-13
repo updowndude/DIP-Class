@@ -19,8 +19,8 @@
    intended datatype: string
    -->
 <?php
-//*** SQL Related PHP ***
-//**********************
+//*** SQL Related PHP 0 ***
+//************************
 require '../model/db.php';
 
 if(count($_SESSION['sqlValues']) == 0) {
@@ -43,7 +43,7 @@ if(count($_SESSION['sqlValues']) == 0) {
     $ticketOfVisitorName = $ticketOfVisitorQuery['Name'];
 }
 
-$ticketTypeCountQuery
+$ticketTypesQuery
     = handSQL
     ('SELECT TicketTypes.TicketTypeID, TicketTypes.Name, TicketTypes.Price, Available.Total, TicketTypes.Description
          FROM TicketTypes INNER JOIN Available ON TicketTypes.AvailableID = Available.AvailableID'
@@ -58,6 +58,93 @@ if($_SESSION['found'] == false) {
     $found = true;
 }
 
+//*** Generate Ticket Type Option Information For Form ***
+//*******************************************************
+//*** Variables For Displaying Ticket Type Options ***
+$isNoTicketTypeOptionsAvailable = true;
+$visitorTicketInfo = "";
+$ticketOptions = array();
+$buttonsToEcho = "";
+
+foreach /*thing in*/ ($ticketTypesQuery as $ticketType)
+{
+    //local variables
+    $ticketTypeID = $ticketType[0];
+    $ticketTypeName = $ticketType[1];
+    $ticketTypePrice = $ticketType[2];
+    $ticketTypeAvailable = $ticketType[3];
+    $ticketTypeDescription = $ticketType[4];
+    
+    echo '<br><br><br>'.var_dump($ticketType).'<br><br><br>'.var_dump($ticketOfVisitorQuery).'<br><br><br>';
+
+    //if ticket type's name contains "week" 
+    //AND ticket is not visitor's ticket type, then don't show as option
+    if((strpos(strtoupper($ticketTypeName), 'WEEK') !== false) && $ticketTypeName != $ticketOfVisitorName)
+    {echo '<font class="blue-pill">thing</font><br> '; continue; echo 'something ';}
+    echo '<font class="blue-pill">EOF</font> ';
+    //entering this if statement means at least 1 ticket type was a selectable option, don't show "there are no ticket types" panel message
+    if($ticketTypeAvailable > 0 && $ticketTypeName != $ticketOfVisitorName){
+        echo '$ticketTypeName: '.$ticketTypeName;
+    $isNoTicketTypeOptionsAvailable = false;
+    }
+    echo '<font class="orange-pill" color="orange">($OptionsAvailable: '.($isNoTicketTypeOptionsAvailable == false).') </font>';
+    echo '<font class="blue-pill"> EOF#2</font><br>';
+
+    //if visitor is found in mysql database,
+    //AND ticket type is not visitors ticket type,
+    //AND visitors ticket costs less than the ticket type that might be shown as an option then...
+    if(/*visitor is not*/ !$found || ($ticketTypeName != $ticketOfVisitorName && $ticketOfVisitorPrice < $ticketTypePrice))
+    {
+        $isButtonDisabled = false;
+        //if ticket type amount > 0, then don't disable button
+        if($ticketTypeAvailable > 0) { $isButtonDisabled = false; }
+        //else ticket type amount == 0, then disable button
+        else if ($ticketTypeAvailable == 0){ $isButtonDisabled = true; }
+        $ticketOptionDisabledText = $isButtonDisabled?'disabled':'';
+        
+        array_push($ticketOptions,"
+           <label class='btn btn-default {$ticketOptionDisabledText}'>
+               <input type='radio'
+                             name='selected-ticket-type-option'
+                             value='{$ticketTypeID}'
+                             onclick='enableButton(\"register-and-upgrade-button\")'>
+               <div>
+                  {$ticketTypeName} \${$ticketTypePrice}<br>
+                  Tickets Remaining: {$ticketTypeAvailable}<br>
+                  -------- Description --------<br>
+                  {$ticketTypeDescription}
+               </div>
+           </label>
+           ");
+    }
+    //else if ticket type is visitors ticket type, then display visitors ticket type as nonclickable
+   else if(/*visitor is*/ $found && $ticketTypeName == $ticketOfVisitorName)
+   {
+        $visitorTicketInfo
+            = "<label class='btn btn-info disabled'>
+                     <div>
+                         Current Ticket: {$ticketTypeName} <br>
+                         Price: {$ticketTypePrice}<br>
+                         -------- Description --------<br>
+                         {$ticketTypeDescription}
+                     </div>
+                 </label>
+                ";
+    }
+}
+
+//*** Build $buttonsToEcho ***
+//***************************
+if($visitorTicketInfo != null){ $buttonsToEcho .= $visitorTicketInfo; }
+foreach /*thing in*/ ($ticketOptions as $ticketOption)
+{
+    $buttonsToEcho .= $ticketOption;
+}
+
+/*End NOTE:
+  *Simply echo the variable $buttonsToEcho where you want the
+  *buttons echoed + visitor ticket info 
+  */
 ?>
 <!DOCTYPE HTML>
 <html>
@@ -205,7 +292,72 @@ if($_SESSION['found'] == false) {
                     </div>
                     <!- End Of Panel Body ->
                     <div class="panel-footer">
-                        <!- Upgrade/ Registration Button ->
+                        <!<body>
+<div class="container">
+    <!--- Top Padding --->
+    <div class="page-top-padding">
+    </div>
+    <!--
+       === PAGE MESSAGE ===
+       -->
+    <div class="row">
+        <div class="col-xs-12">
+            <!--
+            === MESSAGE PANEL =============================
+            -->
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    <?php if(/*visitor is*/ $found) :?>
+                        <?php echo 'Visitor Is Registered' ?>
+                    <?php else /*visitor not found*/ :?>
+                        <?php echo 'Visitor Not Registered' ?>
+                    <?php endif; ?>
+                </div>
+            </div>
+            <!- Vertical Spacing ->
+            <div class="page-vert-space">
+            </div>
+            <!--
+            === FORM: REGISTRATION/ UPGRADE ==================
+            -->
+            <form action="php/view/controller.php" method="post">
+                <!--
+                *** Message Panel: Visitor Found? ***
+                ************************************
+                -->
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <?php
+                        //*** Choose Panel Title *** ?>
+                        <?php if(/* visitor is */ $found) :?>
+                            <?php echo 'Upgrade Visitor' ?>
+                        <?php else /* visitor not found */:?>
+                            <?php echo 'Complete Visitor Registration' ?>
+                        <?php endif; ?>
+                    </div>
+                    <!-- End Of Panel Heading -->
+                    <div class="panel-body">
+                        <!-- ////////////////////////////////// -->
+                        <!-- /// Auto Generated Error Panel /// -->
+                        <div id="no-ticket-type-options-message"><!-- Auto Generated --></div>
+                        <!-- /// Auto Generated Error Panel /// -->
+                        <!-- ////////////////////////////////// -->
+                        <?php
+                        //*** Generate Vertical Button Group From MySQL Data *** ?>
+                        <div class="btn-group btn-group-vertical" data-toggle="buttons">
+
+                            <!--
+                            --->
+                            <?php echo $buttonsToEcho; ?>
+                            <!--
+                            --->
+                            
+                        </div>
+                        <!-- End Of Vertical Button Group -->
+                    </div>
+                    <!-- End Of Panel Body -->
+                    <div class="panel-footer">
+                        <!-- Upgrade/ Registration Button -->
                         <?php
                         //*** Choose Button Text (Upgrade/ Register) *** ?>
                         <?php
@@ -213,7 +365,7 @@ if($_SESSION['found'] == false) {
                         if(/* visitor is */ $found){ $buttonText = 'Upgrade'; }
                         else /* visitor not found */ { $buttonText = 'Register'; }
                         ?>
-                        <!- *** On Click Show Confirmation Box Modal *** ->
+                        <!-- *** On Click Show Confirmation Box Modal *** -->
                         <button id="register-and-upgrade-button"
                                 class="btn btn-primary disabled"
                                 data-target="#confirmation-box"
@@ -225,13 +377,13 @@ if($_SESSION['found'] == false) {
                             <?php echo $buttonText ?>
                         </button>
                     </div>
-                    <!- End Of Panel Footer ->
+                    <!-- End Of Panel Footer -->
                 </div>
-                <!- End Of Panel ->
-                <!-
+                <!-- End Of Panel -->
+                <!--
                 *** Confirmation Box ***
                 ***********************
-                ->
+                -->
                 <div id="confirmation-box" class="modal fade" role="dialog">
                     <div class="modal-dialog">
                         <div class="modal-content">
@@ -240,9 +392,9 @@ if($_SESSION['found'] == false) {
                             </div>
                             <div class="modal-body">
                                 <p id="confirmation-box-text">
-                                    <!-
+                                    <!--
                                     Auto-generated
-                                    ->
+                                    -->
                                 </p>
                             </div>
                             <div class="modal-footer">
@@ -260,12 +412,12 @@ if($_SESSION['found'] == false) {
                             </div>
                         </div>
                     </div>
-                    <!- End Of Confirmation Box ->
+                    <!-- End Of Confirmation Box -->
             </form>
         </div>
-        <!- End of col-xs-12 ->
+        <!-- End of col-xs-12 -->
     </div>
-    <!- End of row ->
+    <!-- End of row -->
     <!-- Vertical Spacing -->
     <div class="page-vert-space">
     </div>
@@ -282,7 +434,7 @@ if($_SESSION['found'] == false) {
        -->
     <div class="row">
         <div class="col-xs-12">
-            <a href="lookup" class="btn btn-default">
+            <a href="findperson.php" class="btn btn-default">
                 <span class="glyphicon glyphicon-arrow-left"></span>&nbsp;Go Back
             </a>
         </div>
@@ -292,9 +444,31 @@ if($_SESSION['found'] == false) {
     </div>
 </div>
 <!-- end of bootstrap container -->
-<!-
+<!--
 === JAVASCRIPT ===========================================
-->
+-->
+<?php
+    //if $isNoTicketTypeOptionsAvailable, then show "there are no ticket types" panel message
+    if($isNoTicketTypeOptionsAvailable){
+       echo '<script id="temp-script-1">
+                       //*** Display No Ticket Types Panel Message ***
+                       var messagePanel = document.getElementById("no-ticket-type-options-message");
+                       messagePanel.classList.add("panel");
+                       messagePanel.classList.add("panel-danger");
+                       messagePanel.innerHTML
+                           = "<div class=\"panel-heading\">"
+                           + "    <strong>Opps...</strong>"
+                           + "</div>"
+                           + "<div class=\"panel-body\">"
+                           + "    <p>There are no ticket type options to select</p>"
+                           + "</div>";
+                       //*** Delete The JavaScript That Created The Panel Message ***
+                       var thisScript = document.getElementById("temp-script-1");
+                       //delete temporary script
+                       thisScript.outerHTML = "";
+             </script>';
+}                              
+?>
 <script type="text/javascript">
     function enableButton(htmlElementID)
     {
