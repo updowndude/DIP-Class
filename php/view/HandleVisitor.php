@@ -75,20 +75,21 @@ foreach /*thing in*/ ($ticketTypesQuery as $ticketType)
     $ticketTypeAvailable = $ticketType[3];
     $ticketTypeDescription = $ticketType[4];
     
-    echo '<br><br><br>'.var_dump($ticketType).'<br><br><br>'.var_dump($ticketOfVisitorQuery).'<br><br><br>';
+    /*DEBUG: echo '<br><br><br>'.var_dump($ticketType).'<br><br><br>'.var_dump($ticketOfVisitorQuery).'<br><br><br>';*/
 
     //if ticket type's name contains "week" 
     //AND ticket is not visitor's ticket type, then don't show as option
     if((strpos(strtoupper($ticketTypeName), 'WEEK') !== false) && $ticketTypeName != $ticketOfVisitorName)
-    {echo '<font class="blue-pill">thing</font><br> '; continue; echo 'something ';}
+    {/*DEBUG: echo '<font class="blue-pill">thing</font><br> '; */continue; /*DEBUG: echo 'something ';*/}
     echo '<font class="blue-pill">EOF</font> ';
     //entering this if statement means at least 1 ticket type was a selectable option, don't show "there are no ticket types" panel message
     if($ticketTypeAvailable > 0 && $ticketTypeName != $ticketOfVisitorName){
         echo '$ticketTypeName: '.$ticketTypeName;
     $isNoTicketTypeOptionsAvailable = false;
     }
-    echo '<font class="orange-pill" color="orange">($OptionsAvailable: '.($isNoTicketTypeOptionsAvailable == false).') </font>';
-    echo '<font class="blue-pill"> EOF#2</font><br>';
+    /*DEBUG: echo '<font class="orange-pill" color="orange">($OptionsAvailable: '.($isNoTicketTypeOptionsAvailable == false).') </font>';
+    *echo '<font class="blue-pill"> EOF#2</font><br>';
+    */
 
     //if visitor is found in mysql database,
     //AND ticket type is not visitors ticket type,
