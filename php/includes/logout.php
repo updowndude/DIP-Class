@@ -1,4 +1,5 @@
 <?php
+// copyright 2017 DipFestival, LLC
 ini_set('display_errors',0);
 require '../includes/functions.php';
 require '../includes/session_hijacking.php';

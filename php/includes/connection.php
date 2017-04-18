@@ -1,10 +1,11 @@
 <?php
-	//localhost connection
+// copyright 2017 DipFestival, LLC
+//localhost connection
     // talks to the database
 	$server="localhost";
 	$username="root";
 	$password="root";
-    $db="Festival_DB";
+    $db="dips2017_Festival_DB";
 
     $conn=new mysqli($server,$username,$password,$db);
 

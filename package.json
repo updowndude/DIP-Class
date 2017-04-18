@@ -39,6 +39,7 @@
   "dependencies": {
     "bootstrap-sass": "^3.3.7",
     "bootstrap.native": "^2.0.4",
+    "chart.js": "^2.5.0",
     "postcss": "^5.2.6"
   }
 }

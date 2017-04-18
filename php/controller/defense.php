@@ -5,6 +5,7 @@
  * Date: 3/7/17
  * Time: 11:19 AM
  */
+// copyright 2017 DipFestival, LLC
 // easyer to use secure functions in php
 function s($str) {
     return htmlspecialchars($str);

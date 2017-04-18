@@ -1,3 +1,4 @@
+// copyright 2017 DipFestival, LLC
 // by correy winke
 // 10/17/16
 // import the libraries
@@ -15,7 +16,7 @@ gulp.task('sass', () => {
 	// extra transfromer after sass to css
 	const processors = [
 		// minifier for css
-		csswring,
+		// csswring,
 		// use new css
 		cssnext
 	];

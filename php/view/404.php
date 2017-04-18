@@ -1,10 +1,15 @@
 <html>
   <head>
+     <!-- // copyright 2017 DipFestival, LLC -->
     <title>Bad url</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!--<link rel="stylesheet" type="text/css" href="/DIP-Class/dist/myStyle.css">-->
+<<<<<<< Updated upstream
+    <link rel="manifest" href="manifest.json">
+=======
     <link rel="manifest" href="/manifest.json">
+>>>>>>> Stashed changes
     
    	<style>
 		
@@ -69,8 +74,15 @@
 			 color: lightgray; 
 			border: solid lightgray 3px;
 		}
+<<<<<<< Updated upstream
+
+        .content p {
+            color: #ae070a;
+        }
+=======
 		
 		
+>>>>>>> Stashed changes
 		
 	</style>
           
@@ -81,7 +93,12 @@
 		<div class="inner">
 			<div class="content">
 				<h1>You look lost...</h1>
+<<<<<<< Updated upstream
+				<a href="home" class="btnGetMeOutOfHere">Get me out of here!</a>
+                <p>2017 DipFestival, LLC &copy;</p>
+=======
 				<a href="index.php" class="btnGetMeOutOfHere">Get me out of here!</a>
+>>>>>>> Stashed changes
 			</div>				
 		</div>
 	</section>

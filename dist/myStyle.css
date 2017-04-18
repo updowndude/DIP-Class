@@ -5775,9 +5775,48 @@ body {
   position: relative;
   margin: 0; }
 
+footer {
+  margin-top: 7.5px;
+  margin-top: 0.75rem;
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  font: 12px "PT Serif", serif;
+  font: 1.2rem "PT Serif", serif;
+  background: rgba(204, 86, 86, .3);
+  letter-spacing: 12px;
+  letter-spacing: 1.2rem;
+  color: #D1F8A1; }
+  footer p {
+    text-align: center;
+    font-size: 12.5px;
+    font-size: 1.25rem;
+    margin-bottom: -1px;
+    margin-bottom: -0.1rem;
+    letter-spacing: 5px;
+    letter-spacing: 0.5rem; }
+
 #nav-top {
   background-color: red;
   height: 50px; }
+
+/*login styles*/
+.body-style-light {
+  padding-top: 60px;
+  background-color: #f5f5f5;
+  color: #26262a; }
+
+.myError {
+  color: #fff;
+  background-color: #FB0008; }
+
+#myAlert {
+  margin-top: 20px;
+  margin-top: 2rem; }
+
+a[href="lookup"] {
+  margin-bottom: 30px;
+  margin-bottom: 3rem; }
 
 /*login styles*/
 .body-style-light {
@@ -5791,8 +5830,10 @@ body {
 
 #myAlert {
   margin-top: 20px;
+  margin-top: 20px;
   margin-top: 2rem; }
 
+<<<<<<< HEAD
 #description{
 	color: white;
 	font-size: 20px;
@@ -5805,3 +5846,8 @@ body {
 #visitorLookupLabel{
 	color: #f6f6f6;
 }
+=======
+#description {
+  color: white;
+  font-size: 20px; }
+>>>>>>> master

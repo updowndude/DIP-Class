@@ -1,6 +1,6 @@
 RewriteEngine on
 # friendly urls
-RewriteRule ^visitor php/view/HandleVisiter.php [NC,L]
+RewriteRule ^visitor php/view/HandleVisitor.php [NC,L]
 RewriteRule ^lookup php/view/findperson.php [NC,L]
 RewriteRule ^404 php/view/404.php [NC,L]
 RewriteRule ^logout php/includes/logout.php [NC,L]

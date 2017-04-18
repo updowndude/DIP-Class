@@ -1,4 +1,5 @@
 <?php
+// copyright 2017 DipFestival, LLC
 /**
  * Created by PhpStorm.
  * User: correywinke

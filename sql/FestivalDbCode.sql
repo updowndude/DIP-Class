@@ -2,33 +2,6 @@ DROP Database IF EXISTS dips2017_Festival_DB;
 CREATE DATABASE dips2017_Festival_DB;
 USE dips2017_Festival_DB;
 
-DROP TABLE IF EXISTS Quantity;
-CREATE TABLE Quantity (
-  QuantityID INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
-  QuantityMax INT NOT NULL,
-  QuantityAvailable INT NOT NULL
-);
-
-DROP TABLE IF EXISTS MerchandiseCategory;
-CREATE TABLE MerchandiseCategory (
-  MerchCatID INT PRIMARY KEY AUTO_INCREMENT,
-  MerchCatName VARCHAR(15) NOT NULL
-);
-
-DROP TABLE IF EXISTS Merchandise;
-CREATE TABLE Merchandise (
-  MerchID INT PRIMARY KEY AUTO_INCREMENT,
-  MerchName VARCHAR(25) NOT NULL,
-  Price DECIMAL(4,2) NOT NULL,
-  Image VARCHAR(45) NOT NULL,
-  Description VARCHAR(255),
-  MerchCatID INT NOT NULL,
-  QuantityID INT NOT NULL,
-  FOREIGN KEY (MerchCatID) REFERENCES MerchandiseCategory(MerchCatID),
-  FOREIGN KEY (QuantityID) REFERENCES Quantity(QuantityID)
-);
-
-
 DROP TABLE IF EXISTS Users;
 CREATE TABLE Users (
   UserID INT AUTO_INCREMENT PRIMARY KEY,
@@ -55,18 +28,27 @@ CREATE TABLE Visitors (
   FOREIGN KEY (UserID) REFERENCES Users(UserID)
 );
 
+DROP TABLE IF EXISTS TicketTypes;
+CREATE TABLE TicketTypes (
+  TicketTypeID INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  Name VARCHAR(30) NOT NULL,
+  Price DECIMAL(4,2) NOT NULL,
+  Description VARCHAR(200),
+  AvailableID INT NOT NULL
+);
+
 DROP TABLE IF EXISTS TicketAssignment;
 CREATE TABLE TicketAssignment (
   TicketID INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
   VisitorID INT NOT NULL,
-  MerchID INT NOT NULL,
+  TicketTypeID INT NOT NULL,
   DatePurchased DATE NOT NULL,
   Paid BOOLEAN,
   CheckedIN BOOLEAN,
   LicensePlate VARCHAR(10),
   LicenseIssuedIn VARCHAR(20),
   FOREIGN KEY (VisitorID) REFERENCES Visitors(VisitorID),
-  FOREIGN KEY (MerchID) REFERENCES Merchandise(MerchID)
+  FOREIGN KEY (TicketID) REFERENCES TicketTypes(TicketTypeID)
 );
 
 DROP TABLE IF EXISTS Performers;
@@ -130,6 +112,32 @@ CREATE TABLE Orders (
   FOREIGN KEY (VisitorID) REFERENCES Visitors(VisitorID)
 );
 
+DROP TABLE IF EXISTS Quantity;
+CREATE TABLE Quantity (
+  QuantityID INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  QuantityMax INT NOT NULL,
+  QuantityAvailable INT NOT NULL
+);
+
+DROP TABLE IF EXISTS MerchandiseCategory;
+CREATE TABLE MerchandiseCategory (
+  MerchCatID INT PRIMARY KEY AUTO_INCREMENT,
+  MerchCatName VARCHAR(15) NOT NULL
+);
+
+DROP TABLE IF EXISTS Merchandise;
+CREATE TABLE Merchandise (
+  MerchID INT PRIMARY KEY AUTO_INCREMENT,
+  MerchName VARCHAR(25) NOT NULL,
+  Price DECIMAL(4,2) NOT NULL,
+  Image VARCHAR(45) NOT NULL,
+  Description VARCHAR(255),
+  MerchCatID INT NOT NULL,
+  QuantityID INT NOT NULL,
+  FOREIGN KEY (MerchCatID) REFERENCES MerchandiseCategory(MerchCatID),
+  FOREIGN KEY (QuantityID) REFERENCES Quantity(QuantityID)
+);
+
 DROP TABLE IF EXISTS TicketAssignment;
 CREATE TABLE TicketAssignment (
   TicketID INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
@@ -170,74 +178,79 @@ CREATE TABLE CampingAssignment (
 
 INSERT INTO Quantity (QuantityID, QuantityMax, QuantityAvailable)
 VALUES
-  (1,2400,2400),
-  (2,900,900),
-  (3,23100,23100),
-  (4,400,400),
-  (5,80,80),
-  (6, 1200, 1200),
-  (7, 15000, 15000),
-  (8, 3500, 3500),
-  (9, 4000, 4000),
-  (10, 5000, 5000),
-  (11, 10000, 10000),
-  (12, 100, 100),
-  (13, 200, 200),
-  (14, 300, 300),
-  (15, 400, 400),
-  (16, 500, 500),
-  (17, 600, 600),
-  (18, 700, 700),
-  (19, 800, 800),
-  (20, 50, 50),
-  (21, 40, 40),
-  (22, 30, 30),
-  (23, 1000, 1000),
-  (24, 12000, 12000),
-  (25, 5000, 5000),
-  (26, 200, 200),
-  (27, 100, 100),
-  (28, 100, 100),
-  (29, 100, 100),
-  (30, 50, 50),
-  (31, 50, 50),
-  (32, 30, 30),
-  (33, 30, 30),
-  (34, 500, 500),
-  (35, 500, 500),
-  (36, 500, 500),
-  (37, 500, 500),
-  (38, 500, 500),
-  (39, 500, 500),
-  (40, 500, 500),
-  (41, 500, 500),
-  (42, 500, 500),
-  (43, 500, 500),
-  (44, 500, 500),
-  (45, 500, 500),
-  (46, 500, 500),
-  (47, 100, 100),
-  (48, 500, 500),
-  (49, 300, 300),
-  (50, 300, 500),
-  (51, 100, 100),
-  (52, 1000, 1000),
-  (53, 10000, 10000),
-  (54,900,900),
-  (55,900,900),
-  (56,900,900),
-  (57,900,900),
-  (58,900,900),
-  (59,900,900),
-  (60,900,900),
-  (61,900,900),
-  (62,900,900),
-  (63,900,900),
-  (64,900,900),
-  (65,900,900),
-  (66,900,900);
 
-INSERT INTO MerchandiseCategory (MerchCatID, MerchCatName) VALUES (1, "Aparrel"), (2, "Food/Drink"), (3, "Firewood"), (4, "Misc"), (5, "FirstAid"), (6, "Collectibles"),
+  /* Merch Quantities*/
+  (6, 1200, 1200), /*Reusable Cup*/
+  (7, 15000, 15000), /*Water*/
+  (8, 3500, 3500), /*Hamburger*/
+  (9, 4000, 4000), /*Hot Dog*/
+  (10, 5000, 5000), /*Ice*/
+  (11, 10000, 10000), /*Beer*/
+  (12, 100, 100), /*Aloe Vera*/
+  (13, 200, 200), /*Band Aids*/
+  (14, 300, 300), /*Adult XXL T-Shirt*/
+  (15, 400, 400), /*Beanie*/
+  (16, 500, 500), /*Adult Small T-Shirt*/
+  (17, 600, 600), /*Adult X-Large T-Shirt*/
+  (18, 700, 700), /*Adult Large T-Shirt*/
+  (19, 800, 800), /*Baseball Cap*/
+  (20, 50, 50), /*Child Small T-Shirt*/
+  (21, 40, 40), /*Child Sweatpants*/
+  (22, 30, 30), /*Child Small Hoodie*/
+  (23, 1000, 1000), /*Accordion Party Hat*/
+  (24, 12000, 12000), /*Soda*/
+  (25, 5000, 5000), /*Chips*/
+  (26, 200, 200), /*Sunscreen*/
+  (27, 100, 100), /*Ointment*/
+  (28, 100, 100), /*Tylenol*/
+  (29, 100, 100), /*Tums*/
+  (30, 50, 50), /*Child Medium T-Shirt*/
+  (31, 50, 50), /*Child Large T-Shirt*/
+  (32, 30, 30), /*Child Medium Hoodie*/
+  (33, 30, 30), /*Child Large Hoodie*/
+  (34, 500, 500), /*Adult Medium T-Shirt*/
+  (35, 500, 500), /*Adult Small Hoodie*/
+  (36, 500, 500), /*Adult Medium Hoodie*/
+  (37, 500, 500), /*Adult Large Hoodie*/
+  (38, 500, 500), /*Adult X-Large Hoodie*/
+  (39, 500, 500), /*Adult XXL Hoodie*/
+  (40, 500, 500), /*Adult XXXL Hoodie*/
+  (41, 500, 500), /*Child Poncho*/
+  (42, 500, 500), /*Adult Poncho*/
+  (43, 500, 500), /*Keychain*/
+  (44, 500, 500), /*Bobblehead*/
+  (45, 500, 500), /*Hacky Sack*/
+  (46, 500, 500), /*Mug*/
+  (47, 100, 100), /*Adult XXXL T-Shirt*/
+  (48, 500, 500), /*Adult Sweatpants*/
+  (49, 300, 300), /*Jester Hat*/
+  (50, 300, 500), /*Accordion*/
+  (51, 100, 100), /*Child's Accordion*/
+  (52, 5000, 5000), /*Program*/
+  (53, 10000, 10000), /*Firewood*/
+
+  /* Ticket Quantities */
+  (1,2400,2400), /*Weekly Admission Tickets*/
+  (2,900,900), /*Moday Daily Admission Tickets*/
+  (3,23100,23100), /*All General Parking Tickets*/
+  (4,400,400), /*All VIP Parking Tickets*/
+  (5,80,80), /*All RV Parking Tickets*/
+  (54,900,900), /*Tuesday Daily Admission Tickets*/
+  (55,900,900), /*Wednesday Daily Admission Tickets*/
+  (56,900,900), /*Thursday Daily Admission Tickets*/
+  (57,900,900), /*Friday Daily Admission Tickets*/
+  (58,900,900), /*Saturday Daily Admission Tickets*/
+  (59,900,900), /*Sunday Daily Admission Tickets*/
+  (60,900,900), /*Monday Daily Camping Tickets*/
+  (61,900,900), /*Tuesday Daily Admission Tickets*/
+  (62,900,900), /*Wednesday Daily Admission Tickets*/
+  (63,900,900), /*Thursday Daily Admission Tickets*/
+  (64,900,900), /*Friday Daily Admission Tickets*/
+  (65,900,900), /*Saturday Daily Admission Tickets*/
+  (66,900,900); /*Sunday Daily Admission Tickets*/
+
+INSERT INTO MerchandiseCategory (MerchCatID, MerchCatName) VALUES
+  (1, "Aparrel"), (2, "Food/Drink"), (3, "Firewood"), (4, "Misc"), (5, "FirstAid"), (6, "Collectibles"),
   (7, "DayAdmissionTickets"), (8, "WeekAdmissionTickets"), (9, "DayParkingTickets"), (10, "WeekParkingTickets"), (11, "DayCampingTickets");
 
 
@@ -252,82 +265,79 @@ INSERT INTO Merchandise (MerchID, MerchName, QuantityID, Price, MerchCatID, Desc
   (49, "Ticket Adult_Week", 1, 200.00, 8, 'Full-week festival access for an adult'),
   (55, "Ticket Adult_Mo", 2, 25.00, 7, 'Monday festival access for an adult'),
   (56, "Ticket Adult_Tu", 54, 25.00, 7, 'Tuesday festival access for an adult'),
-  (57, "Ticket Adult_We", 55, 25.00, 7, 'Wednesday festival access for an adult'),
-  (58, "Ticket Adult_Th", 56, 25.00, 7, 'Thursday festival access for an adult'),
-  (59, "Ticket Adult_Fr", 57, 25.00, 7, 'Friday festival access for an adult'),
-  (60, "Ticket Adult_Sa", 58, 25.00, 7, 'Saturday festival access for an adult'),
-  (61, "Ticket Adult_Su", 59, 25.00, 7, 'Sunday festival access for an adult'),
+  (57, "Ticket Adult_We", 55, 25.00, 7, 'Day-long festival access for an adult'),
+  (58, "Ticket Adult_Th", 56, 25.00, 7, 'Day-long festival access for an adult'),
+  (59, "Ticket Adult_Fr", 57, 25.00, 7, 'Day-long festival access for an adult'),
+  (60, "Ticket Adult_Sa", 58, 25.00, 7, 'Day-long festival access for an adult'),
+  (61, "Ticket Adult_Su", 59, 25.00, 7, 'Day-long festival access for an adult'),
   (50, "Ticket UnderTwelve_Week", 1, 100.00, 8, 'Full-week festival access for children under 12'),
-  (62, "Ticket UnderTwelve_Mo", 2, 15.00, 7, 'Monday festival access for children under 12'),
-  (63, "Ticket UnderTwelve_Tu", 54, 15.00, 7, 'Tuesday festival access for children under 12'),
-  (64, "Ticket UnderTwelve_We", 55, 15.00, 7, 'Wednesday festival access for children under 12'),
-  (65, "Ticket UnderTwelve_Th", 56, 15.00, 7, 'Thursday festival access for children under 12'),
-  (66, "Ticket UnderTwelve_Fr", 57, 15.00, 7, 'Friday festival access for children under 12'),
-  (67, "Ticket UnderTwelve_Sa", 58, 15.00, 7, 'Saturday festival access for children under 12'),
-  (68, "Ticket UnderTwelve_Su", 59, 15.00, 7, 'Sunday festival access for children under 12'),
+  (62, "Ticket UnderTwelve_Mo", 2, 15.00, 7, 'Day-long festival access for children under 12'),
+  (63, "Ticket UnderTwelve_Tu", 54, 15.00, 7, 'Day-long festival access for children under 12'),
+  (64, "Ticket UnderTwelve_We", 55, 15.00, 7, 'Day-long festival access for children under 12'),
+  (65, "Ticket UnderTwelve_Th", 56, 15.00, 7, 'Day-long festival access for children under 12'),
+  (66, "Ticket UnderTwelve_Fr", 57, 15.00, 7, 'Day-long festival access for children under 12'),
+  (67, "Ticket UnderTwelve_Sa", 58, 15.00, 7, 'Day-long festival access for children under 12'),
+  (68, "Ticket UnderTwelve_Su", 59, 15.00, 7, 'Day-long festival access for children under 12'),
   (51, "Ticket UnderFive_Week", 1, 0.00, 8, 'Full-week festival access for children under 5'),
-  (69, "Ticket UnderFive_Mo", 2, 0.00, 7, 'Monday festival access for children under 5'),
-  (70, "Ticket UnderFive_Tu", 54, 0.00, 7, 'Tuesday festival access for children under 5'),
-  (71, "Ticket UnderFive_We", 55, 0.00, 7, 'Wednesday festival access for children under 5'),
-  (72, "Ticket UnderFive_Th", 56, 0.00, 7, 'Thursday festival access for children under 5'),
-  (73, "Ticket UnderFive_Fr", 57, 0.00, 7, 'Friday festival access for children under 5'),
-  (74, "Ticket UnderFive_Sa", 58, 0.00, 7, 'Saturday festival access for children under 5'),
-  (75, "Ticket UnderFive_Su", 59, 0.00, 7, 'Sunday festival access for children under 5'),
+  (69, "Ticket UnderFive_Mo", 2, 0.00, 7, 'Day-long festival access for children under 5'),
+  (70, "Ticket UnderFive_Tu", 54, 0.00, 7, 'Day-long festival access for children under 5'),
+  (71, "Ticket UnderFive_We", 55, 0.00, 7, 'Day-long festival access for children under 5'),
+  (72, "Ticket UnderFive_Th", 56, 0.00, 7, 'Day-long festival access for children under 5'),
+  (73, "Ticket UnderFive_Fr", 57, 0.00, 7, 'Day-long festival access for children under 5'),
+  (74, "Ticket UnderFive_Sa", 58, 0.00, 7, 'Day-long festival access for children under 5'),
+  (75, "Ticket UnderFive_Su", 59, 0.00, 7, 'Day-long festival access for children under 5'),
 
   (52, 'WeekParkingGeneral', 3, 25.00, 10,'Week-long general parking access'),
-  (76, 'DayParkingGeneral_Mo', 3, 5.00, 9, 'Monday general parking access'),
-  (77, 'DayParkingGeneral_Tu', 3, 5.00, 9, 'Tuesday general parking access'),
-  (78, 'DayParkingGeneral_We', 3, 5.00, 9, 'Wednesday general parking access'),
-  (79, 'DayParkingGeneral_Th', 3, 5.00, 9, 'Thursday general parking access'),
-  (80, 'DayParkingGeneral_Fr', 3, 5.00, 9, 'Friday general parking access'),
-  (81, 'DayParkingGeneral_Sa', 3, 5.00, 9, 'Saturday general parking access'),
-  (82, 'DayParkingGeneral_Su', 3, 5.00, 9, 'Sunday general parking access'),
+  (76, 'DayParkingGeneral_Mo', 3, 5.00, 9, 'Day-long general parking access'),
+  (77, 'DayParkingGeneral_Tu', 3, 5.00, 9, 'Day-long general parking access'),
+  (78, 'DayParkingGeneral_We', 3, 5.00, 9, 'Day-long general parking access'),
+  (79, 'DayParkingGeneral_Th', 3, 5.00, 9, 'Day-long general parking access'),
+  (80, 'DayParkingGeneral_Fr', 3, 5.00, 9, 'Day-long general parking access'),
+  (81, 'DayParkingGeneral_Sa', 3, 5.00, 9, 'Day-long general parking access'),
+  (82, 'DayParkingGeneral_Su', 3, 5.00, 9, 'Day-long general parking access'),
 
   (53, 'WeekParkingVIP', 4, 50.00, 10, 'Week-long VIP parking access'),
-  (83, 'DayParkingVIP_Mo', 4, 10.00, 9, 'Monday VIP parking access'),
-  (84, 'DayParkingVIP_Tu', 4, 10.00, 9, 'Tuesday VIP parking access'),
-  (85, 'DayParkingVIP_We', 4, 10.00, 9, 'Wednesday VIP parking access'),
-  (86, 'DayParkingVIP_Th', 4, 10.00, 9, 'Thursday VIP parking access'),
-  (87, 'DayParkingVIP_Fr', 4, 10.00, 9, 'Friday VIP parking access'),
-  (88, 'DayParkingVIP_Sa', 4, 10.00, 9, 'Saturday VIP parking access'),
-  (89, 'DayParkingVIP_Su', 4, 10.00, 9, 'Sunday VIP parking access'),
+  (83, 'DayParkingVIP_Mo', 4, 10.00, 9, 'Day-long VIP parking access'),
+  (84, 'DayParkingVIP_Tu', 4, 10.00, 9, 'Day-long VIP parking access'),
+  (85, 'DayParkingVIP_We', 4, 10.00, 9, 'Day-long VIP parking access'),
+  (86, 'DayParkingVIP_Th', 4, 10.00, 9, 'Day-long VIP parking access'),
+  (87, 'DayParkingVIP_Fr', 4, 10.00, 9, 'Day-long VIP parking access'),
+  (88, 'DayParkingVIP_Sa', 4, 10.00, 9, 'Day-long VIP parking access'),
+  (89, 'DayParkingVIP_Su', 4, 10.00, 9, 'Day-long VIP parking access'),
 
   (54, 'WeekParkingRV', 5, 100.00, 10, 'Week-long RV parking access'),
-  (90, 'DayParkingRV_Mo', 5, 20.00, 9, 'Monday RV parking access'),
-  (91, 'DayParkingRV_Tu', 5, 20.00, 9, 'Tuesday RV parking access'),
-  (92, 'DayParkingRV_We', 5, 20.00, 9, 'Wednesday RV parking access'),
-  (93, 'DayParkingRV_Th', 5, 20.00, 9, 'Thursday RV parking access'),
-  (94, 'DayParkingRV_Fr', 5, 20.00, 9, 'Friday RV parking access'),
-  (95, 'DayParkingRV_Sa', 5, 20.00, 9, 'Saturday RV parking access'),
-  (96, 'DayParkingRV_Su', 5, 20.00, 9, 'Sunday RV parking access'),
+  (90, 'DayParkingRV_Mo', 5, 20.00, 9, 'Day-long RV parking access'),
+  (91, 'DayParkingRV_Tu', 5, 20.00, 9, 'Day-long RV parking access'),
+  (92, 'DayParkingRV_We', 5, 20.00, 9, 'Day-long RV parking access'),
+  (93, 'DayParkingRV_Th', 5, 20.00, 9, 'Day-long RV parking access'),
+  (94, 'DayParkingRV_Fr', 5, 20.00, 9, 'Day-long RV parking access'),
+  (95, 'DayParkingRV_Sa', 5, 20.00, 9, 'Day-long RV parking access'),
+  (96, 'DayParkingRV_Su', 5, 20.00, 9, 'Day-long RV parking access'),
 
-  (97, 'DayCampingAdult_Mo', 60, 25.00, 11, 'Monday camping access for an adult'),
-  (98, 'DayCampingAdult_Tu', 61, 25.00, 11, 'Tuesday camping access for an adult'),
-  (99, 'DayCampingAdult_We', 62, 25.00, 11, 'Wednesday camping access for an adult'),
-  (100, 'DayCampingAdult_Th', 63, 25.00, 11, 'Thursday camping access for an adult'),
-  (101, 'DayCampingAdult_Fr', 64, 25.00, 11, 'Friday camping access for an adult'),
-  (102, 'DayCampingAdult_Sa', 65, 25.00, 11, 'Saturday camping access for an adult'),
-  (103, 'DayCampingAdult_Su', 66, 25.00, 11, 'Sunday camping access for an adult'),
+  (97, 'DayCampingAdult_Mo', 60, 25.00, 11, 'Day-long camping access for an adult'),
+  (98, 'DayCampingAdult_Tu', 61, 25.00, 11, 'Day-long camping access for an adult'),
+  (99, 'DayCampingAdult_We', 62, 25.00, 11, 'Day-long camping access for an adult'),
+  (100, 'DayCampingAdult_Th', 63, 25.00, 11, 'Day-long camping access for an adult'),
+  (101, 'DayCampingAdult_Fr', 64, 25.00, 11, 'Day-long camping access for an adult'),
+  (102, 'DayCampingAdult_Sa', 65, 25.00, 11, 'Day-long camping access for an adult'),
+  (103, 'DayCampingAdult_Su', 66, 25.00, 11, 'Day-long camping access for an adult'),
 
-  (104, 'DayCampingUnderTwelve_Mo', 60, 15.00, 11, 'Monday camping access for children under 12'),
-  (105, 'DayCampingUnderTwelve_Tu', 61, 15.00, 11, 'Tuesday camping access for children under 12'),
-  (106, 'DayCampingUnderTwelve_We', 62, 15.00, 11, 'Wednesday camping access for children under 12'),
-  (107, 'DayCampingUnderTwelve_Th', 63, 15.00, 11, 'Thursday camping access for children under 12'),
-  (108, 'DayCampingUnderTwelve_Fr', 64, 15.00, 11, 'Friday camping access for children under 12'),
-  (109, 'DayCampingUnderTwelve_Sa', 65, 15.00, 11, 'Saturday camping access for children under 12'),
-  (110,'DayCampingUnderTwelve_Su', 66, 15.00, 11, 'Sunday camping access for children under 12'),
+  (104, 'DayCampingUnderTwelve_Mo', 60, 15.00, 11, 'Day-long camping access for children under 12'),
+  (105, 'DayCampingUnderTwelve_Tu', 61, 15.00, 11, 'Day-long camping access for children under 12'),
+  (106, 'DayCampingUnderTwelve_We', 62, 15.00, 11, 'Day-long camping access for children under 12'),
+  (107, 'DayCampingUnderTwelve_Th', 63, 15.00, 11, 'Day-long camping access for children under 12'),
+  (108, 'DayCampingUnderTwelve_Fr', 64, 15.00, 11, 'Day-long camping access for children under 12'),
+  (109, 'DayCampingUnderTwelve_Sa', 65, 15.00, 11, 'Day-long camping access for children under 12'),
+  (110,'DayCampingUnderTwelve_Su', 66, 15.00, 11, 'Day-long camping access for children under 12'),
 
-  (111, 'DayCampingUnderFive_Mo', 60, 0.00, 11, 'Monday camping access for children under 5'),
-  (112, 'DayCampingUnderFive_Tu', 61, 0.00, 11, 'Tuesday camping access for children under 5'),
-  (113, 'DayCampingUnderFive_We', 62, 0.00, 11, 'Wednesday camping access for children under 5'),
-  (114, 'DayCampingUnderFive_Th', 63, 0.00, 11, 'Thursday camping access for children under 5'),
-  (115, 'DayCampingUnderFive_Fr', 64, 0.00, 11, 'Friday camping access for children under 5'),
-  (116, 'DayCampingUnderFive_Sa', 65, 0.00, 11, 'Saturday camping access for children under 5'),
-  (117, 'DayCampingUnderFive_Su', 66, 0.00, 11, 'Sunday camping access for children under 5');
+  (111, 'DayCampingUnderFive_Mo', 60, 0.00, 11, 'Day-long camping access for children under 5'),
+  (112, 'DayCampingUnderFive_Tu', 61, 0.00, 11, 'Day-long camping access for children under 5'),
+  (113, 'DayCampingUnderFive_We', 62, 0.00, 11, 'Day-long camping access for children under 5'),
+  (114, 'DayCampingUnderFive_Th', 63, 0.00, 11, 'Day-long camping access for children under 5'),
+  (115, 'DayCampingUnderFive_Fr', 64, 0.00, 11, 'Day-long camping access for children under 5'),
+  (116, 'DayCampingUnderFive_Sa', 65, 0.00, 11, 'Day-long camping access for children under 5'),
+  (117, 'DayCampingUnderFive_Su', 66, 0.00, 11, 'Day-long camping access for children under 5');
 
-/*
-	need to adjust the MerchID (the third number in the insert) and also adjust for the change to how we're doing the daily tickets now i believe
-*/
 
 INSERT INTO Users (Username, Password, AccessLevel) VALUES ("thebigcheese", "$2y$10$Lle9WvZM/rOrGF3IeltFN.O5EC5TqIvptb9HR7pDFe8EtyD0T7fRa", 5), -- Festival Chief
   ("maingateadmin", "$2y$10$hpfuFl/vAy/yBxDUXxpiZO3SKDNXAPtFiK06PB/uy8eDexm.xg8PG", 4), -- main gate admin
@@ -574,20 +584,20 @@ INSERT INTO PerformanceSchedule (PerformerID, StageID, StartTime) VALUES (1, 1, 
   (67, 2, "2017-08-11 12:00:00"), (67, 3, "2017-08-07 12:00:00");
 
 INSERT INTO TicketAssignment (TicketID, VisitorID, MerchID, DatePurchased, Paid, CheckedIn, LicensePlate, LicenseIssuedIn) VALUES
-  (1, 1, 49, "2017-06-01", true, false, null, null), /* Week-long adult ticket for visitor 1, two people staying for the week */
-  (2, 1, 49, "2017-06-01", true, false, null, null), /* Week-long adult ticket for visitor 1 */
-  (3, 1, 52, "2017-06-01", true, false, 'DHX-1138', 'Ohio'), /* Week-long parking ticket for visitor 1 */
-  (4, 2, 49, "2017-06-02", true, false, null, null), /* Week-long adult ticket for visitor 2, two parents and a kid staying for the week */
-  (5, 2, 49, "2017-06-02", true, false, null, null), /* Week-long adult ticket for visitor 2 */
-  (6, 2, 50, "2017-06-02", true, false, null, null), /* Week-long <12 ticket for visitor 2 */
-  (7, 2, 54, "2017-06-02", true, false, '867-5309', 'Arizona'), /* Week-long RV parking ticket for visitor 2 */
-  (8, 3, 4, "2017-06-03", true, false, null, null), /* Day adult ticket for visitor 3, one person staying for one day */
-  (9, 3, 10, "2017-06-03", true, false, 'SO-SLNCE', 'Arizona'), /* Day VIP parking ticket for visitor 3 */
-  (10, 4, 4, "2017-06-04", true, false, null, null), /* Day adult ticket for visitor 4, one person staying for two days */
-  (11, 4, 4, "2017-06-04", true, false, null, null), /* Day adult ticket for visitor 4 */
-  (12, 4, 13, "2017-06-04", true, false, null, null), /* Day camping ticket for visitor 4 */
-  (13, 4, 13, "2017-06-04", true, false, null, null), /* Day camping ticket for visitor 4 */
-  (14, 4, 8, "2017-06-04", true, false, 'CH8-M8', 'California'), /* Day parking ticket for visitor 4 */
-  (15, 4, 8, "2017-06-04", true, false, 'CH8-M8', 'California'); /* Day parking ticket for visitor 4 */
+  (1, 1, 49, "2017-06-01", true, false, null, null), /* Week-long adult ticket for visitor 1("Ivana","Knight"), two people staying for the week */
+  (2, 1, 49, "2017-06-01", true, false, null, null), /* Week-long adult ticket for visitor 1("Ivana","Knight") */
+  (3, 1, 52, "2017-06-01", true, false, 'DHX-1138', 'Ohio'), /* Week-long parking ticket for visitor 1("Ivana","Knight") */
+  (4, 2, 49, "2017-06-02", true, false, null, null), /* Week-long adult ticket for visitor 2("Keith","Stout"), two parents and a kid staying for the week */
+  (5, 2, 49, "2017-06-02", true, false, null, null), /* Week-long adult ticket for visitor 2("Keith","Stout") */
+  (6, 2, 50, "2017-06-02", true, false, null, null), /* Week-long <12 ticket for visitor 2("Keith","Stout") */
+  (7, 2, 54, "2017-06-02", true, false, '867-5309', 'Arizona'), /* Week-long RV parking ticket for visitor 2("Keith","Stout") */
+  (8, 3, 55, "2017-06-03", true, false, null, null), /* Monday adult ticket for visitor 3("Georgia","Noble"), one person staying for one day */
+  (9, 3, 76, "2017-06-03", true, false, 'SO-SLNCE', 'Arizona'), /* Monday General parking ticket for visitor 3("Georgia","Noble") */
+  (10, 4, 55, "2017-06-04", true, false, null, null), /* Monday adult ticket for visitor 4("Emma","Horn"), one person staying for two days */
+  (11, 4, 56, "2017-06-04", true, false, null, null), /* Tuesday adult ticket for visitor 4("Emma","Horn") */
+  (12, 4, 111, "2017-06-04", true, false, null, null), /* Monday camping ticket for visitor 4("Emma","Horn") */
+  (13, 4, 112, "2017-06-04", true, false, null, null), /* Tuesday camping ticket for visitor 4("Emma","Horn") */
+  (14, 4, 76, "2017-06-04", true, false, 'CH8-M8', 'California'), /* Day parking ticket for visitor 4("Emma","Horn") */
+  (15, 4, 77, "2017-06-04", true, false, 'CH8-M8', 'California'); /* Day parking ticket for visitor 4("Emma","Horn") */
 
 INSERT INTO CampingAssignment (TicketID, CampingID) VALUES (1, "A01"), (2, "A01"), (4, "A08"), (5, "A08"), (6, "A08"), (12, "C01"), (13, "C01");

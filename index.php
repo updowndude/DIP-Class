@@ -1,6 +1,7 @@
 <?php
 	session_start();
-	//reset session id to help prevent session hijacking
+// copyright 2017 DipFestival, LLC
+//reset session id to help prevent session hijacking
 
 	include 'php/includes/functions.php';
 	include 'php/includes/session_hijacking.php';

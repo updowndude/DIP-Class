@@ -1,5 +1,6 @@
 <?php
 // check if the session has started
+// copyright 2017 DipFestival, LLC
 if(!isset($_SESSION))
 {
     session_start();
@@ -469,8 +470,8 @@ $aryCountry = explode("\n",$countries);
                         </div>
                     </div>
                     <div class="btn-group" role="group">
-                        <button type="submit" class="btn btn-default" id="findPerson">Find person</button>
-                        <button type="submit" class="btn btn-default" id="searchPhone" disabled="disabled">Search by fields</button>
+                        <button data-toggle="tooltip" title="Goes another page to handle tickets" type="submit" class="btn btn-default" id="findPerson">Find person</button>
+                        <button data-toggle="tooltip" title="Search database for user and return to current page" type="submit" class="btn btn-default" id="searchPhone" disabled="disabled">Search by fields</button>
                         <button class="btn btn-default" id="btnClear">Clear</button>
                         <a class="btn btn-default" id="btnLogout" href="logout">Logout</a>
                     </div>
@@ -502,6 +503,9 @@ $aryCountry = explode("\n",$countries);
         </div>
     </div>
 </div>
+<footer>
+    <p>2017 DipFestival, LLC &copy;</p>
+</footer>
 <script type="text/javascript">
     // get the Javascript
     <?php echo file_get_contents("../../dist/my-com.js") ?>

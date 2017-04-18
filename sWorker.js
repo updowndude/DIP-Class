@@ -1,3 +1,4 @@
+// copyright 2017 DipFestival, LLC
 /**
  * Created by correywinke on 3/9/17.
  */

@@ -1,5 +1,5 @@
 <?php
-
+// copyright 2017 DipFestival, LLC
     /*Summary:
      *Returns a PDO object that has access to the festival database.
      */
@@ -7,7 +7,7 @@
         // by Correy Winke
         // 10/27/16
         // opens up a database
-        $dsn = 'mysql:host=localhost;dbname=Festival_DB';
+        $dsn = 'mysql:host=localhost;dbname=dips2017_Festival_DB';
         $username = 'root';
         $password = 'root';
         // check to se it works

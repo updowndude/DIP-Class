@@ -3,7 +3,7 @@
 <html>
 	
 	<head>
-		
+		<!-- // copyright 2017 DipFestival, LLC -->
 		<meta charset="utf-8">
 		<meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="theme-color" content="#ff8080">
