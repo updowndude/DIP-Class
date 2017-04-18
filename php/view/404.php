@@ -9,8 +9,6 @@
    	<style>
 		
 		/*fonts*/
-		@import url('https://fonts.googleapis.com/css?family=Raleway');
-		@import url('https://fonts.googleapis.com/css?family=Oswald');
 		@import url('https://fonts.googleapis.com/css?family=Creepster');
 		
 		html, body{

@@ -330,7 +330,7 @@ $aryCountry = explode("\n",$countries);
     <!--main container-->
     <div class="row">
         <div class="col-centered">
-            <h1 class="text-center">Visitor Lookup</h1>
+            <h1 class="text-center" id="visitorLookupLabel">Visitor Lookup</h1>
             <form action="php/controller/search.php" method="post" id="searchPerson">
                 <div class="panel-group">
                     <div class="panel panel-default">

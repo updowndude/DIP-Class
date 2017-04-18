@@ -5797,3 +5797,11 @@ body {
 	color: white;
 	font-size: 20px;
 }
+
+#findPersonBody{
+	background-color: #252525;
+}
+
+#visitorLookupLabel{
+	color: #f6f6f6;
+}
