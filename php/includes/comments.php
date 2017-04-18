@@ -18,7 +18,7 @@
                     echo  $_SESSION['Comments'];
                 } ?>" placeholder="Comment" name="comment">
             </div>
-            <button type="submit" class="btn btn-default">Updated comment</button>
+            <button type="submit" class="btn btn-default">Update comment</button>
             <input type="hidden" type="text" id="action" name="action" value="commentsUpdate">
             <input class="form-control" type="hidden" value="<?php
             if(isset( $_SESSION['VisitorID']) == true) {
