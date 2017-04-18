@@ -173,6 +173,9 @@ foreach /*thing in*/ ($ticketOptions as $ticketOption)
             height: /*-- VALUE --*/35px;
         }
     </style>
+    <!-- Material Design fonts -->
+    <link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Roboto:300,400,500,700">
+    <link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/icon?family=Material+Icons">
     <link rel="icon", type="image/x-icon", href="images/favicon.ico">
     <link rel="stylesheet" href="dist/myStyle.css">
     <!-- TODO: get css myStyle.css to work correctly (panels don't show -->

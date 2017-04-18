@@ -85,6 +85,10 @@
         <link rel="icon", type="image/x-icon", href="images/favicon.ico">
         <!--customer styles-->
         <link rel="stylesheet" type="text/css" href="dist/myStyle.css" />
+        <!-- Material Design fonts -->
+        <link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Roboto:300,400,500,700">
+        <link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/icon?family=Material+Icons">
+
 
 
     </head>
@@ -104,15 +108,15 @@
 
 	<p id="description">Please enter your login information to continue.</p>
 
-	<div class="form-group">
+	<div class="form-group label-floating myLogin">
 		<label for="login-username" class="sr-only">Username</label>
 		<input type="text" class="form-control input-lg" id="login-username" placeholder="username" name="username" value="<?php echo $formUsername; ?>">
 	</div>
-	<div class="form-group">
+	<div class="form-group label-floating myLogin">
 		<label for="login-password" class="sr-only">Password</label>
 		<input type="password" class="form-control input-lg" id="login-password" placeholder="password" name="password" value="<?php echo $formPass; ?>">
 	</div><br><br>
-	<button type="submit" class="btn btn-info btn-lg" name="login">Login</button>
+	<button type="submit" class="btn btn-raised btn-info btn-lg" name="login">Login</button>
 </form>
     <?php
         // check to see there a login error

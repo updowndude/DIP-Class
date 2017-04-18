@@ -325,6 +325,9 @@ $aryCountry = explode("\n",$countries);
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" type="text/css" href="dist/myStyle.css" />
     <link rel="icon" type="image/x-icon" href="images/favicon.ico"/>
+    <!-- Material Design fonts -->
+    <link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Roboto:300,400,500,700">
+    <link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/icon?family=Material+Icons">gul
 </head>
 <body id="findPersonBody">
 <div class="container">
@@ -334,7 +337,7 @@ $aryCountry = explode("\n",$countries);
             <h1 class="text-center" id="visitorLookupLabel">Visitor Lookup</h1>
             <form action="php/controller/search.php" method="post" id="searchPerson">
                 <div class="panel-group">
-                    <div class="panel panel-default">
+                    <div class="panel panel-danger">
                         <div class="panel-heading">
                             <a data-toggle="collapse" href="#pBodyBasicInfro">Basic info</a>
                         </div>
@@ -357,7 +360,7 @@ $aryCountry = explode("\n",$countries);
                             </div>
                         </div>
                     </div>
-                    <div class="panel panel-default">
+                    <div class="panel panel-danger">
                         <div class="panel-heading">
                             <a data-toggle="collapse" href="#pBodyAddressGroup">Address group</a>
                         </div>
@@ -427,7 +430,7 @@ $aryCountry = explode("\n",$countries);
                             </div>
                         </div>
                     </div>
-                    <div class="panel panel-default">
+                    <div class="panel panel-danger">
                         <div class="panel-heading">
                             <a data-toggle="collapse" href="#pBodyContact">Contact info</a>
                         </div>
@@ -470,10 +473,10 @@ $aryCountry = explode("\n",$countries);
                         </div>
                     </div>
                     <div class="btn-group" role="group">
-                        <button data-toggle="tooltip" title="Goes another page to handle tickets" type="submit" class="btn btn-default" id="findPerson">Find person</button>
-                        <button data-toggle="tooltip" title="Search database for user and return to current page" type="submit" class="btn btn-default" id="searchPhone" disabled="disabled">Search by fields</button>
-                        <button class="btn btn-default" id="btnClear">Clear</button>
-                        <a class="btn btn-default" id="btnLogout" href="logout">Logout</a>
+                        <button data-toggle="tooltip" title="Goes another page to handle tickets" type="submit" class="btn btn-raised btn-info" id="findPerson">Find person</button>
+                        <button data-toggle="tooltip" title="Search database for user and return to current page" type="submit" class="btn btn-raised btn-info" id="searchPhone" disabled="disabled">Search by fields</button>
+                        <button class="btn btn-raised btn-info" id="btnClear">Clear</button>
+                        <a class="btn btn-raised btn-info" id="btnLogout" href="logout">Logout</a>
                     </div>
                 </div>
                 <input type="hidden" type="text" id="action" name="action" value="search">

@@ -7,7 +7,7 @@
  * Time: 12:45 PM
  */
 ?>
-<div class="panel panel-default">
+<div class="panel panel-danger">
     <div class="panel-heading">
         <a data-toggle="collapse" href="#pChoosePerson">Choose Person</a>
     </div>

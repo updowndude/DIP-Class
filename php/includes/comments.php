@@ -6,7 +6,7 @@
  * Date: 3/23/17
  * Time: 9:47 PM
  */ ?>
-<div class="panel panel-default">
+<div class="panel panel-danger">
     <div class="panel-heading">
         <a data-toggle="collapse" href="#pComments">Comments</a>
     </div>

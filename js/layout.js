@@ -1,7 +1,8 @@
 // copyright 2017 DipFestival, LLC
 
-import bsn from 'bootstrap.native';
 import Chart from 'chart.js';
+import Bootstrap from 'bootstrap';
+import Material from 'bootstrap-material-design';
 
 // see if the broswer support service workers
 if('serviceWorker' in navigator) {
@@ -10,6 +11,8 @@ if('serviceWorker' in navigator) {
         console.log(err);
     });
 }
+
+$.material.init();
 
 // check to see what page  is being display
 if(document.body.id == 'findPersonBody') {

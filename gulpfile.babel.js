@@ -49,8 +49,14 @@ gulp.task('jsx', () => {
 			output: {
 				filename: 'my-com.js'
 			},
-			// devtool: 'inline-sourcemap',
-			plugins: [new webpack.optimize.UglifyJsPlugin()]
+            // devtool: 'inline-sourcemap',
+			plugins: [
+                new webpack.optimize.UglifyJsPlugin(),
+                new webpack.ProvidePlugin({
+                    $: "jquery",
+                    jQuery: "jquery"
+                })
+			]
 		}))
 		.pipe(gulp.dest('dist'))
     .pipe(livereload());
