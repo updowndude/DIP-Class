@@ -99,28 +99,20 @@ if(document.body.id == 'findPersonBody') {
         data: {
             labels: ["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday","Week"],
             datasets: [{
-                data: [pNGGCJMO.numberOfGuest, pNGGCJTU.numberOfGuest, pNGGCJWE.numberOfGuest, pNGGCJTU.numberOfGuest, pNGGCJFR.numberOfGuest, pNGGCJSA.numberOfGuest, pNGGCJSU.numberOfGuest, pNGGCJW.numberOfGuest],
-                backgroundColor: [
-                    'rgba(91,209,243, 0.2)',
-                    'rgba(91,209,243, 0.2)',
-                    'rgba(91,209,243, 0.2)',
-                    'rgba(91,209,243, 0.2)',
-                    'rgba(91,209,243, 0.2)',
-                    'rgba(91,209,243, 0.2)',
-                    'rgba(91,209,243, 0.2)',
-                    'rgba(255, 99, 132, 0.2)'
-                ],
-                borderColor: [
-                    'rgba(91,209,243, 1)',
-                    'rgba(91,209,243, 1)',
-                    'rgba(91,209,243, 1)',
-                    'rgba(91,209,243, 1)',
-                    'rgba(91,209,243, 1)',
-                    'rgba(91,209,243, 1)',
-                    'rgba(91,209,243, 1)',
-                    'rgba(255,99,132,1)'
-                ],
-                borderWidth: 2
+                label: "Expected",
+                backgroundColor: "rgba(91,209,243, 0.2)",
+                borderColor: 'rgba(91,209,243, 1)',
+                data: [pAVGJMO.Expected,pAVGJTU.Expected,pAVGJWE.Expected,pAVGJTH.Expected,pAVGJFR.Expected,pAVGJSA.Expected,pAVGJSU.Expected,pAVGJW.Expected]
+            },{
+                label: "Arrived",
+                backgroundColor: "rgba(255, 99, 132, 0.2)",
+                borderColor: 'rgba(255, 99, 132, 1)',
+                data: [pAVGJMO.Arrived,pAVGJTU.Arrived,pAVGJWE.Arrived,pAVGJTH.Arrived,pAVGJFR.Arrived,pAVGJSA.Arrived,pAVGJSU.Arrived,pAVGJW.Arrived]
+            },{
+                label: "NoShows",
+                backgroundColor: "rgba(91, 255, 132, 0.2)",
+                borderColor: 'rgba(91, 255, 132, 1)',
+                data: [pAVGJMO.NoShows,pAVGJTU.NoShows,pAVGJWE.NoShows,pAVGJTH.NoShows,pAVGJFR.NoShows,pAVGJSA.NoShows,pAVGJSU.NoShows,pAVGJW.NoShows]
             }]
         },
         options: {
@@ -141,28 +133,20 @@ if(document.body.id == 'findPersonBody') {
         data: {
             labels: ["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday","Week"],
             datasets: [{
-                data: [pNGGCJMO.numberOfGuest, pNGGCJTU.numberOfGuest, pNGGCJWE.numberOfGuest, pNGGCJTU.numberOfGuest, pNGGCJFR.numberOfGuest, pNGGCJSA.numberOfGuest, pNGGCJSU.numberOfGuest, pNGGCJW.numberOfGuest],
-                backgroundColor: [
-                    'rgba(91,209,243, 0.2)',
-                    'rgba(91,209,243, 0.2)',
-                    'rgba(91,209,243, 0.2)',
-                    'rgba(91,209,243, 0.2)',
-                    'rgba(91,209,243, 0.2)',
-                    'rgba(91,209,243, 0.2)',
-                    'rgba(91,209,243, 0.2)',
-                    'rgba(255, 99, 132, 0.2)'
-                ],
-                borderColor: [
-                    'rgba(91,209,243, 1)',
-                    'rgba(91,209,243, 1)',
-                    'rgba(91,209,243, 1)',
-                    'rgba(91,209,243, 1)',
-                    'rgba(91,209,243, 1)',
-                    'rgba(91,209,243, 1)',
-                    'rgba(91,209,243, 1)',
-                    'rgba(255,99,132,1)'
-                ],
-                borderWidth: 2
+                label: "Expected",
+                backgroundColor: "rgba(91,209,243, 0.2)",
+                borderColor: 'rgba(91,209,243, 1)',
+                data: [pCampingJMO.Expected,pCampingJTU.Expected,pCampingJWE.Expected,pCampingJTH.Expected,pCampingJFR.Expected,pCampingJSA.Expected,pCampingJSU.Expected,pCampingJW.Expected]
+            },{
+                label: "Arrived",
+                backgroundColor: "rgba(255, 99, 132, 0.2)",
+                borderColor: 'rgba(255, 99, 132, 1)',
+                data: [pCampingJMO.Arrived,pCampingJTU.Arrived,pCampingJWE.Arrived,pCampingJTH.Arrived,pCampingJFR.Arrived,pCampingJSA.Arrived,pCampingJSU.Arrived,pCampingJW.Arrived]
+            },{
+                label: "NoShows",
+                backgroundColor: "rgba(91, 255, 132, 0.2)",
+                borderColor: 'rgba(91, 255, 132, 1)',
+                data: [pCampingJMO.NoShows,pCampingJTU.NoShows,pCampingJWE.NoShows,pCampingJTH.NoShows,pCampingJFR.NoShows,pCampingJSA.NoShows,pCampingJSU.NoShows,pCampingJW.NoShows]
             }]
         },
         options: {
@@ -183,7 +167,7 @@ if(document.body.id == 'findPersonBody') {
         data: {
             labels: ["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday","Week"],
             datasets: [{
-                data: [pNGGCJMO.numberOfGuest, pNGGCJTU.numberOfGuest, pNGGCJWE.numberOfGuest, pNGGCJTU.numberOfGuest, pNGGCJFR.numberOfGuest, pNGGCJSA.numberOfGuest, pNGGCJSU.numberOfGuest, pNGGCJW.numberOfGuest],
+                data: [pUARJMO.TotalSales, pUARJTU.TotalSales, pUARJWE.TotalSales, pUARJTH.TotalSales, pUARJFR.TotalSales, pUARJSA.TotalSales, pUARJSU.TotalSales, pUARJW.TotalSales],
                 backgroundColor: [
                     'rgba(91,209,243, 0.2)',
                     'rgba(91,209,243, 0.2)',
