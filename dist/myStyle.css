@@ -8565,7 +8565,7 @@ footer {
   background: rgba(204, 86, 86, .3);
   letter-spacing: 12px;
   letter-spacing: 1.2rem;
-  color: #D1F8A1; }
+  color: #fff; }
   footer p {
     text-align: center;
     font-size: 12.5px;
@@ -8627,3 +8627,10 @@ a[href="lookup"] {
 
 #adimPage > div.container > h1 {
   color: white; }
+
+div.panel-heading a {
+  color: #fff; }
+
+#IndexPage > div.container > form > button {
+  margin-bottom: 50px;
+  margin-bottom: 5rem; }

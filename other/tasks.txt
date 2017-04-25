@@ -1,7 +1,6 @@
 // copyright 2017 DipFestival, LLC
 
 after buy a ticket
-color scheme 
 filter out week long tickets
 quantity of tickets
 can upgrade if they bought ticket
