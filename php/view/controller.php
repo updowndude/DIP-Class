@@ -10,8 +10,15 @@
   //--- CONTROLLER ---
   switch($action)
   {
+      /*SUMMARY:
+       *Does only everything required to update a visitors selected assigned ticket
+       */
       case 'upgradePerson':
+          //ID of ticket that the selected visitor ticket will be converted (upgraded) to
           $upgradeTicketTypeID = $_POST['selected-ticket-type-option'];
+          //ID of ticket that will be updated
+          $selectedVisitorTicketOption = $_POST['selected-visitor-ticket-option'];
+          //ID of visitor
           $visitorID = $_SESSION['VisitorID'];
           $pdoObj = getAccess();
           $query =
@@ -19,24 +26,27 @@
             UPDATE
                 TicketAssignment
                     INNER JOIN
-                TicketTypes ON TicketAssignment.TicketTypeID = TicketTypes.TicketTypeID
+                Merchandise ON TicketAssignment.MerchID = Merchandise.MerchID
                     INNER JOIN	
                 Visitors ON Visitors.VisitorID = TicketAssignment.VisitorID
                     INNER JOIN
                 Orders ON Orders.VisitorID = Visitors.VisitorID
             SET
-                TicketAssignment.TicketTypeID = :ticketTypeID
-                , Orders.DatePurdchased = NOW()
+                TicketAssignment.MerchID = :merchID
+                , TicketAssignment.DatePurchased = NOW()
+                , Orders.DatePurchased = NOW()
                 
                 -- ???below needed???
                 -- YES: as fail safe should buisness rules change
                 , Orders.Paid = TRUE
             WHERE
-                TicketAssignment.VisitorID = :visitorID
+                TicketAssignment.VisitorID = :visitorID AND
+                TicketAssignment.TicketID = :selectedVisitorTicketOption
             ';
           $statement = $pdoObj->prepare($query);
-          $statement->bindValue(':ticketTypeID',$upgradeTicketTypeID);
+          $statement->bindValue(':merchID',$upgradeTicketTypeID);
           $statement->bindValue(':visitorID',$visitorID);
+          $statement->bindValue(':visitorTicketOption', $selectedVisitorTicketOption);
           $statement->execute();
           $statement->closeCursor();
 
@@ -56,6 +66,19 @@
 
           header('Location: ../../lookup');
           break;
+    
+      /*SUMMARY:
+       *Does only everything thats required to regisiter a visitor
+       *into the database with a assigned ticket.
+       *
+       *TODO (regisiter person rules):
+       * - A minimum of 1 ticket must be assigned to visitor for attending the Accordian Discordian 
+       *   Appocalypse
+       *
+       * - A visitor may be assigned multiple attendance tickets
+       *
+       * - Optional: allow visitor to get a parking ticket (for camping, not a fine)
+       */
       case 'registerPerson':
           $ticketTypeID = $_POST['selected-ticket-type-option'];
           $pdoObj = getAccess();
@@ -70,7 +93,7 @@
 
           $secQuery = "INSERT INTO
             TicketAssignment
-            (VisitorID, TicketTypeID, DatePurchased)
+            (VisitorID, MerchID, DatePurchased)
             VALUES
             ((SELECT VisitorID 
               FROM Visitors  WHERE";
@@ -95,7 +118,7 @@
           $thrQuery = substr($thrQuery, 0, strlen($thrQuery) - 3);
 
           $secQuery .= ")
-             , :ticketTypeID
+             , :merchID
              , NOW());";
           $thrQuery .= ");";
           $query =
@@ -122,7 +145,7 @@
           $statement->bindValue(':PostalCode', $_SESSION['PostalCode']);
           $statement->bindValue(':Email', $_SESSION['Email']);
           $statement->bindValue(':Comments', $_SESSION['Comments']);
-          $statement->bindValue(':ticketTypeID', $ticketTypeID);
+          $statement->bindValue(':merchID', $ticketTypeID);
           $statement->execute();
           $statement->closeCursor();
 
