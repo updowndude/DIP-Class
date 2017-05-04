@@ -10,7 +10,6 @@ import cssnext from 'postcss-cssnext';
 import gulpWebpack from 'webpack-stream';
 import livereload from 'gulp-livereload';
 import webpack from 'webpack';
-import pathfrom from 'path';
 import swPrecache from 'sw-precache';
 
 // build out css using sass and postcsss
@@ -18,7 +17,7 @@ gulp.task('sass', () => {
 	// extra transfromer after sass to css
 	const processors = [
 		// minifier for css
-		// csswring,
+		 csswring,
 		// use new css
 		cssnext
 	];

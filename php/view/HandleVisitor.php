@@ -1,4 +1,17 @@
-<?php
+<?php if(!isset($_SESSION)){
+    session_start();
+
+    if (empty($_SESSION['loggedInUser']) == true){
+        header('Location: what');
+    } else {
+        if($_SESSION['loggedInUser'] != 'maingate') {
+            header('Location: what');
+        }
+    }
+} else {
+    header('Location: what');
+}
+
 // Copyright 2017 DipFestival, LLC
 /*====== DOCUMENT I\O INFO ======
 *VARIABLES REQUIRED:
@@ -17,7 +30,6 @@
 *intended datatype: string
 */
 ?>
-<?php if(!isset($_SESSION)){ session_start(); } ?>
 <!--
 	====== DOCUMENT I\O INFO ======
 	VARIABLES REQUIRED:
@@ -568,11 +580,6 @@ function echoTicketOptionsButtonGroup()
     <link rel="icon", type="image/x-icon", href="images/favicon.ico">
     <!--<link rel="stylesheet" href="dist/myStyle.css">-->
     <link rel="stylesheet" type="text/css" href="dist/myStyle.css" />
-    <!-- jQuery library -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.0/jquery.min.js"></script>
-
-    <!-- Latest compiled JavaScript -->
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 
     <?php /*
 		<!-- Custom HTML Elements
@@ -781,7 +788,7 @@ function echoTicketOptionsButtonGroup()
                         Since findperson.php reloads available form data, the back button
                         should take the volunteer back to the entered form data as expected.
                         -->
-                        <a href="lookup.php" class="btn btn-default">
+                        <a href="lookup" class="btn btn-default">
                             <span class="glyphicon glyphicon-arrow-left"></span>&nbsp;Go Back
                         </a>
 
@@ -879,7 +886,7 @@ function echoTicketOptionsButtonGroup()
 </script>
 
 <script type="text/javascript">
-    <?php echo file_get_contents("../../dist/my-com.js") ?>
+    <?php echo file_get_contents("../../dist/my-com.js"); ?>
 </script>
 </body>
 </html>

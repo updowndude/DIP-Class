@@ -165,9 +165,9 @@ if(document.body.id == 'findPersonBody') {
     new Chart(document.getElementById('pUARC'), {
         type: 'bar',
         data: {
-            labels: ["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday","Week"],
+            labels: ["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday","Week", "Total"],
             datasets: [{
-                data: [pUARJMO.TotalSales, pUARJTU.TotalSales, pUARJWE.TotalSales, pUARJTH.TotalSales, pUARJFR.TotalSales, pUARJSA.TotalSales, pUARJSU.TotalSales, pUARJW.TotalSales],
+                data: [pUARJMO.DailyTotal, pUARJTU.DailyTotal, pUARJWE.DailyTotal, pUARJTH.DailyTotal, pUARJFR.DailyTotal, pUARJSA.DailyTotal, pUARJSU.DailyTotal, pUARJW.WeeklyTotal, pUARJT.TotalSales],
                 backgroundColor: [
                     'rgba(91,209,243, 0.2)',
                     'rgba(91,209,243, 0.2)',
@@ -176,7 +176,8 @@ if(document.body.id == 'findPersonBody') {
                     'rgba(91,209,243, 0.2)',
                     'rgba(91,209,243, 0.2)',
                     'rgba(91,209,243, 0.2)',
-                    'rgba(255, 99, 132, 0.2)'
+                    'rgba(255, 99, 132, 0.2)',
+                    'rgba(91, 255, 132, 0.2)'
                 ],
                 borderColor: [
                     'rgba(91,209,243, 1)',
@@ -186,7 +187,8 @@ if(document.body.id == 'findPersonBody') {
                     'rgba(91,209,243, 1)',
                     'rgba(91,209,243, 1)',
                     'rgba(91,209,243, 1)',
-                    'rgba(255,99,132,1)'
+                    'rgba(255,99,132,1)',
+                    'rgba(91, 255, 132, 1)'
                 ],
                 borderWidth: 2
             }]
