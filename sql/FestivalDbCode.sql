@@ -128,9 +128,8 @@ CREATE TABLE TicketAssignment (
   CheckedIN BOOLEAN,
   LicensePlate VARCHAR(10),
   LicenseIssuedIn VARCHAR(20),
-  QuantityID INT,
+  IsValid BOOLEAN DEFAULT TRUE, /*if ticket has been upgraded, change to false*/
   FOREIGN KEY (VisitorID) REFERENCES Visitors(VisitorID),
-  FOREIGN KEY (QuantityID) REFERENCES Quantity(QuantityID),
   FOREIGN KEY (MerchID) REFERENCES Merchandise(MerchID)
 );
 
@@ -153,9 +152,30 @@ CREATE TABLE CampingAssignment (
   FOREIGN KEY (CampingID) REFERENCES Camping(CampingID)
 );
 
+DROP TABLE IF EXISTS UpdateActivity;
+CREATE TABLE UpdateActivity (
+  UpdateID INT PRIMARY KEY AUTO_INCREMENT,
+  VisitorID INT NOT NULL,
+  NewTicketID INT NOT NULL,
+  NewTicketPrice DECIMAL(4,2) NOT NULL,
+  ServiceCharge DECIMAL(4,2) DEFAULT 20.00 NOT NULL,
+  DateUpdated DATETIME NOT NULL,
+  FOREIGN KEY (VisitorID) REFERENCES Visitors(VisitorID),
+  FOREIGN KEY (NewTicketID) REFERENCES TicketAssignment(TicketID)
+);
 
-INSERT INTO Quantity (QuantityID, QuantityMax, QuantityAvailable)
-VALUES
+DROP TABLE IF EXISTS UpdateAssignment;
+CREATE TABLE UpdateAssignment (
+  UpdateAssignID INT PRIMARY KEY AUTO_INCREMENT,
+  UpdateID INT NOT NULL,
+  OriginalTicketID INT NOT NULL,
+  OriginalTicketPrice DECIMAL(4,2) DEFAULT 0.00 NOT NULL,
+  FOREIGN KEY (UpdateID) REFERENCES UpdateActivity(UpdateID),
+  FOREIGN KEY (OriginalTicketID) REFERENCES TicketAssignment(TicketID)
+);
+
+
+INSERT INTO Quantity (QuantityID, QuantityMax, QuantityAvailable) VALUES
 
   /* Merch Quantities*/
   (6, 1200, 1200), /*Reusable Cup*/
@@ -228,7 +248,7 @@ VALUES
   (66,900,900); /*Sunday Daily Admission Tickets*/
 
 INSERT INTO MerchandiseCategory (MerchCatID, MerchCatName) VALUES
-  (1, "Aparrel"), (2, "Food/Drink"), (3, "Firewood"), (4, "Misc"), (5, "FirstAid"), (6, "Collectibles"),
+  (1, "Apparel"), (2, "Food/Drink"), (3, "Firewood"), (4, "Misc"), (5, "FirstAid"), (6, "Collectibles"),
   (7, "DayAdmissionTickets"), (8, "WeekAdmissionTickets"), (9, "DayParkingTickets"), (10, "WeekParkingTickets"), (11, "DayCampingTickets");
 
 
@@ -399,10 +419,47 @@ INSERT INTO Users (Username, Password, AccessLevel) VALUES ("thebigcheese", "$2y
   ("Lovelywort20U","$2y$10$19lTUay3i2hUKGOL80EkbuyZGV3OA8JSJyqBoM0UROyHaU5PzXUle",1),
   ("FourTman9f","$2y$10$IOYf1HAOJZmHu34OrbFrfe3KxjyNVq4ABP1J0oT.NFXgkymZIYRJC",1);
 
-INSERT INTO Visitors (UserID,FName,LName,PhoneNumber,Email,DOB,Address,City,StateProvince,Country,PostalCode) VALUES (1,"Ivana","Knight","915-9094","taciti.sociosqu.ad@cubilia.co.uk","1960-09-04","Ap #841-6590 Purus St.","Cincinnati","OH","USA","74260"),(2,"Keith","Stout","1-708-497-8050","lacus@parturient.com","1943-07-05","P.O. Box 497, 9000 Nisi Road","Springdale","AR","USA","72774"),(3,"Georgia","Noble","1-382-628-6678","nulla.vulputate.dui@loremeumetus.net","1923-12-27","Ap #397-6623 Sem Road","Springdale","AR","USA","72305"),(4,"Emma","Horn","1-596-313-9666","ut.cursus@Suspendissenonleo.co.uk","1944-02-13","P.O. Box 112, 5467 Sagittis Avenue","San Diego","CA","USA","91783"),(5,"Octavia","Henson","1-305-920-5566","auctor.quis@hendreritDonecporttitor.co.uk","1994-06-07","7591 Ipsum Ave","San Francisco","CA","USA","95739"),(6,"Melyssa","Dickson","1-688-580-9503","neque.pellentesque@at.com","1950-05-07","P.O. Box 411, 6803 Natoque Street","Worcester","MA","USA","92666"),(7,"Virginia","Casey","1-488-436-0759","at@atnisi.ca","1960-12-22","Ap #150-9078 Diam Ave","Pittsburgh","PA","USA","32047"),(8,"Tatiana","Paul","1-940-972-7757","in@erosnectellus.co.uk","1974-02-05","Ap #127-9626 Nascetur Ave","Bellevue","WA","USA","16890"),(9,"Germane","Wilder","1-460-403-0942","amet@erat.net","1918-12-04","Ap #193-4962 Vel Street","Cambridge","MA","USA","53519"),(10,"Carol","Fischer","1-913-143-1312","Vivamus.nibh@nec.com","1988-06-12","460-9997 Magna. Street","Chesapeake","VA","USA","64865");
-INSERT INTO Visitors (UserID,FName,LName,PhoneNumber,Email,DOB,Address,City,StateProvince,Country,PostalCode) VALUES (11,"Judah","Cook","395-9297","urna.suscipit.nonummy@semelit.com","1915-10-31","6364 Aliquam Road","Las Vegas","NV","USA","59968"),(12,"Rashad","Hunter","1-319-327-7745","enim@nisiMauris.edu","1990-06-28","Ap #283-3343 Nam Avenue","Bridgeport","CT","USA","75933"),(13,"Abel","Sweeney","743-1895","placerat.orci@lectusCumsociis.net","1969-05-24","Ap #429-3729 Risus Avenue","Olympia","WA","USA","12690"),(14,"Blythe","Davenport","932-2493","Duis.cursus@iaculisneceleifend.ca","1928-11-09","Ap #311-430 Dis Rd.","Shreveport","LA","USA","30715"),(15,"Amela","Mays","914-8975","a.auctor@mieleifend.ca","1907-05-15","600-6130 Vel Rd.","Springfield","IL","USA","29957"),(16,"Howard","Logan","1-136-560-0589","id@molestie.com","1942-10-04","P.O. Box 273, 944 Et Rd.","Auburn","ME","USA","84656"),(17,"Mason","Benson","599-7938","libero.Integer@idmagna.com","1992-05-06","Ap #414-2698 Sagittis Av.","New Orleans","LA","USA","14976"),(18,"Adele","Becker","960-7799","ultrices.Duis@adipiscinglacusUt.net","1907-12-15","P.O. Box 862, 9481 Fames Rd.","Tacoma","WA","USA","68800"),(19,"Iris","Murray","1-373-784-7154","mauris@gravida.co.uk","1933-10-08","876 Congue. Avenue","Austin","TX","USA","62652"),(20,"Aubrey","Wilder","715-4129","sit.amet@nec.edu","1985-01-29","6838 Phasellus Avenue","Topeka","KS","USA","96885");
-INSERT INTO Visitors (UserID,FName,LName,PhoneNumber,Email,DOB,Address,City,StateProvince,Country,PostalCode) VALUES (21,"Jolene","Nicholson","851-0894","tellus@quam.org","1995-08-04","Ap #688-3743 Praesent St.","Little Rock","AR","USA","71520"),(22,"Stacey","Berry","744-8223","ornare@tellus.net","2000-12-20","346-372 Et Rd.","Racine","WI","USA","75297"),(23,"Cheyenne","Ortiz","432-5355","non@egestasDuisac.org","1956-10-14","P.O. Box 989, 3910 Donec Street","West Valley City","UT","USA","92589"),(24,"Jared","Harding","411-0428","luctus@leoelementumsem.net","1968-04-16","8648 Lectus St.","Kenosha","WI","USA","96512"),(25,"Nissim","Pollard","1-412-727-7668","taciti@eutellus.com","1997-04-26","P.O. Box 606, 3682 Tincidunt. St.","Iowa City","IA","USA","76904"),(26,"Kelsey","Gregory","1-583-900-4541","rhoncus.id.mollis@ipsumSuspendisse.org","1928-10-01","P.O. Box 663, 463 Cras Rd.","South Bend","IN","USA","57149"),(27,"Rosalyn","Bonner","921-5796","purus.ac@lorem.co.uk","1909-11-26","6146 Nibh. Av.","Essex","VT","USA","45339"),(28,"Lucy","Mcknight","392-5258","ac.sem.ut@eu.ca","1923-01-18","P.O. Box 400, 3324 Aliquet Rd.","Worcester","MA","USA","23713"),(29,"Hillary","Dorsey","503-0719","senectus.et.netus@dolor.ca","1905-06-21","Ap #357-2468 Amet Street","Phoenix","AZ","USA","86132"),(30,"Maisie","Guthrie","1-628-638-7140","Aliquam.erat@Duis.com","1977-07-24","572-8404 Eros Ave","Milwaukee","WI","USA","82136");
-INSERT INTO Visitors (UserID,FName,LName,PhoneNumber,Email,DOB,Address,City,StateProvince,Country,PostalCode) VALUES (31,"Zachery","Sheppard","1-172-170-1073","lacus.varius@semmollis.org","1982-08-03","683-2990 Mattis St.","Orlando","FL","USA","77507"),(32,"Cedric","Casey","683-0547","nec@Cras.edu","1921-10-03","1956 Conubia St.","Bellevue","NE","USA","45152"),(33,"Maris","Dejesus","498-3981","urna@duiFusce.net","1967-05-06","996-9836 Magnis Street","Jonesboro","AR","USA","71965"),(34,"Pascale","Knox","1-844-455-2260","consectetuer.rhoncus@rutrummagnaCras.com","1992-07-31","825-6181 Nec Rd.","Louisville","KY","USA","95455"),(35,"Megan","Schroeder","140-7705","egestas.blandit@ligulaAenean.ca","1968-02-01","373-3142 Mi Rd.","Topeka","KS","USA","42462"),(36,"Phoebe","Henderson","822-0618","Ut@id.co.uk","1912-03-24","1035 Odio. Rd.","Chicago","IL","USA","37731"),(37,"Hayfa","Carroll","593-4958","tellus@arcuSed.ca","1976-04-15","Ap #680-7263 Massa St.","Sioux City","IA","USA","92650"),(38,"Leilani","Arnold","1-173-843-7510","eget.magna@in.edu","1905-07-10","915-684 Dolor Av.","Kansas City","MO","USA","45198"),(39,"Jared","Kirk","854-8609","Duis@placeratvelitQuisque.ca","1944-08-30","2038 Risus. Avenue","Salt Lake City","UT","USA","58905"),(40,"Nichole","Pearson","679-0807","penatibus@Donecluctusaliquet.edu","1930-08-25","1433 Odio. Road","Chesapeake","VA","USA","24340");
+INSERT INTO Visitors (UserID,FName,LName,PhoneNumber,Email,DOB,Address,City,StateProvince,Country,PostalCode) VALUES
+  (1,"Ivana","Knight","915-9094","taciti.sociosqu.ad@cubilia.co.uk","1960-09-04","Ap #841-6590 Purus St.","Cincinnati","OH","USA","74260"),
+  (2,"Keith","Stout","1-708-497-8050","lacus@parturient.com","1943-07-05","P.O. Box 497, 9000 Nisi Road","Springdale","AR","USA","72774"),
+  (3,"Georgia","Noble","1-382-628-6678","nulla.vulputate.dui@loremeumetus.net","1923-12-27","Ap #397-6623 Sem Road","Springdale","AR","USA","72305"),
+  (4,"Emma","Horn","1-596-313-9666","ut.cursus@Suspendissenonleo.co.uk","1944-02-13","P.O. Box 112, 5467 Sagittis Avenue","San Diego","CA","USA","91783"),
+  (5,"Octavia","Henson","1-305-920-5566","auctor.quis@hendreritDonecporttitor.co.uk","1994-06-07","7591 Ipsum Ave","San Francisco","CA","USA","95739"),
+  (6,"Melyssa","Dickson","1-688-580-9503","neque.pellentesque@at.com","1950-05-07","P.O. Box 411, 6803 Natoque Street","Worcester","MA","USA","92666"),
+  (7,"Virginia","Casey","1-488-436-0759","at@atnisi.ca","1960-12-22","Ap #150-9078 Diam Ave","Pittsburgh","PA","USA","32047"),
+  (8,"Tatiana","Paul","1-940-972-7757","in@erosnectellus.co.uk","1974-02-05","Ap #127-9626 Nascetur Ave","Bellevue","WA","USA","16890"),
+  (9,"Germane","Wilder","1-460-403-0942","amet@erat.net","1918-12-04","Ap #193-4962 Vel Street","Cambridge","MA","USA","53519"),
+  (10,"Carol","Fischer","1-913-143-1312","Vivamus.nibh@nec.com","1988-06-12","460-9997 Magna. Street","Chesapeake","VA","USA","64865"),
+  (11,"Judah","Cook","395-9297","urna.suscipit.nonummy@semelit.com","1915-10-31","6364 Aliquam Road","Las Vegas","NV","USA","59968"),
+  (12,"Rashad","Hunter","1-319-327-7745","enim@nisiMauris.edu","1990-06-28","Ap #283-3343 Nam Avenue","Bridgeport","CT","USA","75933"),
+  (13,"Abel","Sweeney","743-1895","placerat.orci@lectusCumsociis.net","1969-05-24","Ap #429-3729 Risus Avenue","Olympia","WA","USA","12690"),
+  (14,"Blythe","Davenport","932-2493","Duis.cursus@iaculisneceleifend.ca","1928-11-09","Ap #311-430 Dis Rd.","Shreveport","LA","USA","30715"),
+  (15,"Amela","Mays","914-8975","a.auctor@mieleifend.ca","1907-05-15","600-6130 Vel Rd.","Springfield","IL","USA","29957"),
+  (16,"Howard","Logan","1-136-560-0589","id@molestie.com","1942-10-04","P.O. Box 273, 944 Et Rd.","Auburn","ME","USA","84656"),
+  (17,"Mason","Benson","599-7938","libero.Integer@idmagna.com","1992-05-06","Ap #414-2698 Sagittis Av.","New Orleans","LA","USA","14976"),
+  (18,"Adele","Becker","960-7799","ultrices.Duis@adipiscinglacusUt.net","1907-12-15","P.O. Box 862, 9481 Fames Rd.","Tacoma","WA","USA","68800"),
+  (19,"Iris","Murray","1-373-784-7154","mauris@gravida.co.uk","1933-10-08","876 Congue. Avenue","Austin","TX","USA","62652"),
+  (20,"Aubrey","Wilder","715-4129","sit.amet@nec.edu","1985-01-29","6838 Phasellus Avenue","Topeka","KS","USA","96885"),
+  (21,"Jolene","Nicholson","851-0894","tellus@quam.org","1995-08-04","Ap #688-3743 Praesent St.","Little Rock","AR","USA","71520"),
+  (22,"Stacey","Berry","744-8223","ornare@tellus.net","2000-12-20","346-372 Et Rd.","Racine","WI","USA","75297"),
+  (23,"Cheyenne","Ortiz","432-5355","non@egestasDuisac.org","1956-10-14","P.O. Box 989, 3910 Donec Street","West Valley City","UT","USA","92589"),
+  (24,"Jared","Harding","411-0428","luctus@leoelementumsem.net","1968-04-16","8648 Lectus St.","Kenosha","WI","USA","96512"),
+  (25,"Nissim","Pollard","1-412-727-7668","taciti@eutellus.com","1997-04-26","P.O. Box 606, 3682 Tincidunt. St.","Iowa City","IA","USA","76904"),
+  (26,"Kelsey","Gregory","1-583-900-4541","rhoncus.id.mollis@ipsumSuspendisse.org","1928-10-01","P.O. Box 663, 463 Cras Rd.","South Bend","IN","USA","57149"),
+  (27,"Rosalyn","Bonner","921-5796","purus.ac@lorem.co.uk","1909-11-26","6146 Nibh. Av.","Essex","VT","USA","45339"),
+  (28,"Lucy","Mcknight","392-5258","ac.sem.ut@eu.ca","1923-01-18","P.O. Box 400, 3324 Aliquet Rd.","Worcester","MA","USA","23713"),
+  (29,"Hillary","Dorsey","503-0719","senectus.et.netus@dolor.ca","1905-06-21","Ap #357-2468 Amet Street","Phoenix","AZ","USA","86132"),
+  (30,"Maisie","Guthrie","1-628-638-7140","Aliquam.erat@Duis.com","1977-07-24","572-8404 Eros Ave","Milwaukee","WI","USA","82136"),
+  (31,"Zachery","Sheppard","1-172-170-1073","lacus.varius@semmollis.org","1982-08-03","683-2990 Mattis St.","Orlando","FL","USA","77507"),
+  (32,"Cedric","Casey","683-0547","nec@Cras.edu","1921-10-03","1956 Conubia St.","Bellevue","NE","USA","45152"),
+  (33,"Maris","Dejesus","498-3981","urna@duiFusce.net","1967-05-06","996-9836 Magnis Street","Jonesboro","AR","USA","71965"),
+  (34,"Pascale","Knox","1-844-455-2260","consectetuer.rhoncus@rutrummagnaCras.com","1992-07-31","825-6181 Nec Rd.","Louisville","KY","USA","95455"),
+  (35,"Megan","Schroeder","140-7705","egestas.blandit@ligulaAenean.ca","1968-02-01","373-3142 Mi Rd.","Topeka","KS","USA","42462"),
+  (36,"Phoebe","Henderson","822-0618","Ut@id.co.uk","1912-03-24","1035 Odio. Rd.","Chicago","IL","USA","37731"),
+  (37,"Hayfa","Carroll","593-4958","tellus@arcuSed.ca","1976-04-15","Ap #680-7263 Massa St.","Sioux City","IA","USA","92650"),
+  (38,"Leilani","Arnold","1-173-843-7510","eget.magna@in.edu","1905-07-10","915-684 Dolor Av.","Kansas City","MO","USA","45198"),
+  (39,"Jared","Kirk","854-8609","Duis@placeratvelitQuisque.ca","1944-08-30","2038 Risus. Avenue","Salt Lake City","UT","USA","58905"),
+  (40,"Nichole","Pearson","679-0807","penatibus@Donecluctusaliquet.edu","1930-08-25","1433 Odio. Road","Chesapeake","VA","USA","24340");
 
 INSERT INTO Camping (CampingID) VALUES ("A01"), ("A02"), ("A03"), ("A04"), ("A05"), ("A06"), ("A07"), ("A08"), ("A09"), ("A10"), ("B01"), ("B02"), ("B03"), ("B04"), ("B05"), ("B06"), ("B07"), ("B08"), ("B09"), ("B10"),
   ("C01"), ("C02"), ("C03"), ("C04"), ("C05"), ("C06"), ("C07"), ("C08"), ("C09"), ("C10"), ("D01"), ("D02"), ("D03"), ("D04"), ("D05"), ("D06"), ("D07"), ("D08"), ("D09"), ("D10"), ("E01"), ("E02"), ("E03"), ("E04"), ("E05"),
@@ -411,9 +468,10 @@ INSERT INTO Camping (CampingID) VALUES ("A01"), ("A02"), ("A03"), ("A04"), ("A05
 INSERT INTO VendorAssignment (SectionID) VALUES
   ("B120"), ("B121"), ("B122"), ("B123"), ("B124"), ("B125"), ("B126"), ("B127"), ("B128"), ("B129"), ("B130"), ("B131"), ("B132"), ("B133"), ("B134"), ("B135"), ("B136"), ("B137"), ("B138"), ("B139"), ("B140");
 
-INSERT INTO VendorCategory (VendCatName) VALUES ("Aparrel"), ("Instruments"), ("Books"), ("Repair"), ("Body Art"), ("Entertainment Media"), ("Misc"), ("Food");
+INSERT INTO VendorCategory (VendCatName) VALUES ("Apparel"), ("Instruments"), ("Books"), ("Repair"), ("Body Art"), ("Entertainment Media"), ("Misc"), ("Food");
 
-INSERT INTO VendorAssignment (SectionID, VendorName, Description, VisitorID, VendCatID) VALUES ("A01", "Accordion City Mega Mall", "Instrument store", 11, 2), ("A02", "Accordion City Mega Mall", "Instrument store", 11, 2), ("A03", "Accordion City Mega Mall", "Instrument store", 11, 2), ("A04", "Accordion City Mega Mall", "Instrument store", 11, 2), ("A05", "Accordion City Mega Mall", "Instrument store", 11, 2),
+INSERT INTO VendorAssignment (SectionID, VendorName, Description, VisitorID, VendCatID) VALUES
+  ("A01", "Accordion City Mega Mall", "Instrument store", 11, 2), ("A02", "Accordion City Mega Mall", "Instrument store", 11, 2), ("A03", "Accordion City Mega Mall", "Instrument store", 11, 2), ("A04", "Accordion City Mega Mall", "Instrument store", 11, 2), ("A05", "Accordion City Mega Mall", "Instrument store", 11, 2),
   ("A06", "My Other ATM", "ATM", NULL, 7),
   ("A07", "Malleus Malificarum Supplies", "Antiquarian books", 3, 3),
   ("A08", "Hammered Steel and Leather", "Custom iron-work fittings & clothes", 20, 1), ("A09", "Hammered Steel and Leather", "Custom iron-work fittings & clothes", 20, 1), ("A10", "Hammered Steel and Leather", "Custom iron-work fittings & clothes", 20, 1),
@@ -454,12 +512,12 @@ INSERT INTO VendorAssignment (SectionID, VendorName, Description, VisitorID, Ven
   ("B108", "A Cold One", "Ice Cream Shop", 30, 8), ("B109", "A Cold One", "Ice Cream Shop", 30, 8), ("B110", "A Cold One", "Ice Cream Shop", 30, 8), ("B111", "A Cold One", "Ice Cream Shop", 30, 8),
   ("B112", "Polished Wood and Custom Brass", "Custom Cabinetry and Fine Woodwork", 24, 7), ("B113", "Polished Wood and Custom Brass", "Custom Cabinetry and Fine Woodwork", 24, 7), ("B114", "Polished Wood and Custom Brass", "Custom Cabinetry and Fine Woodwork", 24, 7),
   ("B115", "The Metalsmith", "Hardware, Tools, Camping supplies", 9, 7), ("B116", "The Metalsmith", "Hardware, Tools, Camping supplies", 9, 7), ("B117", "The Metalsmith", "Hardware, Tools, Camping supplies", 9, 7), ("B118", "The Metalsmith", "Hardware, Tools, Camping supplies", 9, 7),
-  ("B119", "Today's Accordionist", "Trade Journals", 25, 3)
-;
+  ("B119", "Today's Accordionist", "Trade Journals", 25, 3);
 
 INSERT INTO Stages (StageName) VALUES ("Concertina Corner"), ("Rockin' Out the Polkas"), ("Main Squeeze");
 
-INSERT INTO Performers (PerformerName, BandMembers) VALUES ("Vegan Piranhas", "Chastity Shields, Violet Graham, Jerry Valez"),
+INSERT INTO Performers (PerformerName, BandMembers) VALUES
+  ("Vegan Piranhas", "Chastity Shields, Violet Graham, Jerry Valez"),
   ("Squeeze Play", "Amir Welch, Nicholas Cortez, Mackenzie Clemons"),
   ("Bellows Benders", "Yoshi Horne, Xenos Murray, Hunter Langley"),
   ("Accordion to Hoyle", "Martin Hoyle, James Hoyle, Zena Higgens"),
@@ -527,7 +585,8 @@ INSERT INTO Performers (PerformerName, BandMembers) VALUES ("Vegan Piranhas", "C
   ("Infinite Mass and the Singularity", "Orval Field Parsons, Melva Fern Lamb, Lacey Cross, Brandon Kennedy"),
   ("Los Perritos", "Katrina Hubbard, Humberto Waller, Kent Harmon");
 
-INSERT INTO PerformanceSchedule (PerformerID, StageID, StartTime) VALUES (1, 1, "2017-08-07 12:00:00"), (1, 2, "2017-08-11 14:00:00"), (1, 3, "2017-08-12 12:00:00"),
+INSERT INTO PerformanceSchedule (PerformerID, StageID, StartTime) VALUES
+  (1, 1, "2017-08-07 12:00:00"), (1, 2, "2017-08-11 14:00:00"), (1, 3, "2017-08-12 12:00:00"),
   (2, 1, "2017-08-07 14:00:00"), (2, 2, "2017-08-11 16:00:00"),
   (3, 1, "2017-08-07 16:00:00"), (3, 2, "2017-08-11 18:00:00"), (3, 3, "2017-08-12 14:00:00"),
   (4, 1, "2017-08-07 18:00:00"), (4, 2, "2017-08-11 20:00:00"),
@@ -658,4 +717,3 @@ INSERT INTO `order_items` (`id`, `order_id`, `product_id`, `quantity`) VALUES
   (20, 17, 21, 1),
   (21, 18, 16, 1),
   (22, 19, 17, 1);
-

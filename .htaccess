@@ -1,13 +1,15 @@
 RewriteEngine on
+# copyright 2017 DipFestival, LLC
 # friendly urls
 RewriteRule ^visitor php/view/HandleVisitor.php [NC,L]
 RewriteRule ^lookup php/view/findperson.php [NC,L]
 RewriteRule ^404 php/view/404.php [NC,L]
 RewriteRule ^logout php/includes/logout.php [NC,L]
 RewriteRule ^admin php/view/admin.php [NC,L]
+RewriteRule ^what php/view/what.php [NC,L]
 RewriteRule ^home index.php [NC,L]
 # force https over http
-RewriteCond %{HTTPS} off
-RewriteRule (.*) https://%{HTTP_HOST}%{REQUEST_URI}
+# RewriteCond %{HTTPS} off
+# RewriteRule (.*) https://%{HTTP_HOST}%{REQUEST_URI}
 # custom error page
 ErrorDocument 404 /DIP-Class/php/view/404.php

@@ -7,7 +7,7 @@ import Material from 'bootstrap-material-design';
 // see if the broswer support service workers
 if('serviceWorker' in navigator) {
     // register the service and scoope it to the page
-    navigator.serviceWorker.register('/DIP-Class/sWorker.js', {scope: 'DIP-Class/*'}).catch((err) => {
+    navigator.serviceWorker.register('/maingate/service-worker.js', {scope: 'maingate/*'}).catch((err) => {
         console.log(err);
     });
 }

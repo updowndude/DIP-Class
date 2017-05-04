@@ -315,6 +315,14 @@ $countries = " <option value=\"\"></option>
 // turns the strings into arrays
 $aryState = explode("\n",$States);
 $aryCountry = explode("\n",$countries);
+
+if(isset($_SESSION['loggedInUser']) == true) {
+    if ($_SESSION['loggedInUser'] != 'maingate'){
+        header('Location: what');
+    }
+} else {
+    header('Location: what');
+}
 ?>
 <html>
 <head>
@@ -327,7 +335,7 @@ $aryCountry = explode("\n",$countries);
     <link rel="icon" type="image/x-icon" href="images/favicon.ico"/>
     <!-- Material Design fonts -->
     <link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Roboto:300,400,500,700">
-    <link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/icon?family=Material+Icons">gul
+    <link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/icon?family=Material+Icons">
 </head>
 <body id="findPersonBody">
 <div class="container">

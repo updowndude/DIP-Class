@@ -9,11 +9,11 @@ this.addEventListener('install', (event) => {
         caches.open('v1').then((cache) => {
             // all of the files that get cache
             return cache.addAll([
-                '/DIP-Class/',
-                '/DIP-Class/dist/myStyle.css',
-                '/DIP-Class/dist/my-com.js',
-                '/DIP-Class/dist/offline.html',
-                '/DIP-Class/images/favicon.ico'
+                '/maingate/',
+                '/maingate/dist/myStyle.css',
+                '/maingate/dist/my-com.js',
+                '/maingate/dist/offline.html',
+                '/maingate/images/favicon.ico'
             ]);
         })
     );

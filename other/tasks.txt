@@ -1,7 +1,1 @@
 // copyright 2017 DipFestival, LLC
-
-after buy a ticket
-filter out week long tickets
-quantity of tickets
-can upgrade if they bought ticket
-fix connections

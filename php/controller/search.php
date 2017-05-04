@@ -145,7 +145,7 @@ function actions() {
   }
   else {
      // not a valued action
-    header('Location: ../../404A');
+    header('Location: ../../404');
   }
 }
 

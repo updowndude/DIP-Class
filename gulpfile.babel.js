@@ -10,6 +10,8 @@ import cssnext from 'postcss-cssnext';
 import gulpWebpack from 'webpack-stream';
 import livereload from 'gulp-livereload';
 import webpack from 'webpack';
+import pathfrom from 'path';
+import swPrecache from 'sw-precache';
 
 // build out css using sass and postcsss
 gulp.task('sass', () => {
@@ -60,6 +62,16 @@ gulp.task('jsx', () => {
 		}))
 		.pipe(gulp.dest('dist'))
     .pipe(livereload());
+});
+
+// makes service work
+gulp.task('generate-service-worker', (callback) => {
+    const rootDir = 'dist';
+
+    swPrecache.write(`${rootDir}/service-worker.js`, {
+        staticFileGlobs: [rootDir + '/**/*.{js,html,css,png,jpg,gif,svg,ico}'],
+        stripPrefix: rootDir
+    }, callback);
 });
 
 // look at file and reload the browser

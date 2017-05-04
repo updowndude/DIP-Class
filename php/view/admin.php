@@ -1,5 +1,8 @@
 <?php
 // copyright 2017 DipFestival, LLC
+if(!isset($_SESSION)) {
+    session_start();
+}
 /**
  * Created by PhpStorm.
  * User: correywinke
@@ -7,6 +10,15 @@
  * Time: 2:56 PM
  */
 require '../model/db.php';
+
+if(isset($_SESSION['loggedInUser']) == true) {
+    if ($_SESSION['loggedInUser'] != 'maingateadmin'){
+        header('Location: what');
+    }
+} else {
+    header('Location: what');
+}
+echo $_SESSION['loggedInUser'];
 ?>
 <html>
 <head>
@@ -45,7 +57,7 @@ require '../model/db.php';
             <canvas id="pNGGC"></canvas>
         </div>
     </div>
-    <a class="btn btn-info btn-raised" id="btnLogout" href="logout">Logout</a
+    <a class="btn btn-info btn-raised" id="btnLogout" href="logout">Logout</a>
 </div>
 <script type="text/javascript">
     // get the Javascript
