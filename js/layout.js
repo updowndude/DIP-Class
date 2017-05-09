@@ -167,30 +167,15 @@ if(document.body.id == 'findPersonBody') {
         data: {
             labels: ["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday","Week", "Total"],
             datasets: [{
-                data: [pUARJMO.DailyTotal, pUARJTU.DailyTotal, pUARJWE.DailyTotal, pUARJTH.DailyTotal, pUARJFR.DailyTotal, pUARJSA.DailyTotal, pUARJSU.DailyTotal, pUARJW.WeeklyTotal, pUARJT.TotalSales],
-                backgroundColor: [
-                    'rgba(91,209,243, 0.2)',
-                    'rgba(91,209,243, 0.2)',
-                    'rgba(91,209,243, 0.2)',
-                    'rgba(91,209,243, 0.2)',
-                    'rgba(91,209,243, 0.2)',
-                    'rgba(91,209,243, 0.2)',
-                    'rgba(91,209,243, 0.2)',
-                    'rgba(255, 99, 132, 0.2)',
-                    'rgba(91, 255, 132, 0.2)'
-                ],
-                borderColor: [
-                    'rgba(91,209,243, 1)',
-                    'rgba(91,209,243, 1)',
-                    'rgba(91,209,243, 1)',
-                    'rgba(91,209,243, 1)',
-                    'rgba(91,209,243, 1)',
-                    'rgba(91,209,243, 1)',
-                    'rgba(91,209,243, 1)',
-                    'rgba(255,99,132,1)',
-                    'rgba(91, 255, 132, 1)'
-                ],
-                borderWidth: 2
+                label: "Total with presale",
+                backgroundColor: "rgba(91,209,243, 0.2)",
+                borderColor: 'rgba(91,209,243, 1)',
+                data: [pUARJMOP.TotalSales,pUARJTUP.TotalSales,pUARJWEP.TotalSales,pUARJTHP.TotalSales,pUARJFRP.TotalSales,pUARJSAP.TotalSales,pUARJSUP.TotalSales,pUARJWP.TotalSales,pUARJTP.TotalSales]
+            },{
+                label: "Total without presale",
+                backgroundColor: "rgba(255, 99, 132, 0.2)",
+                borderColor: 'rgba(255, 99, 132, 1)',
+                data: [pUARJMO.TotalSales,pUARJTU.TotalSales,pUARJWE.TotalSales,pUARJTH.TotalSales,pUARJFR.TotalSales,pUARJSA.TotalSales,pUARJSU.TotalSales,pUARJW.TotalSales,pUARJT.TotalSales]
             }]
         },
         options: {

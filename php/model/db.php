@@ -38,7 +38,7 @@
     function handSQL($strQuer="",$aryStatments=[], $aryValues=[], $intGetValues = 0) {
         $db = getAccess();
 
-        if (count($aryStatments) == count($aryValues)) {
+        if ((count($aryStatments) == count($aryValues)) && (strlen($strQuer) != 0)) {
             $statement = $db->prepare($strQuer);
             if (!$statement) {
                 exit("Sorry prepare failed");
@@ -66,7 +66,7 @@
             $statement->closeCursor();
             return $newFeedback;
         } else {
-            exit("Mismatched values");
+            die("Something happen");
         }
     }
 ?>

@@ -322,8 +322,7 @@ if(isset($_SESSION['loggedInUser']) == true) {
     }
 } else {
     header('Location: what');
-}
-?>
+} ?>
 <html>
 <head>
     <title>Main Gate</title>

@@ -52,11 +52,16 @@ gulp.task('jsx', () => {
 			},
             // devtool: 'inline-sourcemap',
 			plugins: [
-                new webpack.optimize.UglifyJsPlugin(),
                 new webpack.ProvidePlugin({
                     $: "jquery",
                     jQuery: "jquery"
-                })
+                }),
+                new webpack.DefinePlugin({
+                    'process.env': {
+                        NODE_ENV: JSON.stringify('production')
+                    }
+                }),
+                new webpack.optimize.UglifyJsPlugin(),
 			]
 		}))
 		.pipe(gulp.dest('dist'))
