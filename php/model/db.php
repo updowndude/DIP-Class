@@ -35,6 +35,11 @@
      *                      If value = 0, then only a single row is returned
      *                      If value = 1, then all rows are returned
      */
+    /*RETURNS:
+     * (successfully executed query that returns data) --> row[???] or rows[???][???], depending on the last argument's value
+     * (successfully executed query designed to retrieve no data) --> null
+     * (faild query execution) --> nothing... error message is shown and function stops
+     */
     function handSQL($strQuer="",$aryStatments=[], $aryValues=[], $intGetValues = 0) {
         $db = getAccess();
 
