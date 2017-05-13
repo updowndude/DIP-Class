@@ -3,6 +3,7 @@
 // copyright 2017 DipFestival, LLC
   //--- REQUIRES AND INCLUDES ---
     require_once '../model/db.php';
+    require_once '../includes/controller_upgrade_functions.php';
 
   //--- RETRIEVE VARIABLES ---
   $action = filter_input(INPUT_POST, "action", FILTER_SANITIZE_STRING);
@@ -14,41 +15,10 @@
        *Does only everything required to update a visitors selected assigned ticket
        */
       case 'upgradePerson':
-          //ID of ticket that the selected visitor ticket will be converted (upgraded) to
-          $upgradeTicketTypeID = $_POST['selected-ticket-type-option'];
-          //ID of ticket that will be updated
-          $selectedVisitorTicketOption = $_POST['selected-visitor-ticket-option'];
-          //ID of visitor
-          $visitorID = $_SESSION['VisitorID'];
-          $pdoObj = getAccess();
-          $query =
-            '
-            UPDATE
-                TicketAssignment
-                    INNER JOIN
-                Merchandise ON TicketAssignment.MerchID = Merchandise.MerchID
-                    INNER JOIN	
-                Visitors ON Visitors.VisitorID = TicketAssignment.VisitorID
-                    INNER JOIN
-                Orders ON Orders.VisitorID = Visitors.VisitorID
-            SET
-                TicketAssignment.MerchID = :merchID
-                , TicketAssignment.DatePurchased = NOW()
-                , Orders.DatePurchased = NOW()
-                
-                -- ???below needed???
-                -- YES: as fail safe should buisness rules change
-                , Orders.Paid = TRUE
-            WHERE
-                TicketAssignment.VisitorID = :visitorID AND
-                TicketAssignment.TicketID = :selectedVisitorTicketOption
-            ';
-          $statement = $pdoObj->prepare($query);
-          $statement->bindValue(':merchID',$upgradeTicketTypeID);
-          $statement->bindValue(':visitorID',$visitorID);
-          $statement->bindValue(':visitorTicketOption', $selectedVisitorTicketOption);
-          $statement->execute();
-          $statement->closeCursor();
+          /*SEE:
+           * ../php/includes/controller_upgrade_functions.php
+           */
+          runAllUpgradeRequests();
 
           $_SESSION['PhoneNumber'] = "";
           $_SESSION['FName'] = "";
@@ -70,68 +40,91 @@
       /*SUMMARY:
        *Does only everything thats required to regisiter a visitor
        *into the database with a assigned ticket.
-       *
-       *TODO (regisiter person rules):
-       * - A minimum of 1 ticket must be assigned to visitor for attending the Accordian Discordian 
-       *   Appocalypse
-       *
-       * - A visitor may be assigned multiple attendance tickets
-       *
-       * - Optional: allow visitor to get a parking ticket (for camping, not a fine)
        */
       case 'registerPerson':
-          $ticketTypeID = $_POST['selected-ticket-type-option'];
+          //$ticketTypeID = $_POST['selected-ticket-type-option'];
+          $selectedAdmissionTickets = $_POST['selected-day-admission-ticket-option'];
+          $selectedParkingTickets = $_POST['selected-day-parking-ticket-option'];
+          $selectedCampingTickets = $_POST['selected-day-camping-ticket-option'];
+          $allSelectedTickets = array_merge
+              ( (is_array($selectedAdmissionTickets)?$selectedAdmissionTickets:array())
+              , (is_array($selectedParkingTickets)?$selectedParkingTickets:array())
+              , (is_array($selectedCampingTickets)?$selectedCampingTickets:array())
+              );
+          $numberOfSelectedTickets
+              = sizeof($allSelectedTickets);
           $pdoObj = getAccess();
+          
+          /*echo var_dump($selectedAdmissionTickets).'<br>';
+          echo var_dump($selectedParkingTickets).'<br>';
+          echo var_dump($selectedCampingTickets).'<br>';
+         exit();*/
 
+          //*** Get Value for $fullName ***
+          //*******************************
           $fullName = $_SESSION['FName'].$_SESSION['LName'];
           handSQL("INSERT INTO Users (Username, Password, AccessLevel)
              VALUES (:Username, '', 1)
           ",[":Username"],[$fullName],2);
 
+          //*** Get Value for $sqlValues ***
+          //********************************
           $sqlValues = handSQL("SELECT * FROM Users WHERE Username = :Username
           ",[":Username"],[$fullName],0);
 
-          $secQuery = "INSERT INTO
-            TicketAssignment
-            (VisitorID, MerchID, DatePurchased)
-            VALUES
-            ((SELECT VisitorID 
-              FROM Visitors  WHERE";
-          $thrQuery = "(SELECT VisitorID 
-              FROM Visitors  WHERE";
-          $arySessionKey = array_keys($_SESSION);
-          $intTmp = sizeof($arySessionKey) -1;
-
-          for($lcv = 0;$lcv<sizeof($arySessionKey);$lcv++) {
-              if((($arySessionKey[$lcv] == "FName") || ($arySessionKey[$lcv] == "LName") || ($arySessionKey[$lcv] == "DOB") ||
-                      ($arySessionKey[$lcv] == "Address") || ($arySessionKey[$lcv] == "City") || ($arySessionKey[$lcv] == "StateProvince") ||
-                      ($arySessionKey[$lcv] == "Country") || ($arySessionKey[$lcv] == "PhoneNumber") || ($arySessionKey[$lcv] == "PostalCode") ||
-                      ($arySessionKey[$lcv] == "Email") || ($arySessionKey[$lcv] == "Comments")) && (strlen($_SESSION[$arySessionKey[$lcv]]) != 0)) {
-                 if($lcv !== $intTmp) {
-                     $secQuery .= "({$arySessionKey[$lcv]} = :{$arySessionKey[$lcv]}) AND";
-                     $thrQuery .= "({$arySessionKey[$lcv]} = :{$arySessionKey[$lcv]}) AND";
-                 }
-              }
-          }
-
-          $secQuery = substr($secQuery, 0, strlen($secQuery) - 3);
-          $thrQuery = substr($thrQuery, 0, strlen($thrQuery) - 3);
-
-          $secQuery .= ")
-             , :merchID
-             , NOW());";
-          $thrQuery .= ");";
+          /*SUMMARY:
+           * Inserts visitor and his/ her purchased tickets into the database
+           */
+          //*** Make & Run Last Query ***
+          //*****************************
           $query =
             "
             INSERT INTO
             Visitors
             (UserID,FName, LName, DOB, Address, City, StateProvince, Country, PhoneNumber, PostalCode, Email)
             VALUES
-            (:UserID,:FName, :LName, :DOB, :Address, :City, :StateProvince, :Country, :PhoneNumber, :PostalCode, :Email);
-            
-            {$secQuery}
-             ";
+            (:UserID,:FName, :LName, :DOB, :Address, :City, :StateProvince, :Country, :PhoneNumber, :PostalCode, :Email);";
+              
+          //for each selected ticket...
+          for($i = 0; $i < $numberOfSelectedTickets; $i++){
+              $secQuery = "INSERT INTO
+                TicketAssignment
+                (VisitorID, MerchID, DatePurchased)
+                VALUES
+                ((SELECT VisitorID 
+                  FROM Visitors WHERE ";
+              $arySessionKey = array_keys($_SESSION);
+              $intTmp = sizeof($arySessionKey) -1;
 
+              //for each allowed element in $_SESSION, append condition part to MySQL WHERE clause...
+              for($lcv = 0;$lcv<sizeof($arySessionKey);$lcv++) {
+                  if((($arySessionKey[$lcv] == "FName") || ($arySessionKey[$lcv] == "LName") || ($arySessionKey[$lcv] == "DOB") ||
+                          ($arySessionKey[$lcv] == "Address") || ($arySessionKey[$lcv] == "City") || ($arySessionKey[$lcv] == "StateProvince") ||
+                          ($arySessionKey[$lcv] == "Country") || ($arySessionKey[$lcv] == "PhoneNumber") || ($arySessionKey[$lcv] == "PostalCode") ||
+                          ($arySessionKey[$lcv] == "Email") || ($arySessionKey[$lcv] == "Comments")) && (strlen($_SESSION[$arySessionKey[$lcv]]) != 0)) {
+                     if($lcv !== $intTmp) {
+                         $secQuery .= "({$arySessionKey[$lcv]} = :{$arySessionKey[$lcv]}) AND";
+                     }
+                  }
+              }
+
+              //eliminates the last "AND". with out this an error can happen
+              $secQuery = substr($secQuery, 0, strlen($secQuery) - 3);
+
+              //append static query portion
+              $secQuery 
+                 .= "), "
+                 .filter_var($allSelectedTickets[$i], FILTER_SANITIZE_NUMBER_INT)
+                 .", NOW());";
+
+              //finish building the MySQL for giving a visitor 1 ticket, and continue building onto $query if
+              //there are more tickets to give
+              $query .="{$secQuery}";
+          }
+          echo '<pre>';
+          echo $query;
+          echo '</pre>';
+          //die();
           $statement = $pdoObj->prepare($query);
           $statement->bindValue(':UserID', $sqlValues['UserID']);
           $statement->bindValue(':FName', $_SESSION['FName']);
@@ -145,7 +138,6 @@
           $statement->bindValue(':PostalCode', $_SESSION['PostalCode']);
           $statement->bindValue(':Email', $_SESSION['Email']);
           $statement->bindValue(':Comments', $_SESSION['Comments']);
-          $statement->bindValue(':merchID', $ticketTypeID);
           $statement->execute();
           $statement->closeCursor();
 
