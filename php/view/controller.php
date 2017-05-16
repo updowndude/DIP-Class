@@ -43,9 +43,24 @@
        */
       case 'registerPerson':
           //$ticketTypeID = $_POST['selected-ticket-type-option'];
-          $selectedAdmissionTickets = $_POST['selected-day-admission-ticket-option'];
-          $selectedParkingTickets = $_POST['selected-day-parking-ticket-option'];
-          $selectedCampingTickets = $_POST['selected-day-camping-ticket-option'];
+          if (isset($_POST['selected-day-admission-ticket-option']) == true) {
+              $selectedAdmissionTickets = $_POST['selected-day-admission-ticket-option'];
+          } else {
+              $selectedAdmissionTickets = [];
+          }
+
+          if (isset($_POST['selected-day-parking-ticket-option']) == true) {
+              $selectedParkingTickets = $_POST['selected-day-parking-ticket-option'];
+          } else {
+              $selectedParkingTickets = [];
+          }
+
+          if (isset($_POST['selected-day-camping-ticket-option']) == true) {
+              $selectedCampingTickets = $_POST['selected-day-camping-ticket-option'];
+          } else {
+              $selectedCampingTickets = [];
+          }
+
           $allSelectedTickets = array_merge
               ( (is_array($selectedAdmissionTickets)?$selectedAdmissionTickets:array())
               , (is_array($selectedParkingTickets)?$selectedParkingTickets:array())
@@ -53,6 +68,11 @@
               );
           $numberOfSelectedTickets
               = sizeof($allSelectedTickets);
+
+          if($numberOfSelectedTickets == 0) {
+              exit("Need to select some tickets");
+          }
+
           $pdoObj = getAccess();
           
           /*echo var_dump($selectedAdmissionTickets).'<br>';
@@ -95,7 +115,6 @@
                   FROM Visitors WHERE ";
               $arySessionKey = array_keys($_SESSION);
               $intTmp = sizeof($arySessionKey) -1;
-
               //for each allowed element in $_SESSION, append condition part to MySQL WHERE clause...
               for($lcv = 0;$lcv<sizeof($arySessionKey);$lcv++) {
                   if((($arySessionKey[$lcv] == "FName") || ($arySessionKey[$lcv] == "LName") || ($arySessionKey[$lcv] == "DOB") ||
@@ -121,9 +140,9 @@
               //there are more tickets to give
               $query .="{$secQuery}";
           }
-          echo '<pre>';
-          echo $query;
-          echo '</pre>';
+          // echo '<pre>';
+          //echo $query;
+          // echo '</pre>';
           //die();
           $statement = $pdoObj->prepare($query);
           $statement->bindValue(':UserID', $sqlValues['UserID']);

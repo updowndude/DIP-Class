@@ -604,13 +604,12 @@ $DayAdmissionTicketOptionsQuery = filterOutVisitorTickets(handSQL("
 
                     $ticketOptionDisabledText = $isButtonDisabled?'disabled':'';
                     $thingToEcho .= "
-                        <label class='btn btn-default {$ticketOptionDisabledText}'
-                            onclick='enableButton(\"register-and-upgrade-button\");gotoElement(\"panel-visitor-tickets\")'>
-                            <input type='radio'
+                        <input type='checkbox'
                                 id='{$htmlButtonId}'
                                 name='selected-upgrade-for-visitor-ticket-{$ticketAssignmentID}'
-                                value='{$ticketTypeUpgradeID}'						
-                            >
+                                value='{$ticketTypeUpgradeID}' />
+                        <label class='btn btn-default {$ticketOptionDisabledText}'
+                            onclick='enableButton(\"register-and-upgrade-button\");gotoElement(\"panel-visitor-tickets\")'>
                             <div class='ticket-option-width'>
                                 <strong>{$ticketTypeUpgradeName}</strong><br>
                                 Ticket Price: \${$ticketTypeUpgradePrice}<br>
@@ -720,13 +719,12 @@ $DayAdmissionTicketOptionsQuery = filterOutVisitorTickets(handSQL("
                 else if ($ticketTypeAvailable == 0){ $isButtonDisabled = true; }
                 $ticketOptionDisabledText = $isButtonDisabled?'disabled':'';
                 $thingToEcho .= "
-                    <label class='btn btn-default {$ticketOptionDisabledText}'
-                        onclick='enableButton(\"register-and-upgrade-button\")'>
                         <input type='checkbox'
                             id='{$htmlButtonId}'
                             name='selected-day-admission-ticket-option[]'
-                            value='{$ticketTypeID}'						
-                        >
+                            value='{$ticketTypeID}'	>
+                    <label class='btn btn-default {$ticketOptionDisabledText}'
+                        onclick='enableButton(\"register-and-upgrade-button\")'>
                         <div class='ticket-option-width'>
                             <strong>{$ticketTypeName}</strong><br>
                             Ticket Price: \${$ticketTypePrice}<br>
@@ -812,12 +810,11 @@ $DayAdmissionTicketOptionsQuery = filterOutVisitorTickets(handSQL("
                 else if ($ticketTypeAvailable == 0){ $isButtonDisabled = true; }
                 $ticketOptionDisabledText = $isButtonDisabled?'disabled':'';
                 $thingToEcho .= "
-                    <label class='btn btn-default {$ticketOptionDisabledText}'>
-                        <input type='checkbox'
+                          <input type='checkbox'
                             id='{$htmlButtonId}'
                             name='selected-day-parking-ticket-option[]'
-                            value='{$ticketTypeID}'						
-                        >
+                            value='{$ticketTypeID}'	>
+                    <label class='btn btn-default {$ticketOptionDisabledText}'>
                         <div class='ticket-option-width'>
                             <strong>{$ticketTypeName}</strong><br>
                             Ticket Price: \${$ticketTypePrice}<br>
@@ -903,12 +900,11 @@ $DayAdmissionTicketOptionsQuery = filterOutVisitorTickets(handSQL("
                 else if ($ticketTypeAvailable == 0){ $isButtonDisabled = true; }
                 $ticketOptionDisabledText = $isButtonDisabled?'disabled':'';
                 $thingToEcho .= "
-                    <label class='btn btn-default {$ticketOptionDisabledText}'>
-                        <input type='checkbox'
+                         <input type='checkbox'
                             id='{$htmlButtonId}'
                             name='selected-day-camping-ticket-option[]'
-                            value='{$ticketTypeID}'						
-                        >
+                            value='{$ticketTypeID}'	>
+                    <label class='btn btn-default {$ticketOptionDisabledText}'>
                         <div class='ticket-option-width'>
                             <strong>{$ticketTypeName}</strong><br>
                             Ticket Price: \${$ticketTypePrice}<br>
@@ -941,7 +937,7 @@ $DayAdmissionTicketOptionsQuery = filterOutVisitorTickets(handSQL("
 	}
 ?>
 <!DOCTYPE HTML>
-<html>
+<html lang="en">
 	<head>
 		<title>Handle Visitor</title>
 
@@ -1003,7 +999,7 @@ $DayAdmissionTicketOptionsQuery = filterOutVisitorTickets(handSQL("
             }
         </script>
     </head>
-	<body style="background:#252525;">
+	<body style="background:#252525;" id="handlevistitor">
 		<!-- Main HTML
 		===================================================== -->
 		<div class="container">
@@ -1079,35 +1075,34 @@ $DayAdmissionTicketOptionsQuery = filterOutVisitorTickets(handSQL("
 							Since findperson.php reloads available form data, the back button
 							should take the volunteer back to the entered form data as expected.
 							-->
-							<a href="lookup.php" class="btn btn-default">
+							<a href="lookup" class="btn btn-default">
 								<span class="glyphicon glyphicon-arrow-left"></span>&nbsp;Go Back
 							</a>
-					
+
 							<!-- *** On Click Show Confirmation Box Modal *** -->
-							<button id="register-and-upgrade-button"
-							class="btn btn-primary disabled"
+							<a id="register-and-upgrade-button"
+							class="btn btn-raised btn-primary disabled"
 							data-target="#confirmation-box"
 							data-toggle="modal"
-							onclick="updateConfirmationBoxMsg()"
-                            				disabled>
+							onclick="updateConfirmationBoxMsg()">
 							<?php if(/* visitor is */ $found): ?>
 							Upgrade
 							<?php else: ?>
 							Register
 							<?php endif; ?>
-							</button>
+							</a>
 							
 							<?php if(/* visitor is */ $found) : ?>
 							<input name="action" type="hidden" value="upgradePerson">
 							<?php else: ?>
 							<input name="action" type="hidden" value="registerPerson">
 							<?php endif; ?>
-						</div>
+                        </div>
 					</div>
 				</div>
 			</div>
 			<div class="page-bottom-padding"><!-- Leave Empty --></div>
-			</form>
+            </form>
 		</div>
 
 		<!-- Webpage Footer: Copyright
@@ -1169,8 +1164,7 @@ $DayAdmissionTicketOptionsQuery = filterOutVisitorTickets(handSQL("
 			{
 				var htmlElement = document.getElementById(htmlElementID);
 				htmlElement.classList.remove("disabled");
-				htmlElement.disabled = false;
-			}
+            }
 
             /*SUMMARY:
              *Provides the Bootstrap confirmation modal
@@ -1208,7 +1202,10 @@ $DayAdmissionTicketOptionsQuery = filterOutVisitorTickets(handSQL("
                 console.log("getting the total");
                 msgBoxElement.innerHTML
                     += "====================================================<br>"
-                    +  "   <strong><i>Total Cost: $"+totalCost.toFixed(2)+"<i><strong>";
+                    +  "   <strong><i>Total Cost: $"+totalCost.toFixed(2)+"<i><strong> <br>"
+                    +"====================================================<br>"
+                    +" <strong>Volunteer<strong> <br>"
+                    +"Take in money and hand out wristbands";
 			}
             
             /*SUMMARY:
@@ -1265,7 +1262,10 @@ $DayAdmissionTicketOptionsQuery = filterOutVisitorTickets(handSQL("
                 //find all checked elements
                 for (var ticketOption of radioAndCheckboxs)
                 {
-                    if(ticketOption.htmlElement.checked){ returnedValue.push(ticketOption); }
+                    if(ticketOption.htmlElement.checked){ returnedValue.push(ticketOption); } else
+                    if((document.querySelector('input[name="action"]').value === 'upgradePerson') && (ticketOption.htmlElement.hasAttributes('checked'))) {
+                        returnedValue.push(ticketOption);
+                    }
                 }
 
                 return returnedValue;

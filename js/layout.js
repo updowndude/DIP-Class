@@ -233,4 +233,34 @@ if(document.body.id == 'findPersonBody') {
             }
         }
     });
+} else if (document.body.id === 'handlevistitor') {
+    document.querySelectorAll('label').forEach((curPlace) => {
+        curPlace.addEventListener('click', (event) => {
+            document.querySelectorAll('input[type="checkbox"]').forEach((cur) => {
+                if(cur.id === event.target.parentElement.previousElementSibling.id) {
+                    if(cur.checked === true) {
+                        cur.checked = false;
+                        cur.removeAttribute('checked');
+                    } else {
+                        cur.checked = true;
+                        cur.setAttribute('checked','checked');
+                    }
+                }
+            });
+            document.querySelectorAll('input[type="radio"]').forEach((curThis) => {
+                if(curThis.id === event.target.parentElement.previousElementSibling.id) {
+                    if(curThis.hasAttribute('checked') === true) {
+                        curThis.checked = false;
+                        curThis.removeAttribute('checked');
+                    } else {
+                        curThis.checked = true;
+                        curThis.setAttribute('checked','checked');
+                    }
+                } else  {
+                    curThis.checked = true;
+                    curThis.setAttribute('checked','checked');
+                }
+            });
+        })
+    });
 }
